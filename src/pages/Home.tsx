@@ -41,7 +41,7 @@ export const Home = () => {
       </div>
 
       <section className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
-        <div className="relative z-10 mx-auto w-full max-w-6xl">
+        <div className="relative z-10 mx-auto w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,6 +100,22 @@ export const Home = () => {
               <Button label="GitHub" href="https://github.com/Vedant021004" icon={GitBranch} variant="secondary" />
               <Button label="Resume" href="/resume.pdf" icon={Download} variant="secondary" />
             </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="relative hidden lg:block"
+          >
+            <div className="absolute inset-0 bg-white/5 blur-3xl rounded-full translate-y-8" />
+            <div className="relative aspect-square w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+              <img 
+                src="/me.png" 
+                alt="Vedant Kapil" 
+                className="w-full h-full object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700" 
+              />
+            </div>
           </motion.div>
         </div>
       </section>
