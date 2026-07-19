@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Code, Cpu, Database, Network } from "lucide-react";
+import dataJson from "../data.json";
 
 const principles = [
   {
@@ -36,14 +37,19 @@ export const About = () => {
           className="mb-24"
         >
           <h1 className="font-display text-5xl md:text-7xl font-medium tracking-tight text-white mb-8">
-            Engineering <br /> Intelligence.
+            {(dataJson.global?.aboutTitle || "Engineering \\n Intelligence.").split('\\n').map((line, i) => (
+              <span key={i}>
+                {line}
+                <br />
+              </span>
+            ))}
           </h1>
           <div className="prose prose-invert prose-lg text-gray-400 font-light leading-relaxed">
             <p>
-              I am an AI Systems Engineer focused on bridging the gap between theoretical machine learning and robust production environments. My work revolves around training, fine-tuning, and deploying large-scale language models (LLMs) and computer vision systems.
+              {dataJson.global?.aboutText1 || "I am an AI Systems Engineer focused on bridging the gap between theoretical machine learning and robust production environments. My work revolves around training, fine-tuning, and deploying large-scale language models (LLMs) and computer vision systems."}
             </p>
             <p className="mt-6">
-              I believe that the future of software isn't just about writing code; it's about orchestrating intelligence. This requires a deep understanding of both distributed systems and neural architectures.
+              {dataJson.global?.aboutText2 || "I believe that the future of software isn't just about writing code; it's about orchestrating intelligence. This requires a deep understanding of both distributed systems and neural architectures."}
             </p>
           </div>
         </motion.div>

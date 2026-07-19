@@ -6,6 +6,7 @@ import { useCountUp } from "../hooks/useCountUp";
 import { Button } from "../components/ui/Button";
 import { TechCard } from "../components/ui/TechCard";
 import { useMemo } from "react";
+import dataJson from "../data.json";
 
 const roles = [
   "AI Systems Architect",
@@ -65,7 +66,7 @@ export const Home = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="font-display text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-white mb-4"
               >
-                Vedant Kapil
+                {dataJson.global?.heroTitle || "Vedant Kapil"}
               </motion.h1>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -86,8 +87,7 @@ export const Home = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="max-w-2xl text-lg text-gray-400 leading-relaxed font-light"
             >
-              Crafting production-grade AI systems and highly scalable ML infrastructure. 
-              Bridging the gap between cutting-edge research and real-world deployment.
+              {dataJson.global?.heroDescription || "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment."}
             </motion.p>
 
             <motion.div
@@ -111,8 +111,8 @@ export const Home = () => {
             <div className="absolute inset-0 bg-white/5 blur-3xl rounded-full translate-y-8" />
             <div className="relative aspect-square w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
               <img 
-                src="/me.png" 
-                alt="Vedant Kapil" 
+                src={dataJson.global?.profileImage || "/me.png"} 
+                alt={dataJson.global?.heroTitle || "Vedant Kapil"} 
                 className="w-full h-full object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700" 
               />
             </div>
