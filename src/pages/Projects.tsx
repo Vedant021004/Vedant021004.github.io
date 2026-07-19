@@ -24,10 +24,10 @@ export const Projects = () => {
 
   const filtered = useMemo(() => {
     let data = [...repos];
-    
-    // Filter hidden repos
+    // Filter hidden repos case-insensitively
     if (dataJson.hiddenRepos && dataJson.hiddenRepos.length > 0) {
-      data = data.filter((r) => !dataJson.hiddenRepos.includes(r.name));
+      const hidden = dataJson.hiddenRepos.map(name => name.toLowerCase().trim());
+      data = data.filter((r) => !hidden.includes(r.name.toLowerCase().trim()));
     }
 
     if (search) data = data.filter((r) => r.name.toLowerCase().includes(search.toLowerCase()));
