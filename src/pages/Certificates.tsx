@@ -10,7 +10,8 @@ const certificates = [
   { file: "tata.png", title: "Tata Certification" },
   { file: "datascience.png", title: "Data Science Certification" },
   { file: "c programming.png", title: "C Programming" },
-  { file: "LLM.png", title: "LLM Certification" }
+  { file: "LLM.png", title: "LLM Certification" },
+  { file: "openai.jpg", title: "OpenAI Agents and Workflows" }
 ];
 
 export const Certificates = () => {
