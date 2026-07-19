@@ -38,6 +38,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Disable Jekyll
+        run: touch dist/.nojekyll
+
       # Copy index.html to 404.html so React Router works on refresh
       - name: Copy index.html to 404.html
         run: cp dist/index.html dist/404.html
