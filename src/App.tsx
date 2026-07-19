@@ -6,6 +6,7 @@ import { About } from "./pages/About";
 import { Projects } from "./pages/Projects";
 import { Stats } from "./pages/Stats";
 import { Certificates } from "./pages/Certificates";
+import { Admin } from "./pages/Admin";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/certificates" element={<Certificates />} />
             <Route path="/github" element={<Stats />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
         <Footer />

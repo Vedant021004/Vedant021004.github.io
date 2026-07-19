@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Search, X, GitBranch } from "lucide-react";
 import { useGithubRepos, Repo } from "../hooks/useGithubRepos";
+import dataJson from "../data.json";
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString("en-US", {
@@ -23,6 +24,12 @@ export const Projects = () => {
 
   const filtered = useMemo(() => {
     let data = [...repos];
+    
+    // Filter hidden repos
+    if (dataJson.hiddenRepos && dataJson.hiddenRepos.length > 0) {
+      data = data.filter((r) => !dataJson.hiddenRepos.includes(r.name));
+    }
+
     if (search) data = data.filter((r) => r.name.toLowerCase().includes(search.toLowerCase()));
     if (language !== "All") data = data.filter((r) => r.language === language);
     return data.sort((a, b) => b.stargazers_count - a.stargazers_count); // Default sort by stars
@@ -85,9 +92,18 @@ export const Projects = () => {
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.05 }}
                   onClick={() => setActiveRepo(repo)}
-                  className="group flex flex-col items-start justify-between rounded-2xl border border-white/10 bg-white/5 p-6 text-left transition-all hover:bg-white/10 hover:border-white/20"
+                  className="group flex flex-col items-start justify-between rounded-2xl border border-white/10 bg-white/5 overflow-hidden text-left transition-all hover:bg-white/10 hover:border-white/20"
                 >
-                  <div className="w-full">
+                  {dataJson.projectImages && (dataJson.projectImages as any)[repo.name] && (
+                    <div className="w-full h-40 bg-black overflow-hidden border-b border-white/10">
+                      <img 
+                        src={(dataJson.projectImages as any)[repo.name]} 
+                        alt={repo.name} 
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                      />
+                    </div>
+                  )}
+                  <div className="w-full p-6">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-display text-lg font-medium text-white truncate pr-4">
                         {repo.name}
@@ -103,7 +119,7 @@ export const Projects = () => {
                     </p>
                   </div>
                   
-                  <div className="flex w-full items-center justify-between mt-auto pt-4 border-t border-white/5">
+                  <div className="flex w-full items-center justify-between mt-auto px-6 pb-6 pt-4 border-t border-white/5">
                     <div className="flex gap-4 text-xs text-gray-500">
                       <span className="flex items-center gap-1">⭐ {repo.stargazers_count}</span>
                       <span className="flex items-center gap-1">🍴 {repo.forks_count}</span>
@@ -143,6 +159,16 @@ export const Projects = () => {
                   </button>
                 </div>
                 
+                {dataJson.projectImages && (dataJson.projectImages as any)[activeRepo.name] && (
+                  <div className="w-full rounded-xl overflow-hidden mb-6 border border-white/10 bg-black/50">
+                    <img 
+                      src={(dataJson.projectImages as any)[activeRepo.name]} 
+                      alt={activeRepo.name} 
+                      className="w-full h-auto max-h-[250px] object-cover"
+                    />
+                  </div>
+                )}
+
                 <p className="text-gray-400 leading-relaxed mb-8">
                   {activeRepo.description || "No description provided."}
                 </p>
