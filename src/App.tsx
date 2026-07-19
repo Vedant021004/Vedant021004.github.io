@@ -11,7 +11,7 @@ import { Admin } from "./pages/Admin";
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#050505] text-white selection:bg-white/20 selection:text-white flex flex-col font-body antialiased">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#050505] text-gray-900 dark:text-white selection:bg-black/20 dark:selection:bg-white/20 selection:text-black dark:selection:text-white flex flex-col font-body antialiased transition-colors duration-500">
         <Navbar />
         <main className="flex-1">
           <Routes>
