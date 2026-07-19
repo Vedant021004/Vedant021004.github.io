@@ -11,6 +11,21 @@
     "heroDescription": "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment.",
     "aboutTitle": "Conscious Engineering.",
     "aboutText1": "I am an AI Systems Engineer focused on bridging the gap between theoretical machine learning and robust production environments. My work revolves around training, fine-tuning, and deploying large-scale language models (LLMs) and computer vision systems.",
-    "aboutText2": "I believe that the future of software isn't just about writing code; it's about orchestrating intelligence. This requires a deep understanding of both distributed systems and neural architectures."
+    "aboutText2": "I believe that the future of software isn't just about writing code; it's about orchestrating intelligence. This requires a deep understanding of both distributed systems and neural architectures.",
+    "roles": [
+      "AI Systems Architect",
+      "Deep Learning Engineer",
+      "LLM Systems Designer",
+      "ML Infrastructure Lead",
+      "Autonomous AI Developer"
+    ],
+    "expertise": [
+      { "title": "Neural Networks", "icon": "Brain", "description": "Designing architectures for optimal inference." },
+      { "title": "Transformers", "icon": "Layers", "description": "Attention mechanisms and large scale models." },
+      { "title": "LLMs", "icon": "Sparkles", "description": "Prompt engineering, fine-tuning, and deployment." },
+      { "title": "RAG Systems", "icon": "Rocket", "description": "Retrieval-augmented generation pipelines." },
+      { "title": "System Design", "icon": "Shield", "description": "Building scalable, fault-tolerant infrastructure." },
+      { "title": "Cloud Native", "icon": "Code", "description": "Kubernetes, Docker, and serverless compute." }
+    ]
   }
 }

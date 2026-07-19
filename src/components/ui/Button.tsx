@@ -23,9 +23,9 @@ export const Button = ({
     "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300 backdrop-blur-md";
   const variants = {
     primary:
-      "bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]",
+      "bg-black/10 dark:bg-white/10 text-black dark:text-white border border-black/20 dark:border-white/20 hover:bg-black/20 dark:hover:bg-white/20 hover:border-black/40 dark:hover:border-white/40 shadow-[0_0_15px_rgba(0,0,0,0.05)] dark:shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]",
     secondary:
-      "bg-transparent text-gray-300 border border-white/10 hover:text-white hover:border-white/30",
+      "bg-transparent text-gray-700 dark:text-gray-300 border border-black/10 dark:border-white/10 hover:text-black dark:hover:text-white hover:border-black/30 dark:hover:border-white/30",
   };
 
   return (

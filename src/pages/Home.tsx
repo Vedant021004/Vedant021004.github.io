@@ -8,24 +8,24 @@ import { TechCard } from "../components/ui/TechCard";
 import { useMemo } from "react";
 import dataJson from "../data.json";
 
-const roles = [
-  "AI Systems Architect",
-  "Deep Learning Engineer",
-  "LLM Systems Designer",
-  "ML Infrastructure Lead",
-  "Autonomous AI Developer",
-];
-
-const expertise = [
-  { title: "Neural Networks", icon: Brain, description: "Designing architectures for optimal inference." },
-  { title: "Transformers", icon: Layers, description: "Attention mechanisms and large scale models." },
-  { title: "LLMs", icon: Sparkles, description: "Prompt engineering, fine-tuning, and deployment." },
-  { title: "RAG Systems", icon: Rocket, description: "Retrieval-augmented generation pipelines." },
-  { title: "System Design", icon: Shield, description: "Building scalable, fault-tolerant infrastructure." },
-  { title: "Cloud Native", icon: Code, description: "Kubernetes, Docker, and serverless compute." },
-];
+// Map string icon names to actual Lucide components
+const IconMap: Record<string, any> = {
+  Brain, Layers, Sparkles, Rocket, Shield, Code, Cpu
+};
 
 export const Home = () => {
+  const roles = dataJson.global?.roles || [
+    "AI Systems Architect",
+    "Deep Learning Engineer",
+    "LLM Systems Designer"
+  ];
+  
+  const expertise = dataJson.global?.expertise || [];
+  const typedExpertise = expertise.map((item: any) => ({
+    ...item,
+    icon: IconMap[item.icon] || Code
+  }));
+
   const typingText = useTyping(roles);
   const { repos } = useGithubRepos("Vedant021004");
 
@@ -36,9 +36,9 @@ export const Home = () => {
   return (
     <div className="relative">
       {/* Background elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.03] via-black to-black" />
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-white/[0.02] blur-[120px]" />
+      <div className="fixed inset-0 pointer-events-none transition-colors duration-500">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-black/[0.03] via-gray-50 to-gray-50 dark:from-white/[0.03] dark:via-black dark:to-black" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-black/[0.02] dark:bg-white/[0.02] blur-[120px]" />
       </div>
 
       <section className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
@@ -49,12 +49,12 @@ export const Home = () => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col items-start gap-8"
           >
-            <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md">
+            <div className="inline-flex items-center gap-3 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-4 py-2 backdrop-blur-md">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black dark:bg-white opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-black dark:bg-white"></span>
               </span>
-              <span className="text-xs font-medium text-gray-300 tracking-wide uppercase">
+              <span className="text-xs font-medium text-gray-700 dark:text-gray-300 tracking-wide uppercase">
                 Available for new opportunities
               </span>
             </div>
@@ -64,7 +64,7 @@ export const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="font-display text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-white mb-4"
+                className="font-display text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight text-black dark:text-white mb-4 transition-colors duration-500"
               >
                 {dataJson.global?.heroTitle || "Vedant Kapil"}
               </motion.h1>
@@ -74,9 +74,9 @@ export const Home = () => {
                 transition={{ duration: 0.8, delay: 0.3 }}
                 className="h-12 md:h-16"
               >
-                <h2 className="text-xl md:text-3xl text-gray-400 font-light">
+                <h2 className="text-xl md:text-3xl text-gray-600 dark:text-gray-400 font-light transition-colors duration-500">
                   {typingText}
-                  <span className="animate-pulse text-white">|</span>
+                  <span className="animate-pulse text-black dark:text-white">|</span>
                 </h2>
               </motion.div>
             </div>
@@ -85,7 +85,7 @@ export const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="max-w-2xl text-lg text-gray-400 leading-relaxed font-light"
+              className="max-w-2xl text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-light transition-colors duration-500"
             >
               {dataJson.global?.heroDescription || "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment."}
             </motion.p>
@@ -108,8 +108,8 @@ export const Home = () => {
             transition={{ duration: 1, delay: 0.3 }}
             className="relative hidden lg:block"
           >
-            <div className="absolute inset-0 bg-white/5 blur-3xl rounded-full translate-y-8" />
-            <div className="relative aspect-square w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+            <div className="absolute inset-0 bg-black/5 dark:bg-white/5 blur-3xl rounded-full translate-y-8 transition-colors duration-500" />
+            <div className="relative aspect-square w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-4 backdrop-blur-sm transition-colors duration-500">
               <img 
                 src={dataJson.global?.profileImage || "/me.png"} 
                 alt={dataJson.global?.heroTitle || "Vedant Kapil"} 
@@ -122,26 +122,26 @@ export const Home = () => {
 
       {/* Stats Quick View */}
       <section className="relative px-6 pb-32">
-        <div className="mx-auto max-w-6xl border-y border-white/5 py-12">
+        <div className="mx-auto max-w-6xl border-y border-black/10 dark:border-white/5 py-12 transition-colors duration-500">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-white" ref={starsCounter.ref}>
+              <span className="text-4xl font-display text-black dark:text-white transition-colors" ref={starsCounter.ref}>
                 {starsCounter.value}+
               </span>
               <span className="text-sm text-gray-500 uppercase tracking-widest">Total Stars</span>
             </div>
             <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-white" ref={repoCounter.ref}>
+              <span className="text-4xl font-display text-black dark:text-white transition-colors" ref={repoCounter.ref}>
                 {repoCounter.value}
               </span>
               <span className="text-sm text-gray-500 uppercase tracking-widest">Repositories</span>
             </div>
             <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-white">4+</span>
+              <span className="text-4xl font-display text-black dark:text-white transition-colors">4+</span>
               <span className="text-sm text-gray-500 uppercase tracking-widest">Years Exp.</span>
             </div>
             <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-white">100%</span>
+              <span className="text-4xl font-display text-black dark:text-white transition-colors">100%</span>
               <span className="text-sm text-gray-500 uppercase tracking-widest">Dedication</span>
             </div>
           </div>
@@ -157,14 +157,14 @@ export const Home = () => {
             viewport={{ once: true }}
             className="mb-16"
           >
-            <h2 className="font-display text-4xl tracking-tight text-white mb-4">Core Expertise</h2>
-            <p className="text-gray-400 max-w-xl text-lg">
+            <h2 className="font-display text-4xl tracking-tight text-black dark:text-white mb-4 transition-colors">Core Expertise</h2>
+            <p className="text-gray-600 dark:text-gray-400 max-w-xl text-lg transition-colors">
               Specialized in the full lifecycle of machine learning models, from dataset preparation to deployment at scale.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {expertise.map((item, idx) => (
+            {typedExpertise.map((item: any, idx: number) => (
               <motion.div
                 key={item.title}
                 initial={{ opacity: 0, y: 20 }}

@@ -36,7 +36,7 @@ export const Projects = () => {
   }, [repos, search, language]);
 
   return (
-    <div className="relative min-h-screen pt-32 pb-24 px-6">
+    <div className="relative min-h-screen pt-32 pb-24 px-6 transition-colors duration-500">
       <div className="relative z-10 mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -45,10 +45,10 @@ export const Projects = () => {
           className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8"
         >
           <div>
-            <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-white mb-4">
+            <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-black dark:text-white mb-4 transition-colors">
               Open Source
             </h1>
-            <p className="text-gray-400 text-lg max-w-xl">
+            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-xl transition-colors">
               Exploring AI research and production systems through code.
             </p>
           </div>
@@ -60,13 +60,13 @@ export const Projects = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search repositories..."
-                className="w-full sm:w-64 rounded-full border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-white placeholder-gray-500 outline-none transition-colors focus:border-white/30 focus:bg-white/10"
+                className="w-full sm:w-64 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 py-2 pl-10 pr-4 text-sm text-black dark:text-white placeholder-gray-500 outline-none transition-colors focus:border-black/30 dark:focus:border-white/30 focus:bg-black/10 dark:focus:bg-white/10"
               />
             </div>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="rounded-full border border-white/10 bg-black py-2 pl-4 pr-8 text-sm text-gray-300 outline-none transition-colors focus:border-white/30"
+              className="rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-black py-2 pl-4 pr-8 text-sm text-gray-700 dark:text-gray-300 outline-none transition-colors focus:border-black/30 dark:focus:border-white/30"
             >
               {languages.map((l) => (
                 <option key={l} value={l}>
@@ -77,12 +77,12 @@ export const Projects = () => {
           </div>
         </motion.div>
 
-        {error && <p className="text-red-400 mb-8">{error}</p>}
+        {error && <p className="text-red-500 dark:text-red-400 mb-8">{error}</p>}
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {loading
             ? Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-48 rounded-2xl bg-white/5 animate-pulse" />
+                <div key={i} className="h-48 rounded-2xl bg-black/5 dark:bg-white/5 animate-pulse" />
               ))
             : filtered.map((repo, idx) => (
                 <motion.button
@@ -92,10 +92,10 @@ export const Projects = () => {
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.05 }}
                   onClick={() => setActiveRepo(repo)}
-                  className="group flex flex-col items-start justify-between rounded-2xl border border-white/10 bg-white/5 overflow-hidden text-left transition-all hover:bg-white/10 hover:border-white/20"
+                  className="group flex flex-col items-start justify-between rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 overflow-hidden text-left transition-all hover:bg-black/10 dark:hover:bg-white/10 hover:border-black/20 dark:hover:border-white/20"
                 >
                   {dataJson.projectImages && (dataJson.projectImages as any)[repo.name] && (
-                    <div className="w-full h-40 bg-black overflow-hidden border-b border-white/10">
+                    <div className="w-full h-40 bg-gray-100 dark:bg-black overflow-hidden border-b border-black/10 dark:border-white/10">
                       <img 
                         src={(dataJson.projectImages as any)[repo.name]} 
                         alt={repo.name} 
@@ -105,26 +105,26 @@ export const Projects = () => {
                   )}
                   <div className="w-full p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-display text-lg font-medium text-white truncate pr-4">
+                      <h3 className="font-display text-lg font-medium text-black dark:text-white truncate pr-4 transition-colors">
                         {repo.name}
                       </h3>
                       {repo.language && (
-                        <span className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-xs text-gray-300">
+                        <span className="shrink-0 rounded-full bg-black/10 dark:bg-white/10 px-3 py-1 text-xs text-gray-700 dark:text-gray-300 transition-colors">
                           {repo.language}
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-400 line-clamp-2 mb-6">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-6 transition-colors">
                       {repo.description || "No description provided."}
                     </p>
                   </div>
                   
-                  <div className="flex w-full items-center justify-between mt-auto px-6 pb-6 pt-4 border-t border-white/5">
+                  <div className="flex w-full items-center justify-between mt-auto px-6 pb-6 pt-4 border-t border-black/5 dark:border-white/5 transition-colors">
                     <div className="flex gap-4 text-xs text-gray-500">
                       <span className="flex items-center gap-1">⭐ {repo.stargazers_count}</span>
                       <span className="flex items-center gap-1">🍴 {repo.forks_count}</span>
                     </div>
-                    <ArrowRight className="h-4 w-4 text-gray-500 transition-transform group-hover:translate-x-1 group-hover:text-white" />
+                    <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-500 transition-transform group-hover:translate-x-1 group-hover:text-black dark:group-hover:text-white" />
                   </div>
                 </motion.button>
               ))}
@@ -138,29 +138,29 @@ export const Projects = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveRepo(null)}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-6"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/60 backdrop-blur-sm p-6"
             >
               <motion.div
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 shadow-2xl"
+                className="w-full max-w-lg rounded-3xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#0a0a0a] p-8 shadow-2xl transition-colors"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-display text-2xl font-medium text-white break-all">
+                  <h3 className="font-display text-2xl font-medium text-black dark:text-white break-all transition-colors">
                     {activeRepo.name}
                   </h3>
                   <button
                     onClick={() => setActiveRepo(null)}
-                    className="rounded-full p-2 text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
+                    className="rounded-full p-2 text-gray-500 dark:text-gray-400 hover:bg-black/10 dark:hover:bg-white/10 hover:text-black dark:hover:text-white transition-colors"
                   >
                     <X className="h-5 w-5" />
                   </button>
                 </div>
                 
                 {dataJson.projectImages && (dataJson.projectImages as any)[activeRepo.name] && (
-                  <div className="w-full rounded-xl overflow-hidden mb-6 border border-white/10 bg-black/50">
+                  <div className="w-full rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 bg-gray-100 dark:bg-black/50 transition-colors">
                     <img 
                       src={(dataJson.projectImages as any)[activeRepo.name]} 
                       alt={activeRepo.name} 
@@ -169,26 +169,26 @@ export const Projects = () => {
                   </div>
                 )}
 
-                <p className="text-gray-400 leading-relaxed mb-8">
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-8 transition-colors">
                   {activeRepo.description || "No description provided."}
                 </p>
 
                 <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+                  <div className="rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] p-4 transition-colors">
                     <span className="block text-xs text-gray-500 mb-1">Language</span>
-                    <span className="text-white font-medium">{activeRepo.language || "N/A"}</span>
+                    <span className="text-black dark:text-white font-medium transition-colors">{activeRepo.language || "N/A"}</span>
                   </div>
-                  <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+                  <div className="rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] p-4 transition-colors">
                     <span className="block text-xs text-gray-500 mb-1">Last Updated</span>
-                    <span className="text-white font-medium">{formatDate(activeRepo.updated_at)}</span>
+                    <span className="text-black dark:text-white font-medium transition-colors">{formatDate(activeRepo.updated_at)}</span>
                   </div>
-                  <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+                  <div className="rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] p-4 transition-colors">
                     <span className="block text-xs text-gray-500 mb-1">Stars</span>
-                    <span className="text-white font-medium">{activeRepo.stargazers_count}</span>
+                    <span className="text-black dark:text-white font-medium transition-colors">{activeRepo.stargazers_count}</span>
                   </div>
-                  <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
+                  <div className="rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] p-4 transition-colors">
                     <span className="block text-xs text-gray-500 mb-1">Forks</span>
-                    <span className="text-white font-medium">{activeRepo.forks_count}</span>
+                    <span className="text-black dark:text-white font-medium transition-colors">{activeRepo.forks_count}</span>
                   </div>
                 </div>
 
@@ -196,7 +196,7 @@ export const Projects = () => {
                   href={activeRepo.html_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-white text-black px-6 py-3 font-medium transition-transform hover:scale-[1.02]"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-black dark:bg-white text-white dark:text-black px-6 py-3 font-medium transition-transform hover:scale-[1.02]"
                 >
                   <GitBranch className="h-5 w-5" />
                   View Repository
