@@ -24,6 +24,7 @@ export const Admin = () => {
     expertise: []
   });
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
 
   // Skills State
   const [roles, setRoles] = useState<string[]>(globalSettings.roles || []);
@@ -128,6 +129,14 @@ export const Admin = () => {
         updatedGlobal.profileImage = `/${fileName}`;
       }
 
+      if (resumeFile) {
+        const base64Content = await toBase64(resumeFile);
+        const { data: blobData } = await octokit.rest.git.createBlob({
+          owner, repo, content: base64Content, encoding: "base64",
+        });
+        tree.push({ path: "public/resume.pdf", mode: "100644", type: "blob", sha: blobData.sha });
+      }
+
       let updatedProjectImages = { ...projectImages };
       if (uploadFile && uploadRepoName.trim()) {
         const base64Content = await toBase64(uploadFile);
@@ -165,6 +174,7 @@ export const Admin = () => {
       setUploadFile(null);
       setUploadRepoName("");
       setProfileImageFile(null);
+      setResumeFile(null);
       
       setMessage({ type: "success", text: "Successfully saved! GitHub is rebuilding your site. Changes will appear in ~1 minute." });
     } catch (err: any) {
@@ -258,6 +268,15 @@ export const Admin = () => {
                         {profileImageFile ? profileImageFile.name : "Click to upload new profile picture"}
                       </p>
                       <input type="file" accept="image/*" className="hidden" onChange={(e) => setProfileImageFile(e.target.files?.[0] || null)} />
+                    </label>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Resume (PDF)</label>
+                    <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all">
+                      <p className="text-sm text-gray-500">
+                        {resumeFile ? resumeFile.name : "Click to upload new resume"}
+                      </p>
+                      <input type="file" accept="application/pdf" className="hidden" onChange={(e) => setResumeFile(e.target.files?.[0] || null)} />
                     </label>
                   </div>
                   <div>
