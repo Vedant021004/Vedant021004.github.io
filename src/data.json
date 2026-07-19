@@ -1,7 +1,6 @@
 {
   "hiddenRepos": [
-    "Vedant021004.github.io",
-    "Ved"
+    "Vedant021004.github.io"
   ],
   "projectImages": {
     "Vedant021004": "/projects/screenshot-2026-06-14-201058.png"
@@ -11,7 +10,7 @@
     "heroTitle": "Vedant Kapil",
     "heroDescription": "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment.",
     "aboutTitle": "Conscious Engineering.",
-    "aboutText1": "I design and build AI-powered applications using Large Language Models, Computer Vision, and modern software engineering practices. My work focuses on developing practical AI solutions, experimenting with emerging technologies, and continuously improving production-ready systems.",
+    "aboutText1": "I am an AI Systems Engineer focused on bridging the gap between theoretical machine learning and robust production environments. My work revolves around training, fine-tuning, and deploying large-scale language models (LLMs) and computer vision systems.",
     "aboutText2": "I believe that the future of software isn't just about writing code; it's about orchestrating intelligence. This requires a deep understanding of both distributed systems and neural architectures."
   }
 }
