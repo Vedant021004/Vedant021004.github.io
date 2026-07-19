@@ -64,17 +64,22 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-gray-400 hover:text-white"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="md:hidden flex items-center gap-4">
+          <button onClick={toggleTheme} className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
+          <button
+            className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/5 p-6 flex flex-col gap-4">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 dark:bg-black/95 backdrop-blur-xl border-b border-black/5 dark:border-white/5 p-6 flex flex-col gap-4">
           {navLinks.map((item) => (
             <NavLink
               key={item.path}
@@ -82,7 +87,7 @@ export const Navbar = () => {
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
                 `text-lg font-medium transition-colors ${
-                  isActive ? "text-white" : "text-gray-400"
+                  isActive ? "text-black dark:text-white" : "text-gray-500 dark:text-gray-400"
                 }`
               }
             >
