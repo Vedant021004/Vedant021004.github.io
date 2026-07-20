@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Code, Cpu, Database, Network, Brain, Layers, Sparkles, Rocket, Shield } from "lucide-react";
-import dataJson from "../data.json";
+import { usePortfolioData } from "../hooks/usePortfolioData";
 
 const IconMap: Record<string, any> = {
   Brain, Cpu, Network, Database, Code, Layers, Sparkles, Rocket, Shield
@@ -25,6 +25,9 @@ const principles = [
 ];
 
 export const About = () => {
+  const dataJson = usePortfolioData();
+  const global = dataJson.global || {};
+
   return (
     <div className="relative min-h-screen pt-32 pb-24 px-6 transition-colors duration-500">
       <div className="fixed inset-0 pointer-events-none">

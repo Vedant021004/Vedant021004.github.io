@@ -179,6 +179,10 @@ export const Admin = () => {
 
       await octokit.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: newCommit.sha });
 
+      // INSTANT UI UPDATE
+      localStorage.setItem('portfolio_data', JSON.stringify(newDataJson));
+      window.dispatchEvent(new Event('portfolio_data_updated'));
+
       setProjectImages(updatedProjectImages);
       setProjectLinks(updatedProjectLinks);
       setGlobalSettings(updatedGlobal);

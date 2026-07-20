@@ -5,8 +5,8 @@ import { useGithubRepos } from "../hooks/useGithubRepos";
 import { useCountUp } from "../hooks/useCountUp";
 import { Button } from "../components/ui/Button";
 import { TechCard } from "../components/ui/TechCard";
+import { usePortfolioData } from "../hooks/usePortfolioData";
 import { useMemo } from "react";
-import dataJson from "../data.json";
 
 // Map string icon names to actual Lucide components
 const IconMap: Record<string, any> = {
@@ -14,6 +14,7 @@ const IconMap: Record<string, any> = {
 };
 
 export const Home = () => {
+  const dataJson = usePortfolioData();
   const roles = dataJson.global?.roles || [
     "AI Systems Architect",
     "Deep Learning Engineer",

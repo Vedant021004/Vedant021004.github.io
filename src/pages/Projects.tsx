@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Search, X, GitBranch, Globe } from "lucide-react";
 import { useGithubRepos, Repo } from "../hooks/useGithubRepos";
-import dataJson from "../data.json";
+import { usePortfolioData } from "../hooks/usePortfolioData";
 
 const formatDate = (value: string) =>
   new Date(value).toLocaleDateString("en-US", {
@@ -13,6 +13,7 @@ const formatDate = (value: string) =>
 
 export const Projects = () => {
   const { repos, loading, error } = useGithubRepos("Vedant021004");
+  const dataJson = usePortfolioData();
   const [search, setSearch] = useState("");
   const [language, setLanguage] = useState("All");
   const [activeRepo, setActiveRepo] = useState<Repo | null>(null);
