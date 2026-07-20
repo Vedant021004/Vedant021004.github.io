@@ -6,7 +6,8 @@
     "Vedant021004": "/projects/screenshot-2026-06-14-201058.png"
   },
   "projectLinks": {
-    "GEN-AI--Langchain-": "http://localhost:8501/"
+    "GEN-AI--Langchain-": "http://localhost:8501/",
+    "ML-JOURNEY": "https://mymodelone.streamlit.app/"
   },
   "global": {
     "profileImage": "/me.png",
