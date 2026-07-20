@@ -108,11 +108,18 @@ export const Projects = () => {
                       <h3 className="font-display text-lg font-medium text-black dark:text-white truncate pr-4 transition-colors">
                         {repo.name}
                       </h3>
-                      {repo.language && (
-                        <span className="shrink-0 rounded-full bg-black/10 dark:bg-white/10 px-3 py-1 text-xs text-gray-700 dark:text-gray-300 transition-colors">
-                          {repo.language}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {(dataJson as any).projectLinks?.[repo.name] && (
+                          <span className="shrink-0 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 px-3 py-1 text-xs font-medium flex items-center gap-1">
+                            <Globe className="h-3 w-3" /> Demo
+                          </span>
+                        )}
+                        {repo.language && (
+                          <span className="shrink-0 rounded-full bg-black/10 dark:bg-white/10 px-3 py-1 text-xs text-gray-700 dark:text-gray-300 transition-colors">
+                            {repo.language}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-6 transition-colors">
                       {repo.description || "No description provided."}
