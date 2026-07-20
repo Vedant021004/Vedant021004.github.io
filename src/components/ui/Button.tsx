@@ -33,8 +33,8 @@ export const Button = ({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noreferrer" : undefined}
+      target={href.startsWith("http") || href.endsWith(".pdf") ? "_blank" : undefined}
+      rel={href.startsWith("http") || href.endsWith(".pdf") ? "noreferrer" : undefined}
       className={twMerge(clsx(baseStyles, variants[variant], className))}
       {...props}
     >
