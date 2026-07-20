@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Search, X, GitBranch } from "lucide-react";
+import { ArrowRight, Search, X, GitBranch, Globe } from "lucide-react";
 import { useGithubRepos, Repo } from "../hooks/useGithubRepos";
 import dataJson from "../data.json";
 
@@ -192,15 +192,28 @@ export const Projects = () => {
                   </div>
                 </div>
 
-                <a
-                  href={activeRepo.html_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-black dark:bg-white text-white dark:text-black px-6 py-3 font-medium transition-transform hover:scale-[1.02]"
-                >
-                  <GitBranch className="h-5 w-5" />
-                  View Repository
-                </a>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {(dataJson as any).projectLinks?.[activeRepo.name] && (
+                    <a
+                      href={(dataJson as any).projectLinks[activeRepo.name]}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex-1 flex items-center justify-center gap-2 rounded-full bg-cyan-600 dark:bg-cyan-500 text-white px-6 py-3 font-medium transition-transform hover:scale-[1.02] shadow-lg shadow-cyan-500/25"
+                    >
+                      <Globe className="h-5 w-5" />
+                      Live Demo
+                    </a>
+                  )}
+                  <a
+                    href={activeRepo.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 rounded-full bg-black dark:bg-white text-white dark:text-black px-6 py-3 font-medium transition-transform hover:scale-[1.02]"
+                  >
+                    <GitBranch className="h-5 w-5" />
+                    GitHub
+                  </a>
+                </div>
               </motion.div>
             </motion.div>
           )}

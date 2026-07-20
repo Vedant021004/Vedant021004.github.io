@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Octokit } from "octokit";
 import { motion } from "framer-motion";
-import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star } from "lucide-react";
+import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe } from "lucide-react";
 import dataJsonStatic from "../data.json";
 
 export const Admin = () => {
@@ -35,8 +35,11 @@ export const Admin = () => {
   const [hiddenRepos, setHiddenRepos] = useState<string[]>(dataJsonStatic.hiddenRepos || []);
   const [newHiddenRepo, setNewHiddenRepo] = useState("");
   const [projectImages, setProjectImages] = useState<Record<string, string>>(dataJsonStatic.projectImages || {});
+  const [projectLinks, setProjectLinks] = useState<Record<string, string>>((dataJsonStatic as any).projectLinks || {});
   const [uploadRepoName, setUploadRepoName] = useState("");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [linkRepoName, setLinkRepoName] = useState("");
+  const [linkUrl, setLinkUrl] = useState("");
 
   useEffect(() => {
     const savedToken = localStorage.getItem("github_admin_token");
@@ -62,6 +65,7 @@ export const Admin = () => {
         const decoded = JSON.parse(atob(data.content));
         setHiddenRepos(decoded.hiddenRepos || []);
         setProjectImages(decoded.projectImages || {});
+        setProjectLinks(decoded.projectLinks || {});
         setGlobalSettings(decoded.global || globalSettings);
         setRoles(decoded.global?.roles || []);
         setExpertise(decoded.global?.expertise || []);
@@ -150,9 +154,15 @@ export const Admin = () => {
         updatedProjectImages[uploadRepoName.trim()] = `/projects/${fileName}`;
       }
 
+      let updatedProjectLinks = { ...projectLinks };
+      if (linkRepoName.trim() && linkUrl.trim()) {
+        updatedProjectLinks[linkRepoName.trim()] = linkUrl.trim();
+      }
+
       const newDataJson = {
         hiddenRepos,
         projectImages: updatedProjectImages,
+        projectLinks: updatedProjectLinks,
         global: updatedGlobal
       };
 
@@ -170,9 +180,12 @@ export const Admin = () => {
       await octokit.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: newCommit.sha });
 
       setProjectImages(updatedProjectImages);
+      setProjectLinks(updatedProjectLinks);
       setGlobalSettings(updatedGlobal);
       setUploadFile(null);
       setUploadRepoName("");
+      setLinkRepoName("");
+      setLinkUrl("");
       setProfileImageFile(null);
       setResumeFile(null);
       
@@ -463,6 +476,38 @@ export const Admin = () => {
                     </div>
                   ))}
                   {Object.keys(projectImages).length === 0 && <div className="text-gray-500 text-sm italic text-center py-4">No images configured.</div>}
+                </div>
+              </div>
+
+              {/* Project Links / Demos */}
+              <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 transition-colors mt-8">
+                <h2 className="text-xl font-medium text-black dark:text-white mb-2 flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-gray-500" /> Live Demo Links
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Add a "Live Demo" button to your projects.</p>
+                <div className="flex flex-col md:flex-row gap-2 mb-6 mt-4">
+                  <input
+                    type="text" value={linkRepoName} onChange={(e) => setLinkRepoName(e.target.value)}
+                    placeholder="Repo name (e.g. ai-chatbot)"
+                    className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+                  />
+                  <input
+                    type="url" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)}
+                    placeholder="URL (e.g. https://demo.com)"
+                    className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+                  />
+                  <button onClick={() => { if (linkRepoName && linkUrl) { setProjectLinks({...projectLinks, [linkRepoName]: linkUrl}); setLinkRepoName(""); setLinkUrl(""); }}} className="bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white px-4 py-2 rounded-xl text-sm transition-colors">Add</button>
+                </div>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300 mb-3">Current Demo Links</h3>
+                <div className="flex flex-col gap-2">
+                  {Object.entries(projectLinks).map(([repo, url]) => (
+                    <div key={repo} className="flex items-center justify-between bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 px-4 py-3 rounded-xl">
+                      <span className="text-gray-700 dark:text-gray-300 text-sm font-medium">{repo}</span>
+                      <a href={url} target="_blank" rel="noreferrer" className="text-cyan-500 hover:underline text-xs truncate max-w-[120px]">{url}</a>
+                      <button onClick={() => { const newLinks = {...projectLinks}; delete newLinks[repo]; setProjectLinks(newLinks); }} className="text-red-500 dark:text-red-400 text-xs ml-4">Remove</button>
+                    </div>
+                  ))}
+                  {Object.keys(projectLinks).length === 0 && <div className="text-gray-500 text-sm italic text-center py-4">No demo links configured.</div>}
                 </div>
               </div>
             </>
