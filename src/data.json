@@ -56,15 +56,46 @@
       }
     ],
     "certificates": [
-      { "file": "google.png", "title": "Google Certification" },
-      { "file": "jp morgan.png", "title": "J.P. Morgan Certification" },
-      { "file": "CS50P.png", "title": "Harvard CS50P" },
-      { "file": "deloitte.png", "title": "Deloitte Certification" },
-      { "file": "tata.png", "title": "Tata Certification" },
-      { "file": "datascience.png", "title": "Data Science Certification" },
-      { "file": "c programming.png", "title": "C Programming" },
-      { "file": "LLM.png", "title": "LLM Certification" },
-      { "file": "openai.jpg", "title": "OpenAI Agents and Workflows" }
+      {
+        "file": "google.png",
+        "title": "Google Certification"
+      },
+      {
+        "file": "jp morgan.png",
+        "title": "J.P. Morgan Certification"
+      },
+      {
+        "file": "CS50P.png",
+        "title": "Harvard CS50P"
+      },
+      {
+        "file": "deloitte.png",
+        "title": "Deloitte Certification"
+      },
+      {
+        "file": "tata.png",
+        "title": "Tata Certification"
+      },
+      {
+        "file": "datascience.png",
+        "title": "Data Science Certification"
+      },
+      {
+        "file": "c programming.png",
+        "title": "C Programming"
+      },
+      {
+        "file": "LLM.png",
+        "title": "LLM Certification"
+      },
+      {
+        "file": "openai.jpg",
+        "title": "OpenAI Agents and Workflows"
+      },
+      {
+        "file": "screenshot-2026-07-21-185006.png",
+        "title": "Coursera certifies their successful completion of Supervised Machine Learning: Regression and Classification"
+      }
     ]
   }
 }
