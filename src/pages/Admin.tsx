@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Octokit } from "octokit";
 import { motion } from "framer-motion";
-import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe } from "lucide-react";
+import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe, Award } from "lucide-react";
 import dataJsonStatic from "../data.json";
 
 export const Admin = () => {
@@ -9,7 +9,7 @@ export const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
-  const [activeTab, setActiveTab] = useState<"global" | "projects" | "skills">("global");
+  const [activeTab, setActiveTab] = useState<"global" | "projects" | "skills" | "certificates">("global");
   const [isLoadingData, setIsLoadingData] = useState(false);
 
   // Global Settings State
@@ -21,7 +21,8 @@ export const Admin = () => {
     aboutText1: "",
     aboutText2: "",
     roles: [],
-    expertise: []
+    expertise: [],
+    certificates: []
   });
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -30,6 +31,9 @@ export const Admin = () => {
   const [roles, setRoles] = useState<string[]>(globalSettings.roles || []);
   const [newRole, setNewRole] = useState("");
   const [expertise, setExpertise] = useState<any[]>(globalSettings.expertise || []);
+  const [certificates, setCertificates] = useState<{file: string, title: string}[]>(globalSettings.certificates || []);
+  const [certTitle, setCertTitle] = useState("");
+  const [certFile, setCertFile] = useState<File | null>(null);
 
   // Projects State
   const [hiddenRepos, setHiddenRepos] = useState<string[]>(dataJsonStatic.hiddenRepos || []);
@@ -69,6 +73,7 @@ export const Admin = () => {
         setGlobalSettings(decoded.global || globalSettings);
         setRoles(decoded.global?.roles || []);
         setExpertise(decoded.global?.expertise || []);
+        setCertificates(decoded.global?.certificates || []);
       }
     } catch (e) {
       console.error("Failed to fetch live config, using bundled version.", e);
@@ -120,7 +125,20 @@ export const Admin = () => {
 
       const tree: any[] = [];
 
-      let updatedGlobal = { ...globalSettings, roles, expertise };
+      let updatedCertificates = [...certificates];
+      if (certFile && certTitle.trim()) {
+        const base64Content = await toBase64(certFile);
+        const fileName = certFile.name.replace(/\s+/g, '-').toLowerCase();
+        
+        const { data: blobData } = await octokit.rest.git.createBlob({
+          owner, repo, content: base64Content, encoding: "base64",
+        });
+
+        tree.push({ path: `public/certificates/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
+        updatedCertificates.push({ file: fileName, title: certTitle.trim() });
+      }
+
+      let updatedGlobal = { ...globalSettings, roles, expertise, certificates: updatedCertificates };
       if (profileImageFile) {
         const base64Content = await toBase64(profileImageFile);
         const fileName = `profile-${Date.now()}-${profileImageFile.name.replace(/\s+/g, '-').toLowerCase()}`;
@@ -186,12 +204,15 @@ export const Admin = () => {
       setProjectImages(updatedProjectImages);
       setProjectLinks(updatedProjectLinks);
       setGlobalSettings(updatedGlobal);
+      setCertificates(updatedCertificates);
       setUploadFile(null);
       setUploadRepoName("");
       setLinkRepoName("");
       setLinkUrl("");
       setProfileImageFile(null);
       setResumeFile(null);
+      setCertFile(null);
+      setCertTitle("");
       
       setMessage({ type: "success", text: "Successfully saved! GitHub is rebuilding your site. Changes will appear in ~1 minute." });
     } catch (err: any) {
@@ -258,6 +279,12 @@ export const Admin = () => {
             className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${activeTab === 'projects' ? 'bg-black dark:bg-white text-white dark:text-black font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'}`}
           >
             <Code2 className="h-4 w-4" /> Projects
+          </button>
+          <button 
+            onClick={() => setActiveTab("certificates")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${activeTab === 'certificates' ? 'bg-black dark:bg-white text-white dark:text-black font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'}`}
+          >
+            <Award className="h-4 w-4" /> Certificates
           </button>
         </div>
 
@@ -515,6 +542,47 @@ export const Admin = () => {
                 </div>
               </div>
             </>
+          )}
+
+          {activeTab === 'certificates' && (
+            <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 transition-colors col-span-1 lg:col-span-2">
+              <h2 className="text-xl font-medium text-black dark:text-white mb-2 flex items-center gap-2">
+                <Award className="h-5 w-5 text-gray-500" /> Certificates
+              </h2>
+              
+              <div className="flex flex-col md:flex-row gap-4 mb-6 mt-4">
+                <input
+                  type="text" value={certTitle} onChange={(e) => setCertTitle(e.target.value)}
+                  placeholder="Certificate Title (e.g. AWS Certified)"
+                  className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+                />
+                <label className="flex-1 flex items-center justify-center border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all py-2">
+                  <span className="text-sm text-gray-500 px-4">{certFile ? certFile.name : "Select Image"}</span>
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => setCertFile(e.target.files?.[0] || null)} />
+                </label>
+              </div>
+
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300 mb-3 mt-8">Current Certificates</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {certificates.map((cert, idx) => (
+                  <div key={idx} className="flex items-center justify-between bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 p-4 rounded-xl">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-white dark:bg-black rounded-lg p-2 flex items-center justify-center overflow-hidden">
+                        <img src={`/certificates/${cert.file}`} alt={cert.title} className="max-w-full max-h-full object-contain" />
+                      </div>
+                      <span className="text-gray-700 dark:text-gray-300 text-sm font-medium truncate max-w-[150px]">{cert.title}</span>
+                    </div>
+                    <button 
+                      onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))} 
+                      className="text-red-500 dark:text-red-400 text-xs ml-4"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+                {certificates.length === 0 && <div className="text-gray-500 text-sm italic py-4 col-span-3">No certificates configured.</div>}
+              </div>
+            </div>
           )}
         </div>
 

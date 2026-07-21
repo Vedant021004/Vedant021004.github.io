@@ -1,20 +1,12 @@
 import { motion } from "framer-motion";
 import { Award } from "lucide-react";
 
-// List of certificates available in public/certificates/
-const certificates = [
-  { file: "google.png", title: "Google Certification" },
-  { file: "jp morgan.png", title: "J.P. Morgan Certification" },
-  { file: "CS50P.png", title: "Harvard CS50P" },
-  { file: "deloitte.png", title: "Deloitte Certification" },
-  { file: "tata.png", title: "Tata Certification" },
-  { file: "datascience.png", title: "Data Science Certification" },
-  { file: "c programming.png", title: "C Programming" },
-  { file: "LLM.png", title: "LLM Certification" },
-  { file: "openai.jpg", title: "OpenAI Agents and Workflows" }
-];
+import { usePortfolioData } from "../hooks/usePortfolioData";
 
 export const Certificates = () => {
+  const data = usePortfolioData();
+  const certificates = data.global?.certificates || [];
+
   return (
     <div className="relative min-h-screen pt-32 pb-24 px-6 transition-colors duration-500">
       <div className="relative z-10 mx-auto max-w-6xl">
