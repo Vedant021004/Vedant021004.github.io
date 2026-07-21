@@ -11,6 +11,25 @@ const formatDate = (value: string) =>
     day: "numeric",
   });
 
+import { Code2, Database, Terminal, Layout, Binary } from "lucide-react";
+
+const getLanguageConfig = (lang: string) => {
+  switch (lang?.toLowerCase()) {
+    case 'python':
+      return { icon: Terminal, gradient: "from-blue-500/20 to-yellow-500/20", color: "text-blue-500" };
+    case 'jupyter notebook':
+      return { icon: Database, gradient: "from-orange-500/20 to-red-500/20", color: "text-orange-500" };
+    case 'typescript':
+    case 'javascript':
+      return { icon: Code2, gradient: "from-blue-500/20 to-cyan-500/20", color: "text-blue-500" };
+    case 'html':
+    case 'css':
+      return { icon: Layout, gradient: "from-pink-500/20 to-purple-500/20", color: "text-pink-500" };
+    default:
+      return { icon: Binary, gradient: "from-gray-500/20 to-gray-400/20", color: "text-gray-500" };
+  }
+};
+
 export const Projects = () => {
   const { repos, loading, error } = useGithubRepos("Vedant021004");
   const dataJson = usePortfolioData();
@@ -95,13 +114,23 @@ export const Projects = () => {
                   onClick={() => setActiveRepo(repo)}
                   className="group flex flex-col items-start justify-between rounded-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 overflow-hidden text-left transition-all hover:bg-black/10 dark:hover:bg-white/10 hover:border-black/20 dark:hover:border-white/20"
                 >
-                  {dataJson.projectImages && (dataJson.projectImages as any)[repo.name] && (
-                    <div className="w-full h-40 bg-gray-100 dark:bg-black overflow-hidden border-b border-black/10 dark:border-white/10">
+                  {dataJson.projectImages && (dataJson.projectImages as any)[repo.name] ? (
+                    <div className="w-full h-40 bg-gray-100 dark:bg-black overflow-hidden border-b border-black/10 dark:border-white/10 shrink-0">
                       <img 
                         src={(dataJson.projectImages as any)[repo.name]} 
                         alt={repo.name} 
                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                       />
+                    </div>
+                  ) : (
+                    <div className={`w-full h-40 overflow-hidden border-b border-black/10 dark:border-white/10 shrink-0 flex items-center justify-center relative bg-gradient-to-br ${getLanguageConfig(repo.language).gradient}`}>
+                      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
+                      <div className="absolute inset-0 opacity-[0.05] dark:opacity-[0.1]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
+                      {(() => {
+                        const Config = getLanguageConfig(repo.language);
+                        const Icon = Config.icon;
+                        return <Icon className={`w-12 h-12 opacity-50 group-hover:opacity-80 transition-opacity ${Config.color}`} />;
+                      })()}
                     </div>
                   )}
                   <div className="w-full p-6">
@@ -167,13 +196,23 @@ export const Projects = () => {
                   </button>
                 </div>
                 
-                {dataJson.projectImages && (dataJson.projectImages as any)[activeRepo.name] && (
+                {dataJson.projectImages && (dataJson.projectImages as any)[activeRepo.name] ? (
                   <div className="w-full rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 bg-gray-100 dark:bg-black/50 transition-colors">
                     <img 
                       src={(dataJson.projectImages as any)[activeRepo.name]} 
                       alt={activeRepo.name} 
                       className="w-full h-auto max-h-[250px] object-cover"
                     />
+                  </div>
+                ) : (
+                  <div className={`w-full rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 bg-gray-100 dark:bg-black/50 transition-colors h-48 flex items-center justify-center relative bg-gradient-to-br ${getLanguageConfig(activeRepo.language).gradient}`}>
+                    <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
+                    <div className="absolute inset-0 opacity-[0.05] dark:opacity-[0.1]" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
+                    {(() => {
+                      const Config = getLanguageConfig(activeRepo.language);
+                      const Icon = Config.icon;
+                      return <Icon className={`w-16 h-16 opacity-50 ${Config.color}`} />;
+                    })()}
                   </div>
                 )}
 
