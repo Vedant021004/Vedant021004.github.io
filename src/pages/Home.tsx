@@ -111,15 +111,11 @@ export const Home = () => {
                   }}
                   className="flex items-center text-[#ff3b30] relative"
                 >
-                  {/* Real Animated Ant GIF */}
+                  {/* Real Animated Ant GIF (Locally Hosted) */}
                   <img 
-                    src="https://media.tenor.com/FwH3OOSq5w8AAAAi/ant-walking.gif" 
+                    src="/ant.gif" 
                     alt="Crawling Ant" 
-                    className="w-[10vw] md:w-[6vw] object-contain -mr-4"
-                    onError={(e) => {
-                      // Fallback if tenor fails
-                      (e.target as HTMLImageElement).src = "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif";
-                    }}
+                    className="w-[20vw] md:w-[12vw] object-contain -mr-4 drop-shadow-2xl"
                   />
                   <span className="text-[10vw] md:text-[6vw] font-mono tracking-tighter -ml-2">ant</span>
                   
@@ -128,7 +124,7 @@ export const Home = () => {
                     initial={{ opacity: 0, scale: 0, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     transition={{ delay: 1, duration: 0.5, type: "spring" }}
-                    className="absolute -top-12 -right-8 bg-white text-black text-sm md:text-lg font-bold px-4 py-2 rounded-2xl rounded-bl-none shadow-lg border-2 border-black"
+                    className="absolute -top-16 -right-8 bg-white text-black text-sm md:text-xl font-bold px-6 py-3 rounded-2xl rounded-bl-none shadow-[0_0_20px_rgba(255,255,255,0.2)] border-2 border-black z-50"
                   >
                     Hi! 👋
                   </motion.div>
