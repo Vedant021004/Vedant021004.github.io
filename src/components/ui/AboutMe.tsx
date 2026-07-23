@@ -55,12 +55,12 @@ export const AboutMe = () => {
           </div>
 
           <h3 className="text-2xl md:text-3xl font-bold text-black dark:text-white mb-8 leading-tight transition-colors">
-            {global.aboutTitle?.split('\\n').map((line, i) => (
+            {global.aboutTitle ? global.aboutTitle.split('\\n').map((line, i) => (
               <span key={i}>
                 {line}
                 <br />
               </span>
-            )) || "I build AI systems that solve real problems."}
+            )) : "I build AI systems that solve real problems."}
           </h3>
 
           <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 transition-colors">
