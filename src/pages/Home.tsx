@@ -12,6 +12,7 @@ import Particles, { ParticlesProvider } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { Engine } from "@tsparticles/engine";
 import { useTheme } from "../hooks/useTheme";
+import { ErrorBoundary } from "../components/ui/ErrorBoundary";
 
 // Map string icon names to actual Lucide components
 const IconMap: Record<string, any> = {
@@ -166,9 +167,11 @@ export const Home = () => {
           >
             <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px] pointer-events-auto overflow-visible">
               <div className="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full translate-y-12 transition-colors duration-500" />
-              <Suspense fallback={<div className="w-full h-full animate-pulse bg-black/5 dark:bg-white/5 rounded-full" />}>
-                <Spline scene="https://prod.spline.design/qW-O414ZgY-i5L7O/scene.splinecode" className="w-full h-full drop-shadow-2xl z-20 scale-[1.2]" />
-              </Suspense>
+              <ErrorBoundary fallback={<div className="w-full h-full animate-pulse bg-black/5 dark:bg-white/5 rounded-full" />}>
+                <Suspense fallback={<div className="w-full h-full animate-pulse bg-black/5 dark:bg-white/5 rounded-full" />}>
+                  <Spline scene="https://prod.spline.design/qW-O414ZgY-i5L7O/scene.splinecode" className="w-full h-full drop-shadow-2xl z-20 scale-[1.2]" />
+                </Suspense>
+              </ErrorBoundary>
             </div>
           </motion.div>
         </div>
