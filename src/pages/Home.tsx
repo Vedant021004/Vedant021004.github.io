@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { MousePointer2 } from "lucide-react";
 import { Projects } from "../components/ui/Projects";
+import { Certificates } from "../components/ui/Certificates";
+import { GitHubRepos } from "../components/ui/GitHubRepos";
 import { Footer } from "../components/layout/Footer";
 
 export const Home = () => {
@@ -64,7 +66,7 @@ export const Home = () => {
           </p>
 
           {/* Pill Buttons */}
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
             {/* My Work Pill */}
             <a href="#projects" className="relative group cursor-pointer block">
               <div className="pl-14 pr-6 py-3 border-2 border-black rounded-full flex items-center gap-2 hover:bg-black/5 transition-colors bg-white">
@@ -76,16 +78,27 @@ export const Home = () => {
               </div>
             </a>
 
-            {/* About Me Pill */}
-            <div className="px-8 py-3 bg-[#2c2c2c] hover:bg-black text-white rounded-full font-semibold transition-colors cursor-pointer shadow-lg">
-              About Me
-            </div>
+            {/* Certificates Pill */}
+            <a href="#certificates" className="px-8 py-3 bg-white border-2 border-black hover:bg-black hover:text-white text-black rounded-full font-semibold transition-colors cursor-pointer shadow-sm">
+              Certifications
+            </a>
+
+            {/* GitHub Pill */}
+            <a href="#github" className="px-8 py-3 bg-white border-2 border-black hover:bg-black hover:text-white text-black rounded-full font-semibold transition-colors cursor-pointer shadow-sm">
+              Open Source
+            </a>
           </div>
         </motion.div>
       </section>
 
       {/* Projects Grid Section */}
       <Projects />
+
+      {/* Certificates Section */}
+      <Certificates />
+
+      {/* GitHub Repos Section */}
+      <GitHubRepos />
 
       {/* Footer */}
       <Footer />
