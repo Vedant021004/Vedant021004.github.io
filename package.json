@@ -20,6 +20,7 @@
     "octokit": "^5.0.5",
     "react": "19.2.6",
     "react-dom": "19.2.6",
+    "react-icons": "^5.7.0",
     "react-router-dom": "^7.18.1",
     "tailwind-merge": "3.4.0",
     "tsparticles": "^4.3.2"

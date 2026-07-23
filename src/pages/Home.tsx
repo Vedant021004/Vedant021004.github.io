@@ -6,7 +6,7 @@ import { Projects } from "../components/ui/Projects";
 import { Certificates } from "../components/ui/Certificates";
 import { GitHubRepos } from "../components/ui/GitHubRepos";
 import { AboutMe } from "../components/ui/AboutMe";
-import antGif from "../assets/ant.gif";
+import { GiAnt } from "react-icons/gi";
 
 export const Home = () => {
   const { global } = usePortfolioData();
@@ -28,157 +28,50 @@ export const Home = () => {
       {/* Main Playful Typography Area */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-32">
         
-        {/* Massive Text Container */}
-        <div className="flex items-center text-[22vw] md:text-[18vw] font-display leading-none tracking-tighter text-black dark:text-white select-none relative w-full justify-center min-h-[40vh]">
-          
-          <AnimatePresence mode="wait">
-            {!isDark ? (
-              /* LIGHT MODE: v-ed-a-nt */
-              <motion.div 
-                key="light-mode-text"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="flex items-center absolute"
+        {/* Massive Text Container (New Logo Layout) */}
+        <div className="flex flex-col items-center justify-center relative w-full min-h-[40vh] select-none">
+          <div className="flex flex-col items-center relative">
+            {/* Main Logo Row */}
+            <div className="flex items-center justify-center relative">
+              {/* Ant SVG Icon */}
+              <motion.div
+                 initial={{ opacity: 0, x: -30 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 transition={{ duration: 1, type: "spring" }}
+                 className="w-[30vw] md:w-[18vw] z-20 -mr-[6vw] md:-mr-[4vw] mb-[4vw] md:mb-[2vw] flex justify-center text-black dark:text-white drop-shadow-2xl dark:drop-shadow-[0_10px_20px_rgba(255,255,255,0.1)]"
               >
-                {/* 'v' with Figma bounding box */}
-                <div className="figma-box px-1 md:px-3">
-                  <span className="figma-handle figma-handle-tl" />
-                  <span className="figma-handle figma-handle-tr" />
-                  <span className="figma-handle figma-handle-bl" />
-                  <span className="figma-handle figma-handle-br" />
-                  v
-                </div>
-                
-                {/* 'ed' */}
-                <span className="pb-4">ed</span>
-                
-                {/* 'a' replaced with red blob */}
-                <div className="relative w-[0.8em] h-[0.8em] flex items-center justify-center mx-2 md:mx-4 mt-8">
-                  <motion.div 
-                    className="absolute inset-0 bg-[#ff3b30] rounded-full" 
-                    animate={{ 
-                      borderRadius: ["50%", "40% 60% 70% 30%", "60% 40% 30% 70%", "50%"] 
-                    }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  />
-                  {/* Cursor icon inside blob */}
-                  <motion.div
-                    animate={{ x: [0, 10, 0], y: [0, 5, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute z-10"
-                  >
-                    <MousePointer2 className="w-[0.3em] h-[0.3em] text-black fill-black -rotate-12" />
-                  </motion.div>
-                </div>
-                
-                {/* 'nt' */}
-                <span className="pb-4">nt</span>
+                <GiAnt className="w-full h-full transform -rotate-12" />
               </motion.div>
-            ) : (
-              /* DARK MODE: ved      ant(bug) */
-              <motion.div 
-                key="dark-mode-text"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="flex items-center w-full justify-center gap-[2vw] md:gap-[5vw] absolute"
+              
+              {/* "ved" Text */}
+              <motion.div
+                 initial={{ opacity: 0, x: 30 }}
+                 animate={{ opacity: 1, x: 0 }}
+                 transition={{ duration: 1, type: "spring", delay: 0.1 }}
+                 className="z-10"
               >
-                {/* "ved" slides left */}
-                <motion.div
-                  initial={{ x: 100 }}
-                  animate={{ x: -20 }}
-                  transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                  className="pb-4 relative z-10"
-                >
-                  ved
-                </motion.div>
-
-                {/* The word "ant" stays put, and the bug crawls out of it! */}
-                <div className="relative flex items-center">
-                  
-                  {/* The actual text "ant" */}
-                  <motion.div
-                    initial={{ x: -100, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                    className="text-[10vw] md:text-[6vw] font-mono tracking-tighter relative z-20 bg-[#050505]"
-                  >
-                    ant
-                  </motion.div>
-
-                  {/* The crawling ant GIF emerging from the text (z-10 so it comes from under) */}
-                  <motion.div
-                    initial={{ x: -50, opacity: 0, scale: 0.5 }}
-                    animate={{ 
-                      x: [0, 80, 150, 250, 400, typeof window !== "undefined" ? window.innerWidth : 1000], 
-                      y: [0, -10, 5, -15, 10, 0],
-                      rotate: [0, 10, -5, 15, -10, 0],
-                      opacity: [0, 1, 1, 1, 1, 1],
-                      scale: 1
-                    }}
-                    transition={{ 
-                      duration: 10, 
-                      ease: "linear",
-                      times: [0, 0.1, 0.3, 0.5, 0.7, 1],
-                      repeat: Infinity,
-                      repeatDelay: 3,
-                      delay: 0.5
-                    }}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex items-center text-[#ff3b30]"
-                  >
-                    <img 
-                      src={antGif} 
-                      alt="Crawling Ant" 
-                      className="w-[20vw] md:w-[12vw] object-contain drop-shadow-2xl"
-                    />
-                  </motion.div>
-
-                  {/* Speech Bubble "Hi!" (z-30 so it goes over the text) */}
-                  <motion.div
-                    initial={{ x: -50, opacity: 0, scale: 0.5 }}
-                    animate={{ 
-                      x: [0, 80, 150, 250, 400, typeof window !== "undefined" ? window.innerWidth : 1000], 
-                      y: [0, -10, 5, -15, 10, 0],
-                      rotate: [0, 10, -5, 15, -10, 0],
-                      opacity: [0, 1, 1, 1, 1, 1],
-                      scale: 1
-                    }}
-                    transition={{ 
-                      duration: 10, 
-                      ease: "linear",
-                      times: [0, 0.1, 0.3, 0.5, 0.7, 1],
-                      repeat: Infinity,
-                      repeatDelay: 3,
-                      delay: 0.5
-                    }}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-[20vw] md:w-[12vw] pointer-events-none"
-                  >
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0, y: 10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ delay: 2, duration: 0.5, type: "spring" }}
-                      className="absolute -top-12 text-[#ff9500] text-2xl md:text-4xl font-black drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] whitespace-nowrap w-max"
-                    >
-                      Hi!
-                    </motion.div>
-                  </motion.div>
-                </div>
+                 <h1 className="text-[28vw] md:text-[18vw] font-black text-[#ea6b24] leading-none tracking-tighter m-0 drop-shadow-sm font-display">
+                   ved
+                 </h1>
               </motion.div>
-            )}
-          </AnimatePresence>
+            </div>
+            
+            {/* Subtitle */}
+            <motion.div
+               initial={{ opacity: 0, y: 15 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 1, delay: 0.4 }}
+               className="flex flex-col items-center mt-4 md:mt-6 pl-[10vw] md:pl-[6vw]"
+            >
+               <span className="text-[3vw] md:text-[1.5vw] font-bold text-[#333] dark:text-[#ccc] tracking-[0.15em] leading-tight font-body">
+                 INNOVATION & EFFICIENCY
+               </span>
+               <span className="text-[3vw] md:text-[1.5vw] font-bold text-[#333] dark:text-[#ccc] tracking-[0.15em] leading-tight mt-1 font-body">
+                 SOLUTIONS
+               </span>
+            </motion.div>
+          </div>
         </div>
-
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="text-gray-500 font-mono text-sm md:text-base mt-2 mb-8 italic"
-        >
-          * "ved" for smart (from the Vedas) • "ant" for hard work
-        </motion.div>
 
         {/* Subtitle */}
         <motion.div
