@@ -1,35 +1,22 @@
-import { motion } from "framer-motion";
-import { GitBranch, Globe } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Globe } from "lucide-react";
 
-export const Footer = () => (
-  <motion.footer
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-    viewport={{ once: true }}
-    className="border-t border-black/5 dark:border-white/5 glass py-8 mt-20 transition-colors duration-500"
-  >
-    <div className="mx-auto flex w-full max-w-6xl flex-col md:flex-row items-center justify-between gap-6 px-6">
-      <div className="flex flex-col items-center md:items-start gap-1">
-        <p className="font-display text-lg font-semibold text-black dark:text-white tracking-wide transition-colors">
-          VEDANT KAPIL
-        </p>
-        <p className="text-sm text-gray-500">
-          © {new Date().getFullYear()} Vedant Kapil. All rights reserved.
-        </p>
-      </div>
+export const Footer = () => {
+  const currentYear = new Date().getFullYear();
 
-      <div className="flex items-center gap-6">
-        <a href="https://github.com/Vedant021004" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-indigo-500 transition-colors">
-          <GitBranch className="h-5 w-5" />
-        </a>
-        <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-indigo-500 transition-colors">
-          <Globe className="h-5 w-5" />
-        </a>
-        <Link to="/admin" className="text-gray-600 hover:text-indigo-500 text-xs transition-colors ml-4 uppercase tracking-widest font-medium border border-black/10 dark:border-white/10 px-3 py-1 rounded-full">
-          Admin
-        </Link>
+  return (
+    <footer className="w-full bg-white px-6 md:px-10 py-8">
+      <div className="max-w-[1600px] mx-auto border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        {/* Left Side: Copyright */}
+        <p className="text-gray-500 font-medium text-sm md:text-base">
+          Vedant Kapil © {currentYear}
+        </p>
+
+        {/* Right Side: Location / Globe */}
+        <div className="flex items-center gap-2 text-gray-500 hover:text-black transition-colors cursor-pointer">
+          <Globe className="w-5 h-5" />
+          <span className="font-medium text-sm md:text-base uppercase tracking-wider">India</span>
+        </div>
       </div>
-    </div>
-  </motion.footer>
-);
+    </footer>
+  );
+};

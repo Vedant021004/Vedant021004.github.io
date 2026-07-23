@@ -1,16 +1,14 @@
 import { motion } from "framer-motion";
-import { MousePointer2, User, Briefcase } from "lucide-react";
-import { usePortfolioData } from "../hooks/usePortfolioData";
-import { Button } from "../components/ui/Button";
+import { MousePointer2 } from "lucide-react";
+import { Projects } from "../components/ui/Projects";
+import { Footer } from "../components/layout/Footer";
 
 export const Home = () => {
-  const dataJson = usePortfolioData();
-  
   return (
     <div className="relative min-h-screen bg-white overflow-hidden selection:bg-[#0d99ff]/30 selection:text-black">
       
       {/* Main Playful Typography Area */}
-      <section className="relative min-h-[80vh] flex flex-col items-center justify-center px-6 pt-20">
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-32">
         
         {/* Massive Text */}
         <motion.div 
@@ -68,7 +66,7 @@ export const Home = () => {
           {/* Pill Buttons */}
           <div className="flex items-center gap-6">
             {/* My Work Pill */}
-            <div className="relative group cursor-pointer">
+            <a href="#projects" className="relative group cursor-pointer block">
               <div className="pl-14 pr-6 py-3 border-2 border-black rounded-full flex items-center gap-2 hover:bg-black/5 transition-colors bg-white">
                 <span className="font-semibold text-black">My work</span>
               </div>
@@ -76,7 +74,7 @@ export const Home = () => {
               <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-black text-white rounded-lg flex items-center justify-center font-bold text-xl -rotate-6 group-hover:rotate-0 transition-transform shadow-lg border border-white/20">
                 <span className="text-blue-400">A</span>I.
               </div>
-            </div>
+            </a>
 
             {/* About Me Pill */}
             <div className="px-8 py-3 bg-[#2c2c2c] hover:bg-black text-white rounded-full font-semibold transition-colors cursor-pointer shadow-lg">
@@ -85,6 +83,12 @@ export const Home = () => {
           </div>
         </motion.div>
       </section>
+
+      {/* Projects Grid Section */}
+      <Projects />
+
+      {/* Footer */}
+      <Footer />
 
     </div>
   );
