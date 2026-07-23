@@ -13,7 +13,11 @@
     {
       "id": "1",
       "title": "Agentic AI Coding Assistant",
-      "tech": ["Python", "TensorFlow", "React"],
+      "tech": [
+        "Python",
+        "TensorFlow",
+        "React"
+      ],
       "approach": "Built a fully autonomous AI system capable of multi-step reasoning and full-stack code generation.",
       "demoUrl": "#",
       "repoUrl": "#"
@@ -21,14 +25,18 @@
     {
       "id": "2",
       "title": "Scalable RAG Pipeline",
-      "tech": ["LangChain", "Pinecone", "FastAPI"],
+      "tech": [
+        "LangChain",
+        "Pinecone",
+        "FastAPI"
+      ],
       "approach": "Engineered a production-ready RAG architecture that processes millions of documents with sub-second retrieval.",
       "demoUrl": "#",
       "repoUrl": "#"
     }
   ],
   "global": {
-    "profileImage": "/profile-1784809644066-screenshot-2026-07-20-225303.png",
+    "profileImage": "/profile-1784818556934-screenshot-2026-07-19-171104.png",
     "heroTitle": "Vedant Kapil",
     "heroDescription": "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment.",
     "aboutTitle": "Conscious Engineering.",
