@@ -21,7 +21,6 @@
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-router-dom": "^7.18.1",
-    "react-tsparticles": "^2.12.2",
     "tailwind-merge": "3.4.0",
     "tsparticles": "^4.3.2"
   },
