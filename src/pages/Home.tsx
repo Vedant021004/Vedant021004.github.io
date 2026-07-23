@@ -5,6 +5,7 @@ import { Projects } from "../components/ui/Projects";
 import { Certificates } from "../components/ui/Certificates";
 import { GitHubRepos } from "../components/ui/GitHubRepos";
 import { AboutMe } from "../components/ui/AboutMe";
+import antGif from "../assets/ant.gif";
 
 export const Home = () => {
   const [isDark, setIsDark] = useState(
@@ -111,9 +112,9 @@ export const Home = () => {
                   }}
                   className="flex items-center text-[#ff3b30] relative"
                 >
-                  {/* Real Animated Ant GIF (Locally Hosted) */}
+                  {/* Real Animated Ant GIF (Locally Hosted & Bundled) */}
                   <img 
-                    src="/ant.gif" 
+                    src={antGif} 
                     alt="Crawling Ant" 
                     className="w-[20vw] md:w-[12vw] object-contain -mr-4 drop-shadow-2xl"
                   />
