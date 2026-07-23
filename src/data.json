@@ -9,34 +9,8 @@
     "GEN-AI--Langchain-": "http://localhost:8501/",
     "ML-JOURNEY": "https://mymodelone.streamlit.app/"
   },
-  "caseStudies": [
-    {
-      "id": "ml-journey",
-      "title": "ML Journey: End-to-End Prediction Platform",
-      "subtitle": "A scalable machine learning platform for real-time predictions.",
-      "problem": "Data scientists often struggle with deploying models efficiently. There is a gap between a Jupyter notebook and a scalable production endpoint.",
-      "approach": "Built a seamless deployment pipeline using Streamlit and Docker, allowing models to be containerized and exposed via REST APIs with zero downtime.",
-      "results": "Reduced deployment time from days to minutes, successfully serving over 10,000 requests with sub-50ms latency.",
-      "tech": ["Python", "Streamlit", "Docker", "FastAPI"],
-      "repoUrl": "https://github.com/Vedant021004/ML-JOURNEY",
-      "demoUrl": "https://mymodelone.streamlit.app/",
-      "image": "/projects/screenshot-2026-06-14-201058.png"
-    },
-    {
-      "id": "gen-ai-langchain",
-      "title": "GenAI Agent with Langchain",
-      "subtitle": "Autonomous conversational agent with RAG capabilities.",
-      "problem": "Standard LLMs hallucinate on proprietary data and lack the ability to perform complex, multi-step actions across various toolsets.",
-      "approach": "Implemented a Retrieval-Augmented Generation (RAG) architecture using LangChain, integrating vector databases for semantic search and function calling.",
-      "results": "Achieved a 40% reduction in hallucination rates and enabled the agent to autonomously query databases and summarize financial documents.",
-      "tech": ["LangChain", "OpenAI", "Pinecone", "Python"],
-      "repoUrl": "https://github.com/Vedant021004/GEN-AI--Langchain-",
-      "demoUrl": "http://localhost:8501/",
-      "image": "/projects/screenshot-2026-06-14-201058.png"
-    }
-  ],
   "global": {
-    "profileImage": "/me.png",
+    "profileImage": "/profile-1784809644066-screenshot-2026-07-20-225303.png",
     "heroTitle": "Vedant Kapil",
     "heroDescription": "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment.",
     "aboutTitle": "Conscious Engineering.",
