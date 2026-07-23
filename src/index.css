@@ -8,11 +8,11 @@
   --text-color: #000000;
 }
 
-/* Force light mode globally */
+/* Enable real dark mode */
 html.dark {
-  color-scheme: light;
-  --bg-color: #ffffff;
-  --text-color: #000000;
+  color-scheme: dark;
+  --bg-color: #050505;
+  --text-color: #ededed;
 }
 
 body {

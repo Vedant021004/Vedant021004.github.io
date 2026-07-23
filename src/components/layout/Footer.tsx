@@ -7,9 +7,12 @@ export const Footer = () => {
     <footer className="w-full bg-white px-6 md:px-10 py-8">
       <div className="max-w-[1600px] mx-auto border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Left Side: Copyright */}
-        <p className="text-gray-500 font-medium text-sm md:text-base">
-          Vedant Kapil © {currentYear}
-        </p>
+        <div className="flex items-center gap-4">
+          <p className="text-gray-500 font-medium text-sm md:text-base">
+            Vedant Kapil © {currentYear}
+          </p>
+          <a href="/admin" className="text-gray-400 hover:text-black transition-colors text-sm">Admin</a>
+        </div>
 
         {/* Right Side: Location / Globe */}
         <div className="flex items-center gap-2 text-gray-500 hover:text-black transition-colors cursor-pointer">
