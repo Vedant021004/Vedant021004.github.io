@@ -6,10 +6,11 @@ import { useCountUp } from "../hooks/useCountUp";
 import { Button } from "../components/ui/Button";
 import { TechCard } from "../components/ui/TechCard";
 import { usePortfolioData } from "../hooks/usePortfolioData";
-import { useMemo, Suspense, useState, useEffect } from "react";
+import { useMemo, Suspense, useCallback } from "react";
 import Spline from '@splinetool/react-spline';
-import Particles, { initParticlesEngine } from "@tsparticles/react";
+import Particles, { ParticlesProvider } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
+import type { Engine } from "@tsparticles/engine";
 import { useTheme } from "../hooks/useTheme";
 
 // Map string icon names to actual Lucide components
@@ -35,18 +36,13 @@ export const Home = () => {
 
   const typingText = useTyping(roles);
   const { repos } = useGithubRepos("Vedant021004");
-  const [init, setInit] = useState(false);
 
   const totalStars = useMemo(() => repos.reduce((sum, repo) => sum + repo.stargazers_count, 0), [repos]);
   const starsCounter = useCountUp(totalStars);
   const repoCounter = useCountUp(repos.length);
 
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setInit(true);
-    });
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadSlim(engine);
   }, []);
 
   return (
@@ -54,49 +50,49 @@ export const Home = () => {
       {/* Background elements */}
       <div className="fixed inset-0 pointer-events-none transition-colors duration-500 z-0">
         <div className="absolute inset-0 bg-[var(--bg-color)] opacity-95" />
-        {init && (
+        <ParticlesProvider init={particlesInit}>
           <Particles
             id="tsparticles"
             options={{
-            background: {
-              color: { value: "transparent" },
-            },
-            fpsLimit: 60,
-            interactivity: {
-              events: {
-                onHover: { enable: true, mode: "grab" },
+              background: {
+                color: { value: "transparent" },
               },
-              modes: {
-                grab: { distance: 140, links: { opacity: 0.5 } },
+              fpsLimit: 60,
+              interactivity: {
+                events: {
+                  onHover: { enable: true, mode: "grab" },
+                },
+                modes: {
+                  grab: { distance: 140, links: { opacity: 0.5 } },
+                },
               },
-            },
-            particles: {
-              color: { value: theme === 'dark' ? "#6366f1" : "#4f46e5" },
-              links: {
-                color: theme === 'dark' ? "#6366f1" : "#4f46e5",
-                distance: 150,
-                enable: true,
-                opacity: 0.2,
-                width: 1,
+              particles: {
+                color: { value: theme === 'dark' ? "#6366f1" : "#4f46e5" },
+                links: {
+                  color: theme === 'dark' ? "#6366f1" : "#4f46e5",
+                  distance: 150,
+                  enable: true,
+                  opacity: 0.2,
+                  width: 1,
+                },
+                move: {
+                  direction: "none",
+                  enable: true,
+                  outModes: { default: "bounce" },
+                  random: false,
+                  speed: 0.8,
+                  straight: false,
+                },
+                number: { density: { enable: true, width: 800 }, value: 60 },
+                opacity: { value: 0.3 },
+                shape: { type: "circle" },
+                size: { value: { min: 1, max: 2 } },
               },
-              move: {
-                direction: "none",
-                enable: true,
-                outModes: { default: "bounce" },
-                random: false,
-                speed: 0.8,
-                straight: false,
-              },
-              number: { density: { enable: true, width: 800 }, value: 60 },
-              opacity: { value: 0.3 },
-              shape: { type: "circle" },
-              size: { value: { min: 1, max: 2 } },
-            },
-            detectRetina: true,
-          }}
-          className="absolute inset-0"
-        />
-        )}
+              detectRetina: true,
+            }}
+            className="absolute inset-0"
+          />
+        </ParticlesProvider>
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-500/[0.05] blur-[120px]" />
         <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-500/[0.05] blur-[120px]" />
       </div>
