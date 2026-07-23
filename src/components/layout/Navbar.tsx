@@ -48,7 +48,10 @@ export const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="w-8 h-8 rounded-lg bg-[#ea6b24] flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
+            v
+          </div>
           <h1 className="font-mono text-sm md:text-base tracking-widest text-black dark:text-white font-semibold transition-colors">
             Vedant.Kapil
           </h1>
