@@ -37,13 +37,13 @@ export const GitHubRepos = () => {
   }, []);
 
   return (
-    <section id="github" className="py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white border-t border-gray-100">
+    <section id="github" className="py-16 md:py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] border-t border-gray-100 dark:border-white/5 transition-colors duration-500">
       
       {/* Section Header */}
       <div className="mb-16 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Code2 className="w-10 h-10 text-black" />
-          <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black">
+          <Code2 className="w-10 h-10 text-black dark:text-white transition-colors" />
+          <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black dark:text-white transition-colors">
             Open Source
           </h2>
         </div>
@@ -51,7 +51,7 @@ export const GitHubRepos = () => {
           href="https://github.com/Vedant021004" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-2 px-6 py-3 bg-[#f5f5f5] hover:bg-[#e5e5e5] text-black font-bold rounded-full transition-colors"
+          className="hidden md:flex items-center gap-2 px-6 py-3 bg-[#f5f5f5] dark:bg-[#222222] hover:bg-[#e5e5e5] dark:hover:bg-[#333] text-black dark:text-white font-bold rounded-full transition-colors"
         >
           View all <ArrowUpRight className="w-4 h-4" />
         </a>
@@ -59,7 +59,7 @@ export const GitHubRepos = () => {
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="w-8 h-8 border-4 border-black border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-black dark:border-white border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -73,25 +73,25 @@ export const GitHubRepos = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group block p-8 bg-white border-2 border-black/10 rounded-3xl hover:border-black transition-colors"
+              className="group block p-8 bg-white dark:bg-[#111111] border-2 border-black/10 dark:border-white/10 rounded-3xl hover:border-black dark:hover:border-white transition-colors"
             >
-              <h3 className="text-2xl font-bold text-black mb-3 group-hover:text-[#0d99ff] transition-colors line-clamp-1">
+              <h3 className="text-xl md:text-2xl font-bold text-black dark:text-white mb-3 group-hover:text-[#0d99ff] transition-colors line-clamp-1">
                 {repo.name}
               </h3>
               
-              <p className="text-gray-600 mb-8 line-clamp-2 h-12">
+              <p className="text-gray-600 dark:text-gray-400 mb-8 line-clamp-2 h-12 transition-colors">
                 {repo.description || "No description available."}
               </p>
 
-              <div className="flex items-center justify-between text-sm font-semibold">
+              <div className="flex items-center justify-between text-sm font-semibold transition-colors">
                 {/* Language Pill */}
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full bg-[#ff3b30]" />
-                  <span className="text-black">{repo.language || "Markdown"}</span>
+                  <span className="text-black dark:text-white">{repo.language || "Markdown"}</span>
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center gap-4 text-gray-500">
+                <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4" />
                     <span>{repo.stargazers_count}</span>

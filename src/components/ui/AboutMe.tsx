@@ -6,9 +6,9 @@ export const AboutMe = () => {
   const { global } = usePortfolioData();
 
   return (
-    <section id="about" className="py-32 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] transition-colors duration-500">
+    <section id="about" className="py-16 md:py-32 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] transition-colors duration-500">
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
         
         {/* Left: Huge Figma-style Image */}
         <motion.div

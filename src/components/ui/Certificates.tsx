@@ -7,12 +7,12 @@ export const Certificates = () => {
   const certificates = global.certificates || [];
 
   return (
-    <section id="certificates" className="py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white border-t border-gray-100">
+    <section id="certificates" className="py-16 md:py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] border-t border-gray-100 dark:border-white/5 transition-colors duration-500">
       
       {/* Section Header */}
       <div className="mb-16 flex items-center gap-4">
-        <Award className="w-10 h-10 text-black" />
-        <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black">
+        <Award className="w-10 h-10 text-black dark:text-white" />
+        <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black dark:text-white">
           Certifications
         </h2>
       </div>
@@ -29,7 +29,7 @@ export const Certificates = () => {
             className="group flex flex-col items-center text-center"
           >
             {/* Image Box */}
-            <div className="w-full aspect-square bg-[#f9f9f9] border-2 border-black/5 rounded-2xl flex items-center justify-center p-6 mb-4 transition-transform duration-300 group-hover:-translate-y-2 group-hover:border-black/20">
+            <div className="w-full aspect-square bg-[#f9f9f9] dark:bg-[#111111] border-2 border-black/5 dark:border-white/5 rounded-2xl flex items-center justify-center p-6 mb-4 transition-transform duration-300 group-hover:-translate-y-2 group-hover:border-black/20 dark:group-hover:border-white/20">
               <img 
                 src={`/certificates/${cert.file}`} 
                 alt={cert.title}
@@ -38,7 +38,7 @@ export const Certificates = () => {
             </div>
             
             {/* Title */}
-            <h3 className="text-sm font-bold text-gray-800 line-clamp-2 leading-snug">
+            <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug transition-colors">
               {cert.title}
             </h3>
           </motion.div>

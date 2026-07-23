@@ -16,8 +16,8 @@ export const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+    <section id="projects" className="py-16 md:py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] transition-colors duration-500">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
         {caseStudies.map((project, index) => {
           const visual = getProjectVisual(index);
           
@@ -31,7 +31,7 @@ export const Projects = () => {
               className="group flex flex-col"
             >
               {/* Massive Solid Color Image Cover */}
-              <div className={`w-full aspect-[4/3] rounded-2xl md:rounded-3xl flex items-center justify-center mb-8 ${visual.bg} transition-transform duration-500 group-hover:-translate-y-2`}>
+              <div className={`w-full aspect-[4/3] rounded-2xl md:rounded-3xl flex items-center justify-center mb-6 md:mb-8 ${visual.bg} transition-transform duration-500 group-hover:-translate-y-2`}>
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: index % 2 === 0 ? 5 : -5 }}
                   transition={{ type: "spring", stiffness: 300 }}
@@ -41,23 +41,23 @@ export const Projects = () => {
               </div>
 
               {/* Title */}
-              <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black mb-4">
+              <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight text-black dark:text-white mb-4 transition-colors">
                 {project.title.split(":")[0]}
               </h2>
 
               {/* Metadata Row */}
-              <div className="flex justify-between items-center text-sm md:text-base text-gray-500 font-medium mb-6 uppercase tracking-wider">
+              <div className="flex justify-between items-center text-xs md:text-base text-gray-500 font-medium mb-4 md:mb-6 uppercase tracking-wider">
                 <span>{project.tech.slice(0, 2).join(" | ")}</span>
                 <span>Live Demo</span>
               </div>
 
               {/* Description */}
-              <p className="text-gray-700 text-lg md:text-xl leading-relaxed mb-8 font-medium">
+              <p className="text-gray-700 dark:text-gray-300 text-base md:text-xl leading-relaxed mb-6 md:mb-8 font-medium transition-colors">
                 {project.approach}
               </p>
 
               {/* View Project Button */}
-              <div className="mt-auto flex gap-4">
+              <div className="mt-auto flex flex-col md:flex-row gap-3 md:gap-4">
                 <a 
                   href={project.demoUrl}
                   target="_blank"

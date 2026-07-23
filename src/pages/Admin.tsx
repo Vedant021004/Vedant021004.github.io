@@ -588,7 +588,7 @@ export const Admin = () => {
                         onChange={(e) => { const newCS = [...caseStudies]; newCS[idx].approach = e.target.value; setCaseStudies(newCS); }}
                         className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-3 py-1.5 text-black dark:text-white text-sm focus:outline-none"
                       />
-                      <div className="flex gap-2">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <input 
                           type="text" value={cs.demoUrl} placeholder="Live Demo URL"
                           onChange={(e) => { const newCS = [...caseStudies]; newCS[idx].demoUrl = e.target.value; setCaseStudies(newCS); }}
