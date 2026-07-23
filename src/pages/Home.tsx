@@ -109,7 +109,7 @@ export const Home = () => {
                     ant
                   </motion.div>
 
-                  {/* The crawling ant GIF emerging from the text */}
+                  {/* The crawling ant GIF emerging from the text (z-10 so it comes from under) */}
                   <motion.div
                     initial={{ x: -50, opacity: 0, scale: 0.5 }}
                     animate={{ 
@@ -125,7 +125,7 @@ export const Home = () => {
                       times: [0, 0.1, 0.3, 0.5, 0.7, 1],
                       repeat: Infinity,
                       repeatDelay: 3,
-                      delay: 0.5 // Waits half a second before crawling out
+                      delay: 0.5
                     }}
                     className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex items-center text-[#ff3b30]"
                   >
@@ -134,13 +134,33 @@ export const Home = () => {
                       alt="Crawling Ant" 
                       className="w-[20vw] md:w-[12vw] object-contain drop-shadow-2xl"
                     />
-                    
-                    {/* Speech Bubble "Hi!" */}
+                  </motion.div>
+
+                  {/* Speech Bubble "Hi!" (z-30 so it goes over the text) */}
+                  <motion.div
+                    initial={{ x: -50, opacity: 0, scale: 0.5 }}
+                    animate={{ 
+                      x: [0, 80, 150, 250, 400, typeof window !== "undefined" ? window.innerWidth : 1000], 
+                      y: [0, -10, 5, -15, 10, 0],
+                      rotate: [0, 10, -5, 15, -10, 0],
+                      opacity: [0, 1, 1, 1, 1, 1],
+                      scale: 1
+                    }}
+                    transition={{ 
+                      duration: 10, 
+                      ease: "linear",
+                      times: [0, 0.1, 0.3, 0.5, 0.7, 1],
+                      repeat: Infinity,
+                      repeatDelay: 3,
+                      delay: 0.5
+                    }}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-[20vw] md:w-[12vw] pointer-events-none"
+                  >
                     <motion.div
                       initial={{ opacity: 0, scale: 0, y: 10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       transition={{ delay: 2, duration: 0.5, type: "spring" }}
-                      className="absolute -top-12 left-1/2 -translate-x-1/2 text-[#ff9500] text-2xl md:text-4xl font-black drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] whitespace-nowrap z-50 w-max"
+                      className="absolute -top-12 text-[#ff9500] text-2xl md:text-4xl font-black drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] whitespace-nowrap w-max"
                     >
                       Hi!
                     </motion.div>
