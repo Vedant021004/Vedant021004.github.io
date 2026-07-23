@@ -6,7 +6,7 @@ import { Projects } from "../components/ui/Projects";
 import { Certificates } from "../components/ui/Certificates";
 import { GitHubRepos } from "../components/ui/GitHubRepos";
 import { AboutMe } from "../components/ui/AboutMe";
-import { GiAnt } from "react-icons/gi";
+import antImg from "../assets/ant.png";
 
 export const Home = () => {
   const { global } = usePortfolioData();
@@ -33,14 +33,18 @@ export const Home = () => {
           <div className="flex flex-col items-center relative">
             {/* Main Logo Row */}
             <div className="flex items-center justify-center relative">
-              {/* Ant SVG Icon */}
+              {/* Clean Ant Image */}
               <motion.div
                  initial={{ opacity: 0, x: -30 }}
                  animate={{ opacity: 1, x: 0 }}
                  transition={{ duration: 1, type: "spring" }}
-                 className="w-[30vw] md:w-[18vw] z-20 -mr-[6vw] md:-mr-[4vw] mb-[4vw] md:mb-[2vw] flex justify-center text-black dark:text-white drop-shadow-2xl dark:drop-shadow-[0_10px_20px_rgba(255,255,255,0.1)]"
+                 className="w-[30vw] md:w-[18vw] z-20 -mr-[6vw] md:-mr-[4vw] mb-[4vw] md:mb-[2vw]"
               >
-                <GiAnt className="w-full h-full transform -rotate-12" />
+                <img 
+                  src={antImg} 
+                  alt="Ant Logo" 
+                  className="w-full h-auto object-contain drop-shadow-2xl dark:invert dark:drop-shadow-[0_10px_20px_rgba(255,255,255,0.1)]" 
+                />
               </motion.div>
               
               {/* "ved" Text */}
