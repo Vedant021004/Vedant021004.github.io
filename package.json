@@ -11,9 +11,6 @@
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.12.98",
-    "@tsparticles/engine": "^4.3.2",
-    "@tsparticles/react": "^4.3.2",
-    "@tsparticles/slim": "^4.3.2",
     "clsx": "2.1.1",
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.25.0",
@@ -21,8 +18,7 @@
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-router-dom": "^7.18.1",
-    "tailwind-merge": "3.4.0",
-    "tsparticles": "^4.3.2"
+    "tailwind-merge": "3.4.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.1.17",

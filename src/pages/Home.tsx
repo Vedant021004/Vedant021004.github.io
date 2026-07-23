@@ -6,11 +6,8 @@ import { useCountUp } from "../hooks/useCountUp";
 import { Button } from "../components/ui/Button";
 import { TechCard } from "../components/ui/TechCard";
 import { usePortfolioData } from "../hooks/usePortfolioData";
-import { useMemo, Suspense, useCallback } from "react";
+import { useMemo, Suspense } from "react";
 import Spline from '@splinetool/react-spline';
-import Particles, { ParticlesProvider } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
-import type { Engine } from "@tsparticles/engine";
 import { useTheme } from "../hooks/useTheme";
 import { ErrorBoundary } from "../components/ui/ErrorBoundary";
 
@@ -42,192 +39,153 @@ export const Home = () => {
   const starsCounter = useCountUp(totalStars);
   const repoCounter = useCountUp(repos.length);
 
-  const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine);
-  }, []);
-
   return (
     <div className="relative">
-      {/* Background elements */}
-      <div className="fixed inset-0 pointer-events-none transition-colors duration-500 z-0">
-        <div className="absolute inset-0 bg-[var(--bg-color)] opacity-95" />
-        <ParticlesProvider init={particlesInit}>
-          <Particles
-            id="tsparticles"
-            options={{
-              background: {
-                color: { value: "transparent" },
-              },
-              fpsLimit: 60,
-              interactivity: {
-                events: {
-                  onHover: { enable: true, mode: "grab" },
-                },
-                modes: {
-                  grab: { distance: 140, links: { opacity: 0.5 } },
-                },
-              },
-              particles: {
-                color: { value: theme === 'dark' ? "#6366f1" : "#4f46e5" },
-                links: {
-                  color: theme === 'dark' ? "#6366f1" : "#4f46e5",
-                  distance: 150,
-                  enable: true,
-                  opacity: 0.2,
-                  width: 1,
-                },
-                move: {
-                  direction: "none",
-                  enable: true,
-                  outModes: { default: "bounce" },
-                  random: false,
-                  speed: 0.8,
-                  straight: false,
-                },
-                number: { density: { enable: true, width: 800 }, value: 60 },
-                opacity: { value: 0.3 },
-                shape: { type: "circle" },
-                size: { value: { min: 1, max: 2 } },
-              },
-              detectRetina: true,
-            }}
-            className="absolute inset-0"
-          />
-        </ParticlesProvider>
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-500/[0.05] blur-[120px]" />
-        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-500/[0.05] blur-[120px]" />
+      {/* Aurora Mesh Background */}
+      <div className="fixed inset-0 pointer-events-none transition-colors duration-500 z-0 overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-indigo-500 aurora-orb" style={{ animationDelay: '0s' }} />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] bg-purple-600 aurora-orb" style={{ animationDelay: '-5s' }} />
+        <div className="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] bg-fuchsia-500 aurora-orb" style={{ animationDelay: '-10s' }} />
+        <div className="absolute inset-0 bg-[var(--bg-color)] opacity-[0.85] dark:opacity-[0.95]" />
       </div>
 
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-20 overflow-hidden z-10">
-        <div className="mx-auto w-full max-w-6xl flex flex-col-reverse lg:flex-row gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 flex flex-col items-start gap-8"
-          >
-            <div className="inline-flex items-center gap-3 rounded-full border border-black/10 dark:border-white/10 glass px-4 py-2">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-500 opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500"></span>
-              </span>
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300 tracking-wide uppercase">
-                Available for new opportunities
-              </span>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="font-display text-5xl md:text-7xl lg:text-8xl tracking-tight text-black dark:text-white transition-colors duration-500 drop-shadow-sm"
-              >
-                {dataJson.global?.heroTitle || "Vedant Kapil"}
-              </motion.h1>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="h-12 md:h-16 mt-2"
-              >
-                <h2 className="text-xl md:text-3xl font-mono text-indigo-600 dark:text-indigo-400 font-light transition-colors duration-500">
-                  {typingText}
-                  <span className="animate-pulse text-indigo-500">|</span>
-                </h2>
-              </motion.div>
-            </div>
+      <section className="relative min-h-screen flex items-center px-6 pt-32 pb-20 overflow-hidden z-10">
+        <div className="mx-auto w-full max-w-7xl flex flex-col items-start justify-center min-h-[70vh]">
+          
+          <div className="w-full flex flex-col md:flex-row items-end justify-between mb-8 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-start gap-4"
+            >
+              <div className="inline-flex items-center gap-3 rounded-full border border-black/20 dark:border-white/20 px-5 py-2 backdrop-blur-md mix-blend-difference">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+                </span>
+                <span className="text-xs font-semibold text-white tracking-[0.2em] uppercase mix-blend-difference">
+                  Available for new opportunities
+                </span>
+              </div>
+            </motion.div>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="max-w-2xl text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed font-light transition-colors duration-500"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="max-w-md text-right text-sm md:text-base text-gray-800 dark:text-gray-300 uppercase tracking-widest font-medium leading-relaxed mix-blend-difference opacity-80"
             >
-              {dataJson.global?.heroDescription || "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment."}
+              {dataJson.global?.heroDescription || "Crafting production-grade AI systems and highly scalable ML infrastructure."}
             </motion.p>
+          </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+          <div className="w-full relative">
+            <motion.h1
+              initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex flex-wrap gap-4 pt-4"
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              className="font-display text-[15vw] md:text-[12vw] leading-[0.85] tracking-tighter text-black dark:text-white uppercase mix-blend-difference z-20 relative"
             >
-              <Button label="View Case Studies" href="/projects" icon={ArrowRight} />
-              <Button label="GitHub" href="https://github.com/Vedant021004" icon={GitBranch} variant="secondary" />
-              <Button label="Resume" href="/resume.pdf" icon={Download} variant="secondary" />
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="flex-1 w-full flex justify-center lg:justify-end"
-          >
-            <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px] pointer-events-auto overflow-visible">
-              <div className="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full translate-y-12 transition-colors duration-500" />
-              <ErrorBoundary fallback={<div className="w-full h-full animate-pulse bg-black/5 dark:bg-white/5 rounded-full" />}>
-                <Suspense fallback={<div className="w-full h-full animate-pulse bg-black/5 dark:bg-white/5 rounded-full" />}>
-                  <Spline scene="https://prod.spline.design/qW-O414ZgY-i5L7O/scene.splinecode" className="w-full h-full drop-shadow-2xl z-20 scale-[1.2]" />
+              Vedant
+            </motion.h1>
+            
+            {/* The 3D Element floating asymmetrically */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] pointer-events-auto z-10 hidden md:block"
+            >
+              <ErrorBoundary fallback={null}>
+                <Suspense fallback={null}>
+                  <Spline scene="https://prod.spline.design/qW-O414ZgY-i5L7O/scene.splinecode" className="w-full h-full scale-[1.2]" />
                 </Suspense>
               </ErrorBoundary>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              className="flex items-center gap-6"
+            >
+              <h1 className="font-display text-[15vw] md:text-[12vw] leading-[0.85] tracking-tighter text-black dark:text-white uppercase italic mix-blend-difference z-20 relative pr-4">
+                Kapil
+              </h1>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="w-full mt-12 flex justify-between items-end border-t border-black/10 dark:border-white/10 pt-8"
+          >
+            <h2 className="text-xl md:text-3xl font-mono text-black dark:text-white font-light tracking-tight mix-blend-difference">
+              {typingText}
+              <span className="animate-pulse">_</span>
+            </h2>
+
+            <div className="flex gap-4">
+              <Button label="Case Studies" href="/projects" icon={ArrowRight} />
+              <Button label="Resume" href="/resume.pdf" icon={Download} variant="secondary" />
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Stats Quick View */}
+      {/* Stats Quick View - Brutalist minimal */}
       <section className="relative px-6 pb-32 z-10">
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto max-w-6xl border border-black/10 dark:border-white/5 py-12 transition-colors duration-500 glass rounded-3xl"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto max-w-7xl border-y border-black/10 dark:border-white/10 py-16 transition-colors duration-500"
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 px-8">
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-black dark:text-white transition-colors" ref={starsCounter.ref}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 px-4 md:px-12">
+            <div className="flex flex-col items-start gap-4">
+              <span className="text-6xl md:text-7xl font-display text-black dark:text-white transition-colors tracking-tighter" ref={starsCounter.ref}>
                 {starsCounter.value}+
               </span>
-              <span className="text-sm text-gray-500 uppercase tracking-widest font-medium">Total Stars</span>
+              <span className="text-xs text-gray-500 uppercase tracking-[0.2em] font-medium">Total Stars</span>
             </div>
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-black dark:text-white transition-colors" ref={repoCounter.ref}>
+            <div className="flex flex-col items-start gap-4">
+              <span className="text-6xl md:text-7xl font-display text-black dark:text-white transition-colors tracking-tighter" ref={repoCounter.ref}>
                 {repoCounter.value}
               </span>
-              <span className="text-sm text-gray-500 uppercase tracking-widest font-medium">Repositories</span>
+              <span className="text-xs text-gray-500 uppercase tracking-[0.2em] font-medium">Repositories</span>
             </div>
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-black dark:text-white transition-colors">4+</span>
-              <span className="text-sm text-gray-500 uppercase tracking-widest font-medium">Years Exp.</span>
+            <div className="flex flex-col items-start gap-4">
+              <span className="text-6xl md:text-7xl font-display text-black dark:text-white transition-colors tracking-tighter">4+</span>
+              <span className="text-xs text-gray-500 uppercase tracking-[0.2em] font-medium">Years Exp.</span>
             </div>
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-4xl font-display text-black dark:text-white transition-colors">100%</span>
-              <span className="text-sm text-gray-500 uppercase tracking-widest font-medium">Dedication</span>
+            <div className="flex flex-col items-start gap-4">
+              <span className="text-6xl md:text-7xl font-display text-black dark:text-white transition-colors tracking-tighter">100%</span>
+              <span className="text-xs text-gray-500 uppercase tracking-[0.2em] font-medium">Dedication</span>
             </div>
           </div>
         </motion.div>
       </section>
 
-      {/* Expertise Bento Grid */}
+      {/* Expertise - Minimalist Grid */}
       <section className="relative px-6 pb-32 z-10">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-20 flex flex-col md:flex-row justify-between items-end gap-8"
           >
-            <h2 className="font-display text-4xl md:text-5xl tracking-tight text-black dark:text-white mb-4 transition-colors">Core Expertise</h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl text-lg transition-colors">
-              Specialized in the full lifecycle of machine learning models, from dataset preparation to deployment at scale. Building systems that reason, retrieve, and execute autonomously.
+            <h2 className="font-display text-6xl md:text-7xl tracking-tighter text-black dark:text-white uppercase">Core<br /><span className="italic">Expertise</span></h2>
+            <p className="text-gray-600 dark:text-gray-400 max-w-sm text-sm uppercase tracking-widest leading-relaxed">
+              Specialized in the full lifecycle of machine learning models, from dataset preparation to deployment at scale.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 dark:bg-white/10 border border-black/10 dark:border-white/10">
             {typedExpertise.map((item: any, idx: number) => (
               <motion.div
                 key={item.title}
@@ -235,8 +193,15 @@ export const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: idx * 0.1, duration: 0.5 }}
+                className="bg-[var(--bg-color)] p-8 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-500"
               >
-                <TechCard {...item} />
+                <div className="mb-8 p-4 bg-black/5 dark:bg-white/5 rounded-full inline-block">
+                  <item.icon className="w-6 h-6 text-black dark:text-white" />
+                </div>
+                <h3 className="text-2xl font-display tracking-tight text-black dark:text-white mb-4">{item.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 font-light leading-relaxed">
+                  {item.description}
+                </p>
               </motion.div>
             ))}
           </div>
