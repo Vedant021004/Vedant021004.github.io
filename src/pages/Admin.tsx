@@ -17,6 +17,7 @@ export const Admin = () => {
     profileImage: "/me.png",
     heroTitle: "",
     heroDescription: "",
+    currentStatus: "",
     aboutTitle: "",
     aboutText1: "",
     aboutText2: "",
@@ -355,6 +356,14 @@ export const Admin = () => {
                     <textarea 
                       value={globalSettings.heroDescription} rows={3}
                       onChange={(e) => setGlobalSettings({...globalSettings, heroDescription: e.target.value})}
+                      className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Current Status Text</label>
+                    <input 
+                      type="text" value={globalSettings.currentStatus || ""} placeholder="E.g. Currently building production AI systems with"
+                      onChange={(e) => setGlobalSettings({...globalSettings, currentStatus: e.target.value})}
                       className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
                     />
                   </div>

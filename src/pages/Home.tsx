@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MousePointer2, Bug } from "lucide-react";
+import { usePortfolioData } from "../hooks/usePortfolioData";
 import { Projects } from "../components/ui/Projects";
 import { Certificates } from "../components/ui/Certificates";
 import { GitHubRepos } from "../components/ui/GitHubRepos";
@@ -8,6 +9,7 @@ import { AboutMe } from "../components/ui/AboutMe";
 import antGif from "../assets/ant.gif";
 
 export const Home = () => {
+  const { global } = usePortfolioData();
   const [isDark, setIsDark] = useState(
     localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
   );
@@ -166,7 +168,7 @@ export const Home = () => {
           className="mt-16 flex flex-col items-center gap-8 z-10"
         >
           <p className="text-lg md:text-xl text-gray-700 dark:text-gray-400 font-medium tracking-tight transition-colors">
-            Currently building production AI systems with
+            {global.currentStatus || "Currently building production AI systems with"}
           </p>
 
           {/* Pill Buttons */}
