@@ -93,7 +93,7 @@ export const Home = () => {
                   ved
                 </motion.div>
 
-                {/* "ant" literally crawling away! */}
+                {/* "ant" literally crawling away as a REAL ant! */}
                 <motion.div
                   initial={{ x: -100, opacity: 0 }}
                   animate={{ 
@@ -103,16 +103,35 @@ export const Home = () => {
                     opacity: 1
                   }}
                   transition={{ 
-                    duration: 8, 
+                    duration: 12, 
                     ease: "linear",
                     times: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 1],
                     repeat: Infinity,
                     repeatDelay: 2
                   }}
-                  className="flex items-center text-[#ff3b30]"
+                  className="flex items-center text-[#ff3b30] relative"
                 >
-                  <Bug className="w-[0.6em] h-[0.6em] md:w-[0.8em] md:h-[0.8em]" />
+                  {/* Real Animated Ant GIF */}
+                  <img 
+                    src="https://media.tenor.com/FwH3OOSq5w8AAAAi/ant-walking.gif" 
+                    alt="Crawling Ant" 
+                    className="w-[10vw] md:w-[6vw] object-contain -mr-4"
+                    onError={(e) => {
+                      // Fallback if tenor fails
+                      (e.target as HTMLImageElement).src = "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif";
+                    }}
+                  />
                   <span className="text-[10vw] md:text-[6vw] font-mono tracking-tighter -ml-2">ant</span>
+                  
+                  {/* Speech Bubble "Hi!" */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ delay: 1, duration: 0.5, type: "spring" }}
+                    className="absolute -top-12 -right-8 bg-white text-black text-sm md:text-lg font-bold px-4 py-2 rounded-2xl rounded-bl-none shadow-lg border-2 border-black"
+                  >
+                    Hi! 👋
+                  </motion.div>
                 </motion.div>
               </motion.div>
             )}
