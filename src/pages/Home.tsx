@@ -149,11 +149,20 @@ export const Home = () => {
           </AnimatePresence>
         </div>
 
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="text-gray-500 font-mono text-sm md:text-base mt-2 mb-8 italic"
+        >
+          * "ved" for smart (from the Vedas) • "ant" for hard work
+        </motion.div>
+
         {/* Subtitle */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-16 flex flex-col items-center gap-8 z-10"
         >
           <p className="text-lg md:text-xl text-gray-700 dark:text-gray-400 font-medium tracking-tight transition-colors">
