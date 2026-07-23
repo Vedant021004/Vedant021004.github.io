@@ -4,7 +4,7 @@ import { Award } from "lucide-react";
 
 export const Certificates = () => {
   const { global } = usePortfolioData();
-  const certificates = global.certificates;
+  const certificates = global.certificates || [];
 
   return (
     <section id="certificates" className="py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white border-t border-gray-100">
