@@ -137,10 +137,10 @@ export const Home = () => {
                     
                     {/* Speech Bubble "Hi!" */}
                     <motion.div
-                      initial={{ opacity: 0, scale: 0, y: 20 }}
+                      initial={{ opacity: 0, scale: 0, y: 10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       transition={{ delay: 2, duration: 0.5, type: "spring" }}
-                      className="absolute -top-16 -right-8 bg-white text-black text-sm md:text-xl font-bold px-6 py-3 rounded-2xl rounded-bl-none shadow-[0_0_20px_rgba(255,255,255,0.2)] border-2 border-black whitespace-nowrap"
+                      className="absolute -top-10 -right-4 text-[#ff9500] text-2xl md:text-4xl font-black drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] whitespace-nowrap z-50"
                     >
                       Hi! 👋
                     </motion.div>
