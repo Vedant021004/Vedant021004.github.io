@@ -1,6 +1,6 @@
 import { NavLink, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { GitBranch, Globe, FileText, Menu, X, Sun, Moon } from "lucide-react";
+import { GitBranch, Globe, Menu, X, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { useTheme } from "../../hooks/useTheme";
 
@@ -21,27 +21,27 @@ export const Navbar = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="fixed left-0 right-0 top-0 z-50 border-b border-black/5 dark:border-white/5 bg-white/80 dark:bg-black/50 backdrop-blur-xl"
+      className="fixed left-0 right-0 top-0 z-50 pt-4"
     >
-      <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
+      <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-3 glass rounded-full shadow-sm">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white dark:bg-white dark:text-black font-display font-bold transition-transform group-hover:scale-105">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500 text-white font-display font-bold transition-transform group-hover:scale-105 shadow-[0_0_15px_rgba(99,102,241,0.5)]">
             V
           </div>
-          <span className="font-display text-sm font-semibold tracking-wide text-gray-900 dark:text-white">
+          <span className="font-display text-lg font-semibold tracking-wide text-gray-900 dark:text-white ml-2">
             Vedant
           </span>
         </Link>
         
         <div className="hidden items-center gap-8 md:flex">
-          <div className="flex gap-6 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 px-6 py-2 backdrop-blur-md">
+          <div className="flex gap-6 items-center">
             {navLinks.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `text-sm transition-colors ${
-                    isActive ? "text-black dark:text-white font-medium" : "text-gray-500 hover:text-black dark:hover:text-white"
+                  `text-sm font-medium transition-all ${
+                    isActive ? "text-indigo-500 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" : "text-gray-500 hover:text-black dark:hover:text-white"
                   }`
                 }
               >
@@ -50,26 +50,23 @@ export const Navbar = () => {
             ))}
           </div>
           
-          <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400">
-            <button onClick={toggleTheme} className="hover:text-black dark:hover:text-white transition-colors">
-              {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400 border-l border-black/10 dark:border-white/10 pl-6">
+            <button onClick={toggleTheme} className="hover:text-indigo-500 transition-colors">
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-            <a href="https://github.com/Vedant021004" target="_blank" rel="noreferrer" className="hover:text-black dark:hover:text-white transition-colors">
-              <GitBranch className="h-5 w-5" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-black dark:hover:text-white transition-colors">
-              <Globe className="h-5 w-5" />
+            <a href="https://github.com/Vedant021004" target="_blank" rel="noreferrer" className="hover:text-indigo-500 transition-colors">
+              <GitBranch className="h-4 w-4" />
             </a>
           </div>
         </div>
 
         {/* Mobile Toggle */}
         <div className="md:hidden flex items-center gap-4">
-          <button onClick={toggleTheme} className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+          <button onClick={toggleTheme} className="text-gray-500 dark:text-gray-400 hover:text-indigo-500 transition-colors">
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
           <button
-            className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+            className="text-gray-500 dark:text-gray-400 hover:text-indigo-500 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -79,7 +76,7 @@ export const Navbar = () => {
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 dark:bg-black/95 backdrop-blur-xl border-b border-black/5 dark:border-white/5 p-6 flex flex-col gap-4">
+        <div className="md:hidden absolute top-[80px] left-4 right-4 glass rounded-3xl p-6 flex flex-col gap-4 shadow-xl">
           {navLinks.map((item) => (
             <NavLink
               key={item.path}
@@ -87,7 +84,7 @@ export const Navbar = () => {
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
                 `text-lg font-medium transition-colors ${
-                  isActive ? "text-black dark:text-white" : "text-gray-500 dark:text-gray-400"
+                  isActive ? "text-indigo-500" : "text-gray-500 dark:text-gray-400"
                 }`
               }
             >

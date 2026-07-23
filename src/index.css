@@ -1,34 +1,34 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap");
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 
 :root {
   color-scheme: light;
+  --bg-color: #f9fafb;
+  --text-color: #111827;
 }
 
 html.dark {
   color-scheme: dark;
+  --bg-color: #050505;
+  --text-color: #ededed;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #f9fafb;
-  color: #111827;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-html.dark body {
-  background-color: #050505;
-  color: #ededed;
+  transition: background-color 0.5s ease, color 0.5s ease;
+  overflow-x: hidden;
 }
 
 /* Premium Typography Tokens */
 .font-display {
-  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-family: "Newsreader", serif;
 }
 
 .font-body {
@@ -42,27 +42,49 @@ html {
 
 /* Custom Scrollbar for a premium feel */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
-  border-radius: 4px;
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #404040;
+  background: rgba(150, 150, 150, 0.5);
 }
 
-/* Typography utilities */
-.prose p {
-  margin-bottom: 1.5em;
+/* Utility for glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.dark .glass {
+  background: rgba(20, 20, 20, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.prose p:last-child {
-  margin-bottom: 0;
+/* Loading Screen */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: #050505;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.loader-overlay.is-done {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
 }
