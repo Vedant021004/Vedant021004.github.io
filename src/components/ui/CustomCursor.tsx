@@ -13,10 +13,10 @@ export const CustomCursor = () => {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
-        target.tagName.toLowerCase() === "button" ||
-        target.tagName.toLowerCase() === "a" ||
-        target.closest("button") ||
-        target.closest("a")
+        target?.tagName?.toLowerCase() === "button" ||
+        target?.tagName?.toLowerCase() === "a" ||
+        target?.closest?.("button") ||
+        target?.closest?.("a")
       ) {
         setIsHovering(true);
       } else {

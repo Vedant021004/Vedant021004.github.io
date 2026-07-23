@@ -6,11 +6,10 @@ import { useCountUp } from "../hooks/useCountUp";
 import { Button } from "../components/ui/Button";
 import { TechCard } from "../components/ui/TechCard";
 import { usePortfolioData } from "../hooks/usePortfolioData";
-import { useMemo, Suspense, useCallback } from "react";
+import { useMemo, Suspense, useState, useEffect } from "react";
 import Spline from '@splinetool/react-spline';
-import Particles from "@tsparticles/react";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
-import type { Engine } from "@tsparticles/engine";
 import { useTheme } from "../hooks/useTheme";
 
 // Map string icon names to actual Lucide components
@@ -36,13 +35,18 @@ export const Home = () => {
 
   const typingText = useTyping(roles);
   const { repos } = useGithubRepos("Vedant021004");
+  const [init, setInit] = useState(false);
 
   const totalStars = useMemo(() => repos.reduce((sum, repo) => sum + repo.stargazers_count, 0), [repos]);
   const starsCounter = useCountUp(totalStars);
   const repoCounter = useCountUp(repos.length);
 
-  const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine);
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => {
+      setInit(true);
+    });
   }, []);
 
   return (
@@ -50,10 +54,10 @@ export const Home = () => {
       {/* Background elements */}
       <div className="fixed inset-0 pointer-events-none transition-colors duration-500 z-0">
         <div className="absolute inset-0 bg-[var(--bg-color)] opacity-95" />
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          options={{
+        {init && (
+          <Particles
+            id="tsparticles"
+            options={{
             background: {
               color: { value: "transparent" },
             },
@@ -92,6 +96,7 @@ export const Home = () => {
           }}
           className="absolute inset-0"
         />
+        )}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-500/[0.05] blur-[120px]" />
         <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-500/[0.05] blur-[120px]" />
       </div>
