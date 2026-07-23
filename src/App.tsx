@@ -60,9 +60,9 @@ export default function App() {
       <AnimatePresence>
         {loading && <Preloader onComplete={() => setLoading(false)} key="preloader" />}
       </AnimatePresence>
-      <div className={`min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-indigo-500/30 selection:text-indigo-900 dark:selection:text-white flex flex-col font-body antialiased transition-colors duration-500 ${loading ? 'h-screen overflow-hidden' : ''}`}>
+      <div className={`min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] selection:bg-[#0d99ff]/30 selection:text-black flex flex-col font-body antialiased transition-colors duration-500 ${loading ? 'h-screen overflow-hidden' : ''}`}>
         <Navbar />
-        <main className="flex-1 relative">
+        <main className="flex-1 relative z-10">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

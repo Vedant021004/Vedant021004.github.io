@@ -4,14 +4,15 @@
 
 :root {
   color-scheme: light;
-  --bg-color: #f9fafb;
-  --text-color: #111827;
+  --bg-color: #ffffff;
+  --text-color: #000000;
 }
 
+/* Force light mode globally */
 html.dark {
-  color-scheme: dark;
-  --bg-color: #050505;
-  --text-color: #ededed;
+  color-scheme: light;
+  --bg-color: #ffffff;
+  --text-color: #000000;
 }
 
 body {
@@ -26,9 +27,40 @@ body {
   overflow-x: hidden;
 }
 
+/* Figma Bounding Box Styles */
+.figma-box {
+  position: relative;
+  display: inline-block;
+}
+
+.figma-box::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 3px solid #0d99ff;
+  pointer-events: none;
+}
+
+.figma-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border: 2px solid #0d99ff;
+  z-index: 10;
+}
+
+.figma-handle-tl { top: -9px; left: -9px; }
+.figma-handle-tr { top: -9px; right: -9px; }
+.figma-handle-bl { bottom: -9px; left: -9px; }
+.figma-handle-br { bottom: -9px; right: -9px; }
+
+
 /* Premium Typography Tokens */
 .font-display {
-  font-family: "Newsreader", serif;
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
 }
 
 .font-body {
