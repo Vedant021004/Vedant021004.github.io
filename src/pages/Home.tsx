@@ -89,47 +89,61 @@ export const Home = () => {
                   initial={{ x: 100 }}
                   animate={{ x: -20 }}
                   transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                  className="pb-4"
+                  className="pb-4 relative z-10"
                 >
                   ved
                 </motion.div>
 
-                {/* "ant" literally crawling away as a REAL ant! */}
-                <motion.div
-                  initial={{ x: -100, opacity: 0 }}
-                  animate={{ 
-                    x: [0, 50, 100, 150, 200, 300, typeof window !== "undefined" ? window.innerWidth : 1000], 
-                    y: [0, -20, 10, -30, 20, -10, 0],
-                    rotate: [0, 15, -15, 20, -10, 10, 0],
-                    opacity: 1
-                  }}
-                  transition={{ 
-                    duration: 12, 
-                    ease: "linear",
-                    times: [0, 0.1, 0.3, 0.5, 0.7, 0.8, 1],
-                    repeat: Infinity,
-                    repeatDelay: 2
-                  }}
-                  className="flex items-center text-[#ff3b30] relative"
-                >
-                  {/* Real Animated Ant GIF (Locally Hosted & Bundled) */}
-                  <img 
-                    src={antGif} 
-                    alt="Crawling Ant" 
-                    className="w-[20vw] md:w-[12vw] object-contain -mr-4 drop-shadow-2xl"
-                  />
-                  <span className="text-[10vw] md:text-[6vw] font-mono tracking-tighter -ml-2">ant</span>
+                {/* The word "ant" stays put, and the bug crawls out of it! */}
+                <div className="relative flex items-center">
                   
-                  {/* Speech Bubble "Hi!" */}
+                  {/* The actual text "ant" */}
                   <motion.div
-                    initial={{ opacity: 0, scale: 0, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ delay: 1, duration: 0.5, type: "spring" }}
-                    className="absolute -top-16 -right-8 bg-white text-black text-sm md:text-xl font-bold px-6 py-3 rounded-2xl rounded-bl-none shadow-[0_0_20px_rgba(255,255,255,0.2)] border-2 border-black z-50"
+                    initial={{ x: -100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                    className="text-[10vw] md:text-[6vw] font-mono tracking-tighter relative z-20 bg-[#050505]"
                   >
-                    Hi! 👋
+                    ant
                   </motion.div>
-                </motion.div>
+
+                  {/* The crawling ant GIF emerging from the text */}
+                  <motion.div
+                    initial={{ x: -50, opacity: 0, scale: 0.5 }}
+                    animate={{ 
+                      x: [0, 80, 150, 250, 400, typeof window !== "undefined" ? window.innerWidth : 1000], 
+                      y: [0, -10, 5, -15, 10, 0],
+                      rotate: [0, 10, -5, 15, -10, 0],
+                      opacity: [0, 1, 1, 1, 1, 1],
+                      scale: 1
+                    }}
+                    transition={{ 
+                      duration: 10, 
+                      ease: "linear",
+                      times: [0, 0.1, 0.3, 0.5, 0.7, 1],
+                      repeat: Infinity,
+                      repeatDelay: 3,
+                      delay: 0.5 // Waits half a second before crawling out
+                    }}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex items-center text-[#ff3b30]"
+                  >
+                    <img 
+                      src={antGif} 
+                      alt="Crawling Ant" 
+                      className="w-[20vw] md:w-[12vw] object-contain drop-shadow-2xl"
+                    />
+                    
+                    {/* Speech Bubble "Hi!" */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: 2, duration: 0.5, type: "spring" }}
+                      className="absolute -top-16 -right-8 bg-white text-black text-sm md:text-xl font-bold px-6 py-3 rounded-2xl rounded-bl-none shadow-[0_0_20px_rgba(255,255,255,0.2)] border-2 border-black whitespace-nowrap"
+                    >
+                      Hi! 👋
+                    </motion.div>
+                  </motion.div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
