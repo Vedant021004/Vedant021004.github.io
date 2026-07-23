@@ -36,6 +36,7 @@ export const Admin = () => {
   const [certFile, setCertFile] = useState<File | null>(null);
 
   // Projects State
+  const [caseStudies, setCaseStudies] = useState<any[]>((dataJsonStatic as any).caseStudies || []);
   const [hiddenRepos, setHiddenRepos] = useState<string[]>(dataJsonStatic.hiddenRepos || []);
   const [newHiddenRepo, setNewHiddenRepo] = useState("");
   const [projectImages, setProjectImages] = useState<Record<string, string>>(dataJsonStatic.projectImages || {});
@@ -70,6 +71,7 @@ export const Admin = () => {
         setHiddenRepos(decoded.hiddenRepos || []);
         setProjectImages(decoded.projectImages || {});
         setProjectLinks(decoded.projectLinks || {});
+        setCaseStudies(decoded.caseStudies || []);
         setGlobalSettings(decoded.global || globalSettings);
         setRoles(decoded.global?.roles || []);
         setExpertise(decoded.global?.expertise || []);
@@ -112,6 +114,21 @@ export const Admin = () => {
   const handleSave = async () => {
     setIsSaving(true);
     setMessage({ type: "", text: "" });
+
+    // Validation
+    if (!globalSettings.heroTitle?.trim()) {
+      setMessage({ type: "error", text: "Validation Error: Hero Title cannot be empty." });
+      setIsSaving(false);
+      return;
+    }
+    for (let i = 0; i < caseStudies.length; i++) {
+      if (!caseStudies[i].title?.trim()) {
+        setMessage({ type: "error", text: `Validation Error: Case Study #${i + 1} must have a title.` });
+        setIsSaving(false);
+        return;
+      }
+    }
+
     try {
       const octokit = new Octokit({ auth: token });
       const owner = "Vedant021004";
@@ -181,6 +198,7 @@ export const Admin = () => {
         hiddenRepos,
         projectImages: updatedProjectImages,
         projectLinks: updatedProjectLinks,
+        caseStudies,
         global: updatedGlobal
       };
 
@@ -203,6 +221,7 @@ export const Admin = () => {
 
       setProjectImages(updatedProjectImages);
       setProjectLinks(updatedProjectLinks);
+      setCaseStudies(caseStudies);
       setGlobalSettings(updatedGlobal);
       setCertificates(updatedCertificates);
       setUploadFile(null);
@@ -539,6 +558,56 @@ export const Admin = () => {
                     </div>
                   ))}
                   {Object.keys(projectLinks).length === 0 && <div className="text-gray-500 text-sm italic text-center py-4">No demo links configured.</div>}
+                </div>
+              </div>
+
+              {/* Case Studies */}
+              <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 transition-colors mt-8">
+                <h2 className="text-xl font-medium text-black dark:text-white mb-2 flex items-center gap-2">
+                  <Code2 className="h-5 w-5 text-gray-500" /> Case Studies
+                </h2>
+                <div className="flex flex-col gap-6 mt-4">
+                  {caseStudies.map((cs, idx) => (
+                    <div key={idx} className="bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 p-4 rounded-xl flex flex-col gap-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-gray-500 font-medium uppercase">Case Study #{idx + 1}</span>
+                        <button onClick={() => setCaseStudies(caseStudies.filter((_, i) => i !== idx))} className="text-red-500 text-xs hover:underline">Remove</button>
+                      </div>
+                      <input 
+                        type="text" value={cs.title} placeholder="Title"
+                        onChange={(e) => { const newCS = [...caseStudies]; newCS[idx].title = e.target.value; setCaseStudies(newCS); }}
+                        className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-3 py-1.5 text-black dark:text-white text-sm focus:outline-none"
+                      />
+                      <input 
+                        type="text" value={cs.tech?.join(', ') || ""} placeholder="Tech Stack (comma separated)"
+                        onChange={(e) => { const newCS = [...caseStudies]; newCS[idx].tech = e.target.value.split(',').map(s=>s.trim()); setCaseStudies(newCS); }}
+                        className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-3 py-1.5 text-black dark:text-white text-sm focus:outline-none"
+                      />
+                      <textarea 
+                        value={cs.approach} placeholder="Approach / Description" rows={3}
+                        onChange={(e) => { const newCS = [...caseStudies]; newCS[idx].approach = e.target.value; setCaseStudies(newCS); }}
+                        className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-3 py-1.5 text-black dark:text-white text-sm focus:outline-none"
+                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" value={cs.demoUrl} placeholder="Live Demo URL"
+                          onChange={(e) => { const newCS = [...caseStudies]; newCS[idx].demoUrl = e.target.value; setCaseStudies(newCS); }}
+                          className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-3 py-1.5 text-black dark:text-white text-sm focus:outline-none"
+                        />
+                        <input 
+                          type="text" value={cs.repoUrl} placeholder="GitHub Repo URL"
+                          onChange={(e) => { const newCS = [...caseStudies]; newCS[idx].repoUrl = e.target.value; setCaseStudies(newCS); }}
+                          className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-lg px-3 py-1.5 text-black dark:text-white text-sm focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <button 
+                    onClick={() => setCaseStudies([...caseStudies, { id: Date.now().toString(), title: "New Project", tech: [], approach: "", demoUrl: "", repoUrl: "" }])}
+                    className="w-full py-3 border border-dashed border-black/20 dark:border-white/20 rounded-xl text-gray-500 hover:text-black dark:hover:text-white hover:border-black/50 dark:hover:border-white/50 transition-all text-sm"
+                  >
+                    + Add Case Study
+                  </button>
                 </div>
               </div>
             </>

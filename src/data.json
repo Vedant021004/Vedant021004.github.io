@@ -9,6 +9,24 @@
     "GEN-AI--Langchain-": "http://localhost:8501/",
     "ML-JOURNEY": "https://mymodelone.streamlit.app/"
   },
+  "caseStudies": [
+    {
+      "id": "1",
+      "title": "Agentic AI Coding Assistant",
+      "tech": ["Python", "TensorFlow", "React"],
+      "approach": "Built a fully autonomous AI system capable of multi-step reasoning and full-stack code generation.",
+      "demoUrl": "#",
+      "repoUrl": "#"
+    },
+    {
+      "id": "2",
+      "title": "Scalable RAG Pipeline",
+      "tech": ["LangChain", "Pinecone", "FastAPI"],
+      "approach": "Engineered a production-ready RAG architecture that processes millions of documents with sub-second retrieval.",
+      "demoUrl": "#",
+      "repoUrl": "#"
+    }
+  ],
   "global": {
     "profileImage": "/profile-1784809644066-screenshot-2026-07-20-225303.png",
     "heroTitle": "Vedant Kapil",

@@ -4,24 +4,7 @@ import { BrainCircuit, Database } from "lucide-react";
 
 export const Projects = () => {
   const data = usePortfolioData();
-  const caseStudies = data.caseStudies || [
-    {
-      id: "1",
-      title: "Agentic AI Coding Assistant",
-      tech: ["Python", "TensorFlow", "React"],
-      approach: "Built a fully autonomous AI system capable of multi-step reasoning and full-stack code generation.",
-      demoUrl: "#",
-      repoUrl: "#"
-    },
-    {
-      id: "2",
-      title: "Scalable RAG Pipeline",
-      tech: ["LangChain", "Pinecone", "FastAPI"],
-      approach: "Engineered a production-ready RAG architecture that processes millions of documents with sub-second retrieval.",
-      demoUrl: "#",
-      repoUrl: "#"
-    }
-  ];
+  const caseStudies = data.caseStudies || [];
 
   // Helper to map an icon and background color to each project
   const getProjectVisual = (index: number) => {
