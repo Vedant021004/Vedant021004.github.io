@@ -100,9 +100,6 @@ export const Home = () => {
       {/* GitHub Repos Section */}
       <GitHubRepos />
 
-      {/* Footer */}
-      <Footer />
-
     </div>
   );
 };
