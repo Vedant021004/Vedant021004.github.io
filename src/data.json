@@ -13,6 +13,18 @@
   "caseStudies": [
     {
       "id": "1",
+      "title": "PDF Chatbot (GenAI & LangChain)",
+      "tech": [
+        "Python",
+        "LangChain",
+        "Streamlit"
+      ],
+      "approach": "Engineered an interactive RAG PDF Chatbot powered by LangChain, OpenAI, and Streamlit for real-time document Q&A.",
+      "demoUrl": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
+      "repoUrl": "https://github.com/Vedant021004/GEN-AI--Langchain-"
+    },
+    {
+      "id": "2",
       "title": "Agentic AI Coding Assistant",
       "tech": [
         "Python",
@@ -24,7 +36,7 @@
       "repoUrl": "#"
     },
     {
-      "id": "2",
+      "id": "3",
       "title": "Scalable RAG Pipeline",
       "tech": [
         "LangChain",

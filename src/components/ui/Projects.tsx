@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { usePortfolioData } from "../../hooks/usePortfolioData";
-import { BrainCircuit, Database } from "lucide-react";
+import { BrainCircuit, Database, FolderGit2, Sparkles } from "lucide-react";
 
 export const Projects = () => {
   const data = usePortfolioData();
@@ -9,14 +9,24 @@ export const Projects = () => {
   // Helper to map an icon and background color to each project
   const getProjectVisual = (index: number) => {
     const visuals = [
+      { bg: "bg-[#0d99ff]", icon: <BrainCircuit className="w-32 h-32 text-white" /> },
       { bg: "bg-[#000000]", icon: <Database className="w-32 h-32 text-white" /> },
-      { bg: "bg-[#0d99ff]", icon: <BrainCircuit className="w-32 h-32 text-white" /> }
+      { bg: "bg-[#ea6b24]", icon: <Sparkles className="w-32 h-32 text-white" /> }
     ];
     return visuals[index % visuals.length];
   };
 
   return (
     <section id="projects" className="py-16 md:py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] transition-colors duration-500">
+      
+      {/* Section Header */}
+      <div className="mb-16 flex items-center gap-4">
+        <FolderGit2 className="w-10 h-10 text-black dark:text-white transition-colors" />
+        <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black dark:text-white transition-colors">
+          Projects
+        </h2>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
         {caseStudies.map((project, index) => {
           const visual = getProjectVisual(index);
