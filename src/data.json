@@ -22,42 +22,6 @@
       "approach": "Engineered an interactive RAG PDF Chatbot powered by LangChain, OpenAI, and Streamlit for real-time document Q&A.",
       "demoUrl": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
       "repoUrl": "https://github.com/Vedant021004/GEN-AI--Langchain-"
-    },
-    {
-      "id": "2",
-      "title": "Agentic AI Coding Assistant",
-      "tech": [
-        "Python",
-        "TensorFlow",
-        "React"
-      ],
-      "approach": "Built a fully autonomous AI system capable of multi-step reasoning and full-stack code generation.",
-      "demoUrl": "https://github.com/Vedant021004/AGENT-AI",
-      "repoUrl": "https://github.com/Vedant021004/AGENT-AI"
-    },
-    {
-      "id": "3",
-      "title": "Scalable RAG Pipeline",
-      "tech": [
-        "LangChain",
-        "Pinecone",
-        "FastAPI"
-      ],
-      "approach": "Engineered a production-ready RAG architecture that processes millions of documents with sub-second retrieval.",
-      "demoUrl": "https://github.com/Vedant021004/Amazon-Product-RAG",
-      "repoUrl": "https://github.com/Vedant021004/Amazon-Product-RAG"
-    },
-    {
-      "id": "4",
-      "title": "ML Journey & Interactive Models",
-      "tech": [
-        "Python",
-        "Streamlit",
-        "Scikit-Learn"
-      ],
-      "approach": "Built an end-to-end interactive machine learning web platform featuring live model predictions and data analytics.",
-      "demoUrl": "https://mymodelone.streamlit.app/",
-      "repoUrl": "https://github.com/Vedant021004/ML-JOURNEY"
     }
   ],
   "global": {
