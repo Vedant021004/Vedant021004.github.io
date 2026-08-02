@@ -51,7 +51,7 @@ export const Projects = () => {
     }
     if (search) data = data.filter((r) => r.name.toLowerCase().includes(search.toLowerCase()));
     if (language !== "All") data = data.filter((r) => r.language === language);
-    return data.sort((a, b) => b.stargazers_count - a.stargazers_count);
+    return data.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
   }, [repos, search, language, dataJson]);
 
   return (
@@ -273,17 +273,23 @@ export const Projects = () => {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4">
-                    {(dataJson as any).projectLinks?.[activeRepo.name] && (
-                      <a
-                        href={(dataJson as any).projectLinks[activeRepo.name]}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-4 font-medium transition-all hover:scale-[1.02] hover:bg-indigo-700"
-                      >
-                        <Globe className="h-5 w-5" />
-                        Live Demo
-                      </a>
-                    )}
+                    {(() => {
+                      const links = (dataJson as any).projectLinks || {};
+                      const matchedKey = Object.keys(links).find(k => k.toLowerCase().trim() === activeRepo.name.toLowerCase().trim());
+                      const demoUrl = matchedKey ? links[matchedKey] : null;
+                      if (!demoUrl) return null;
+                      return (
+                        <a
+                          href={demoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex-1 flex items-center justify-center gap-2 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-4 font-medium transition-all hover:scale-[1.02] hover:bg-indigo-700"
+                        >
+                          <Globe className="h-5 w-5" />
+                          Live Demo
+                        </a>
+                      );
+                    })()}
                     <a
                       href={activeRepo.html_url}
                       target="_blank"

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Code2, Star, GitFork, ArrowUpRight } from "lucide-react";
+import { usePortfolioData } from "../../hooks/usePortfolioData";
 
 interface Repo {
   id: number;
@@ -10,20 +11,24 @@ interface Repo {
   stargazers_count: number;
   forks_count: number;
   language: string;
+  updated_at?: string;
 }
 
 export const GitHubRepos = () => {
+  const dataJson = usePortfolioData();
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const response = await fetch("https://api.github.com/users/Vedant021004/repos?sort=updated&per_page=6");
+        const response = await fetch("https://api.github.com/users/Vedant021004/repos?sort=updated&per_page=30");
         if (response.ok) {
-          const data = await response.json();
-          // Filter out the portfolio repo itself if desired, or keep it.
-          const filtered = data.filter((repo: Repo) => repo.name !== "Vedant021004.github.io").slice(0, 6);
+          const data = (await response.json()) as Repo[];
+          const hidden = (dataJson.hiddenRepos || []).map((name: string) => name.toLowerCase().trim());
+          const filtered = data
+            .filter((repo: Repo) => !hidden.includes(repo.name.toLowerCase().trim()))
+            .slice(0, 6);
           setRepos(filtered);
         }
       } catch (error) {
@@ -34,7 +39,7 @@ export const GitHubRepos = () => {
     };
 
     fetchRepos();
-  }, []);
+  }, [dataJson.hiddenRepos]);
 
   return (
     <section id="github" className="py-16 md:py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] border-t border-gray-100 dark:border-white/5 transition-colors duration-500">
