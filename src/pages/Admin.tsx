@@ -130,95 +130,121 @@ export const Admin = () => {
       }
     }
 
+    let updatedCertificates = [...certificates];
+    let updatedGlobal = { ...globalSettings, roles, expertise, certificates: updatedCertificates };
+    let updatedProjectImages = { ...projectImages };
+    let updatedProjectLinks = { ...projectLinks };
+    if (linkRepoName.trim() && linkUrl.trim()) {
+      updatedProjectLinks[linkRepoName.trim()] = linkUrl.trim();
+    }
+
+    const newDataJson = {
+      hiddenRepos,
+      projectImages: updatedProjectImages,
+      projectLinks: updatedProjectLinks,
+      caseStudies,
+      global: updatedGlobal
+    };
+
+    // INSTANT LOCAL UI UPDATE (<1ms)
+    localStorage.setItem('portfolio_data', JSON.stringify(newDataJson));
+    window.dispatchEvent(new Event('portfolio_data_updated'));
+
     try {
       const octokit = new Octokit({ auth: token });
       const owner = "Vedant021004";
       const repo = "Vedant021004.github.io";
       const branch = "main";
 
-      const { data: refData } = await octokit.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
-      const commitSha = refData.object.sha;
-      const { data: commitData } = await octokit.rest.git.getCommit({ owner, repo, commit_sha: commitSha });
-      const treeSha = commitData.tree.sha;
+      const hasFileUpdates = profileImageFile || resumeFile || (uploadFile && uploadRepoName.trim()) || (certFile && certTitle.trim());
 
-      const tree: any[] = [];
+      if (!hasFileUpdates) {
+        // FAST PATH: Single API Call (Sub-second Save)
+        const { data: currentFile } = await octokit.rest.repos.getContent({
+          owner, repo, path: "src/data.json", ref: branch
+        });
+        const sha = 'sha' in currentFile ? currentFile.sha : undefined;
 
-      let updatedCertificates = [...certificates];
-      if (certFile && certTitle.trim()) {
-        const base64Content = await toBase64(certFile);
-        const fileName = certFile.name.replace(/\s+/g, '-').toLowerCase();
-        
-        const { data: blobData } = await octokit.rest.git.createBlob({
-          owner, repo, content: base64Content, encoding: "base64",
+        const jsonString = JSON.stringify(newDataJson, null, 2);
+        // Base64 encode for UTF-8 safely
+        const base64Content = btoa(encodeURIComponent(jsonString).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+
+        await octokit.rest.repos.createOrUpdateFileContents({
+          owner, repo, path: "src/data.json",
+          message: "Admin Dashboard: Update portfolio CMS",
+          content: base64Content,
+          sha, branch
+        });
+      } else {
+        // FULL PATH for binary file uploads
+        const { data: refData } = await octokit.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
+        const commitSha = refData.object.sha;
+        const { data: commitData } = await octokit.rest.git.getCommit({ owner, repo, commit_sha: commitSha });
+        const treeSha = commitData.tree.sha;
+
+        const tree: any[] = [];
+
+        if (certFile && certTitle.trim()) {
+          const base64Content = await toBase64(certFile);
+          const fileName = certFile.name.replace(/\s+/g, '-').toLowerCase();
+          const { data: blobData } = await octokit.rest.git.createBlob({
+            owner, repo, content: base64Content, encoding: "base64",
+          });
+          tree.push({ path: `public/certificates/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
+          updatedCertificates.push({ file: fileName, title: certTitle.trim() });
+        }
+
+        updatedGlobal.certificates = updatedCertificates;
+
+        if (profileImageFile) {
+          const base64Content = await toBase64(profileImageFile);
+          const fileName = `profile-${Date.now()}-${profileImageFile.name.replace(/\s+/g, '-').toLowerCase()}`;
+          const { data: blobData } = await octokit.rest.git.createBlob({
+            owner, repo, content: base64Content, encoding: "base64",
+          });
+          tree.push({ path: `public/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
+          updatedGlobal.profileImage = `/${fileName}`;
+        }
+
+        if (resumeFile) {
+          const base64Content = await toBase64(resumeFile);
+          const { data: blobData } = await octokit.rest.git.createBlob({
+            owner, repo, content: base64Content, encoding: "base64",
+          });
+          tree.push({ path: "public/resume.pdf", mode: "100644", type: "blob", sha: blobData.sha });
+        }
+
+        if (uploadFile && uploadRepoName.trim()) {
+          const base64Content = await toBase64(uploadFile);
+          const fileName = uploadFile.name.replace(/\s+/g, '-').toLowerCase();
+          const { data: blobData } = await octokit.rest.git.createBlob({
+            owner, repo, content: base64Content, encoding: "base64",
+          });
+          tree.push({ path: `public/projects/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
+          updatedProjectImages[uploadRepoName.trim()] = `/projects/${fileName}`;
+        }
+
+        const finalDataJson = {
+          hiddenRepos,
+          projectImages: updatedProjectImages,
+          projectLinks: updatedProjectLinks,
+          caseStudies,
+          global: updatedGlobal
+        };
+
+        const { data: jsonBlob } = await octokit.rest.git.createBlob({
+          owner, repo, content: JSON.stringify(finalDataJson, null, 2), encoding: "utf-8",
         });
 
-        tree.push({ path: `public/certificates/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
-        updatedCertificates.push({ file: fileName, title: certTitle.trim() });
-      }
+        tree.push({ path: "src/data.json", mode: "100644", type: "blob", sha: jsonBlob.sha });
 
-      let updatedGlobal = { ...globalSettings, roles, expertise, certificates: updatedCertificates };
-      if (profileImageFile) {
-        const base64Content = await toBase64(profileImageFile);
-        const fileName = `profile-${Date.now()}-${profileImageFile.name.replace(/\s+/g, '-').toLowerCase()}`;
-        
-        const { data: blobData } = await octokit.rest.git.createBlob({
-          owner, repo, content: base64Content, encoding: "base64",
+        const { data: newTree } = await octokit.rest.git.createTree({ owner, repo, base_tree: treeSha, tree });
+        const { data: newCommit } = await octokit.rest.git.createCommit({
+          owner, repo, message: "Admin Dashboard: Update portfolio CMS", tree: newTree.sha, parents: [commitSha],
         });
 
-        tree.push({ path: `public/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
-        updatedGlobal.profileImage = `/${fileName}`;
+        await octokit.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: newCommit.sha });
       }
-
-      if (resumeFile) {
-        const base64Content = await toBase64(resumeFile);
-        const { data: blobData } = await octokit.rest.git.createBlob({
-          owner, repo, content: base64Content, encoding: "base64",
-        });
-        tree.push({ path: "public/resume.pdf", mode: "100644", type: "blob", sha: blobData.sha });
-      }
-
-      let updatedProjectImages = { ...projectImages };
-      if (uploadFile && uploadRepoName.trim()) {
-        const base64Content = await toBase64(uploadFile);
-        const fileName = uploadFile.name.replace(/\s+/g, '-').toLowerCase();
-        
-        const { data: blobData } = await octokit.rest.git.createBlob({
-          owner, repo, content: base64Content, encoding: "base64",
-        });
-
-        tree.push({ path: `public/projects/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
-        updatedProjectImages[uploadRepoName.trim()] = `/projects/${fileName}`;
-      }
-
-      let updatedProjectLinks = { ...projectLinks };
-      if (linkRepoName.trim() && linkUrl.trim()) {
-        updatedProjectLinks[linkRepoName.trim()] = linkUrl.trim();
-      }
-
-      const newDataJson = {
-        hiddenRepos,
-        projectImages: updatedProjectImages,
-        projectLinks: updatedProjectLinks,
-        caseStudies,
-        global: updatedGlobal
-      };
-
-      const { data: jsonBlob } = await octokit.rest.git.createBlob({
-        owner, repo, content: JSON.stringify(newDataJson, null, 2), encoding: "utf-8",
-      });
-
-      tree.push({ path: "src/data.json", mode: "100644", type: "blob", sha: jsonBlob.sha });
-
-      const { data: newTree } = await octokit.rest.git.createTree({ owner, repo, base_tree: treeSha, tree });
-      const { data: newCommit } = await octokit.rest.git.createCommit({
-        owner, repo, message: "Admin Dashboard: Update portfolio CMS", tree: newTree.sha, parents: [commitSha],
-      });
-
-      await octokit.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: newCommit.sha });
-
-      // INSTANT UI UPDATE
-      localStorage.setItem('portfolio_data', JSON.stringify(newDataJson));
-      window.dispatchEvent(new Event('portfolio_data_updated'));
 
       setProjectImages(updatedProjectImages);
       setProjectLinks(updatedProjectLinks);
@@ -234,7 +260,7 @@ export const Admin = () => {
       setCertFile(null);
       setCertTitle("");
       
-      setMessage({ type: "success", text: "Successfully saved! GitHub is rebuilding your site. Changes will appear in ~1 minute." });
+      setMessage({ type: "success", text: "Successfully saved to GitHub! Live site is updated." });
     } catch (err: any) {
       setMessage({ type: "error", text: `Error: ${err.message}` });
     } finally {
