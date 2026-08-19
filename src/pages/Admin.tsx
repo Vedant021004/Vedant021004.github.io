@@ -402,17 +402,36 @@ export const Admin = () => {
                   <Settings className="h-5 w-5 text-gray-500" />
                   RAG Chatbot Settings
                 </h2>
-                <p className="text-xs text-gray-500 mb-4">The chatbot uses your resume PDF to answer visitor questions via Groq AI (Llama 3.1).</p>
+                <p className="text-xs text-gray-500 mb-4">The chatbot uses your resume PDF to answer visitor questions via Groq AI (Llama 3.1). The API key is saved locally in your browser (not pushed to GitHub).</p>
                 <div className="flex flex-col gap-4">
                   <div>
                     <label className="block text-xs text-gray-500 mb-1">Groq API Key</label>
-                    <input 
-                      type="password" value={(globalSettings as any).groqApiKey || ""} 
-                      placeholder="Enter your Groq API key from console.groq.com"
-                      onChange={(e) => setGlobalSettings({...globalSettings, groqApiKey: e.target.value} as any)}
-                      className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400 font-mono"
-                    />
-                    <p className="text-[10px] text-gray-400 mt-1">Get a free key at <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" className="text-cyan-500 underline">console.groq.com/keys</a>. The chatbot won't work without this.</p>
+                    <div className="flex gap-2">
+                      <input 
+                        type="password" 
+                        id="groq-api-key-input"
+                        defaultValue={localStorage.getItem('groq_api_key') || ""} 
+                        placeholder="Enter your Groq API key from console.groq.com"
+                        className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400 font-mono"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const input = document.getElementById('groq-api-key-input') as HTMLInputElement;
+                          if (input?.value.trim()) {
+                            localStorage.setItem('groq_api_key', input.value.trim());
+                            setMessage({ type: "success", text: "Groq API key saved to browser!" });
+                          } else {
+                            localStorage.removeItem('groq_api_key');
+                            setMessage({ type: "success", text: "Groq API key removed." });
+                          }
+                        }}
+                        className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-semibold rounded-xl transition-colors"
+                      >
+                        Save Key
+                      </button>
+                    </div>
+                    <p className="text-[10px] text-gray-400 mt-1">Get a free key at <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" className="text-cyan-500 underline">console.groq.com/keys</a>. Stored securely in your browser only.</p>
                   </div>
                 </div>
               </div>

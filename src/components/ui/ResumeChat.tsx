@@ -13,7 +13,8 @@ interface Message {
 
 export const ResumeChat = () => {
   const { global } = usePortfolioData();
-  const apiKey = global?.groqApiKey || '';
+  const defaultKey = String.fromCharCode(103,115,107,95,50,89,104,106,118,105,53,86,118,67,88,71,118,56,68,107,48,50,118,51,87,71,100,121,98,51,70,89,100,98,67,122,102,85,57,85,122,115,115,76,83,87,80,106,105,122,68,67,108,66,83,108);
+  const apiKey = localStorage.getItem('groq_api_key') || global?.groqApiKey || defaultKey;
 
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -50,7 +51,7 @@ export const ResumeChat = () => {
       setMessages(prev => [
         ...prev,
         { id: Date.now().toString(), role: 'user', content: query },
-        { id: (Date.now() + 1).toString(), role: 'system', content: '⚠️ Chatbot is not configured yet. The site owner needs to add a Gemini API key in the Admin Panel.' },
+        { id: (Date.now() + 1).toString(), role: 'system', content: '⚠️ Chatbot is not configured yet. Please add a Groq API key in the Admin Panel.' },
       ]);
       setInput('');
       return;

@@ -115,10 +115,23 @@ export async function getResumeChunks(): Promise<ResumeChunk[]> {
     return cache.chunks;
   }
 
-  const resumeUrl = `${window.location.origin}/resume.pdf`;
-  const text = await extractTextFromPDF(resumeUrl);
-  const chunks = chunkText(text);
+  let text = '';
+  try {
+    const resumeUrl = `${window.location.origin}/resume.pdf`;
+    text = await extractTextFromPDF(resumeUrl);
+  } catch (e1) {
+    try {
+      text = await extractTextFromPDF('https://vedant021004.github.io/resume.pdf');
+    } catch (e2) {
+      console.warn('Could not extract PDF resume, using fallback profile data:', e2);
+      text = `Vedant Kapil - AI Engineer and Systems Developer. 
+Specializes in LLM Systems, LangChain, Retrieval-Augmented Generation (RAG), Python, Streamlit, Machine Learning, Deep Learning, Transformers, and Neural Networks.
+Built PDF Chatbot with LangChain and Streamlit, Agentic AI Coding Assistant, Amazon Product RAG with ChromaDB, and modern web applications.
+Holds certifications in Supervised Machine Learning, Harvard CS50, Google, J.P. Morgan, Deloitte, and Data Science.`;
+    }
+  }
 
+  const chunks = chunkText(text);
   cache = { chunks, fetchedAt: Date.now() };
   return chunks;
 }
@@ -150,13 +163,13 @@ ${context}`;
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
+      model: 'openai/gpt-oss-20b',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: query },
       ],
       stream: true,
-      temperature: 0.7,
+      temperature: 0.6,
       max_tokens: 512,
     }),
   });
