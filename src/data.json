@@ -38,7 +38,7 @@
     }
   ],
   "global": {
-    "geminiApiKey": "",
+    "groqApiKey": "",
     "profileImage": "/profile-1784818556934-screenshot-2026-07-19-171104.png",
     "heroTitle": "Vedant Kapil",
     "heroDescription": "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment.",

@@ -134,10 +134,6 @@ export async function generateResponse(
   apiKey: string,
   onChunk: (text: string) => void
 ): Promise<void> {
-  const { GoogleGenerativeAI } = await import('@google/generative-ai');
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-
   const systemPrompt = `You are Vedant Kapil's personal AI assistant on his portfolio website. 
 Answer questions about Vedant based ONLY on the resume context provided below.
 Be conversational, concise, and professional. Use first person when speaking as the assistant ("Vedant has..." or "He...").
@@ -147,16 +143,58 @@ Keep responses under 150 words unless the user asks for detail.
 RESUME CONTEXT:
 ${context}`;
 
-  const result = await model.generateContentStream({
-    contents: [
-      { role: 'user', parts: [{ text: systemPrompt + '\n\nUser question: ' + query }] }
-    ],
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'llama-3.1-8b-instant',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: query },
+      ],
+      stream: true,
+      temperature: 0.7,
+      max_tokens: 512,
+    }),
   });
 
-  for await (const chunk of result.stream) {
-    const text = chunk.text();
-    if (text) {
-      onChunk(text);
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Groq API error (${response.status}): ${err}`);
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) throw new Error('No response stream');
+
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || !trimmed.startsWith('data: ')) continue;
+      const data = trimmed.slice(6);
+      if (data === '[DONE]') return;
+
+      try {
+        const parsed = JSON.parse(data);
+        const delta = parsed.choices?.[0]?.delta?.content;
+        if (delta) {
+          onChunk(delta);
+        }
+      } catch {
+        // skip malformed chunks
+      }
     }
   }
 }

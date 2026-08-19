@@ -13,7 +13,7 @@ interface Message {
 
 export const ResumeChat = () => {
   const { global } = usePortfolioData();
-  const apiKey = global?.geminiApiKey || '';
+  const apiKey = global?.groqApiKey || '';
 
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
