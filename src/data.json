@@ -8,7 +8,8 @@
   "projectLinks": {
     "GEN-AI--Langchain-": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
     "ML-JOURNEY": "https://mymodelone.streamlit.app/",
-    "PDF-CHATBOT": "https://genniacqcxj6xbjrk9niak.streamlit.app/"
+    "PDF-CHATBOT": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
+    "WEB": "https://web-seven-topaz-34.vercel.app"
   },
   "caseStudies": [
     {
@@ -22,9 +23,22 @@
       "approach": "Engineered an interactive RAG PDF Chatbot powered by LangChain, OpenAI, and Streamlit for real-time document Q&A.",
       "demoUrl": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
       "repoUrl": "https://github.com/Vedant021004/GEN-AI--Langchain-"
+    },
+    {
+      "id": "2",
+      "title": "Construction Company Website",
+      "tech": [
+        "TypeScript",
+        "React",
+        "Vercel"
+      ],
+      "approach": "Designed and developed a modern, responsive construction company website with dynamic animations, project showcases, and a professional service portfolio.",
+      "demoUrl": "https://web-seven-topaz-34.vercel.app",
+      "repoUrl": "https://github.com/Vedant021004/WEB"
     }
   ],
   "global": {
+    "geminiApiKey": "",
     "profileImage": "/profile-1784818556934-screenshot-2026-07-19-171104.png",
     "heroTitle": "Vedant Kapil",
     "heroDescription": "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment.",

@@ -396,6 +396,27 @@ export const Admin = () => {
                 </div>
               </div>
 
+              {/* Chatbot Settings */}
+              <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 transition-colors">
+                <h2 className="text-xl font-medium text-black dark:text-white mb-2 flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-gray-500" />
+                  RAG Chatbot Settings
+                </h2>
+                <p className="text-xs text-gray-500 mb-4">The chatbot uses your resume PDF to answer visitor questions via Gemini AI.</p>
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Gemini API Key</label>
+                    <input 
+                      type="password" value={(globalSettings as any).geminiApiKey || ""} 
+                      placeholder="Enter your Gemini API key from aistudio.google.com"
+                      onChange={(e) => setGlobalSettings({...globalSettings, geminiApiKey: e.target.value} as any)}
+                      className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400 font-mono"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-cyan-500 underline">Google AI Studio</a>. The chatbot won't work without this.</p>
+                  </div>
+                </div>
+              </div>
+
               {/* About Config */}
               <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 transition-colors">
                 <h2 className="text-xl font-medium text-black dark:text-white mb-2 flex items-center gap-2">

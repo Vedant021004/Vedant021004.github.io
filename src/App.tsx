@@ -10,6 +10,7 @@ import { Admin } from "./pages/Admin";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CustomCursor } from "./components/ui/CustomCursor";
+import { ResumeChat } from "./components/ui/ResumeChat";
 
 function Preloader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
@@ -74,6 +75,7 @@ export default function App() {
         </main>
         <Footer />
       </div>
+      <ResumeChat />
     </BrowserRouter>
   );
 }
