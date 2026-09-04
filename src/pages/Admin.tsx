@@ -362,10 +362,15 @@ export const Admin = () => {
                   </div>
                   <div>
                     <label className="block text-xs text-gray-500 mb-1">Resume (PDF)</label>
-                    <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all">
-                      <p className="text-sm text-gray-500">
-                        {resumeFile ? resumeFile.name : "Click to upload new resume"}
+                    <label className={`flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-xl cursor-pointer transition-all ${resumeFile ? 'border-green-500 bg-green-500/10' : 'border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5'}`}>
+                      <p className={`text-sm ${resumeFile ? 'text-green-600 dark:text-green-400 font-medium' : 'text-gray-500'}`}>
+                        {resumeFile ? `✓ Selected: ${resumeFile.name}` : "Click to upload new resume"}
                       </p>
+                      {resumeFile && (
+                        <p className="text-[11px] text-gray-500 mt-1">
+                          Click "Save Changes" below to deploy this resume
+                        </p>
+                      )}
                       <input type="file" accept="application/pdf" className="hidden" onChange={(e) => setResumeFile(e.target.files?.[0] || null)} />
                     </label>
                   </div>

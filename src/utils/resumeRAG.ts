@@ -117,11 +117,11 @@ export async function getResumeChunks(): Promise<ResumeChunk[]> {
 
   let text = '';
   try {
-    const resumeUrl = `${window.location.origin}/resume.pdf`;
+    const resumeUrl = `${window.location.origin}/resume.pdf?t=${Date.now()}`;
     text = await extractTextFromPDF(resumeUrl);
   } catch (e1) {
     try {
-      text = await extractTextFromPDF('https://vedant021004.github.io/resume.pdf');
+      text = await extractTextFromPDF(`https://vedant021004.github.io/resume.pdf?t=${Date.now()}`);
     } catch (e2) {
       console.warn('Could not extract PDF resume, using fallback profile data:', e2);
       text = `Vedant Kapil - AI Engineer and Systems Developer. 

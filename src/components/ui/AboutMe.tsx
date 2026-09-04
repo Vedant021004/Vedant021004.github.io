@@ -75,7 +75,11 @@ export const AboutMe = () => {
           <div className="mt-12">
             <a 
               href="/resume.pdf" 
+              onClick={(e) => {
+                e.currentTarget.href = `/resume.pdf?v=${Date.now()}`;
+              }}
               target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold text-lg hover:bg-[#ff3b30] dark:hover:bg-[#ff3b30] hover:text-white transition-colors group"
             >
               <span>Download Resume</span>
