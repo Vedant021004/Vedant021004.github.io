@@ -262,7 +262,14 @@ export const Admin = () => {
       
       setMessage({ type: "success", text: "Successfully saved to GitHub! Live site is updated." });
     } catch (err: any) {
-      setMessage({ type: "error", text: `Error: ${err.message}` });
+      if (err.message?.includes("Bad credentials") || err.status === 401) {
+        setMessage({ 
+          type: "error", 
+          text: "GitHub Token Expired: Your Personal Access Token has expired or is invalid. Please click 'Logout' in the top right, generate a new token at github.com/settings/tokens with 'repo' scope, and log in again." 
+        });
+      } else {
+        setMessage({ type: "error", text: `Error: ${err.message}` });
+      }
     } finally {
       setIsSaving(false);
     }
@@ -275,16 +282,22 @@ export const Admin = () => {
           initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} onSubmit={handleLogin} 
           className="w-full max-w-md border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-8 rounded-3xl backdrop-blur-md"
         >
-          <div className="flex items-center gap-3 mb-6 text-black dark:text-white">
+          <div className="flex items-center gap-3 mb-4 text-black dark:text-white">
             <ShieldAlert className="h-6 w-6 text-cyan-500 dark:text-cyan-400" />
             <h2 className="text-2xl font-medium">Admin Access</h2>
           </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">
+            Enter your GitHub Personal Access Token with <span className="font-semibold text-black dark:text-white">repo</span> scope to manage your website content.
+          </p>
           <input
             type="password" value={token} onChange={(e) => setToken(e.target.value)}
             placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-            className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-black dark:text-white focus:outline-none focus:border-cyan-400 mb-4"
+            className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-black dark:text-white focus:outline-none focus:border-cyan-400 mb-2"
             required
           />
+          <div className="text-[11px] text-gray-400 dark:text-gray-500 mb-6">
+            Need a new token? <a href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio+CMS" target="_blank" rel="noopener noreferrer" className="text-cyan-500 hover:underline">Generate one here on GitHub</a> (select expiration and check "repo").
+          </div>
           <button type="submit" className="w-full bg-black dark:bg-white text-white dark:text-black font-medium py-3 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
             Authenticate
           </button>
