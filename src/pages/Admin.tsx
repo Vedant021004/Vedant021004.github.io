@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Octokit } from "octokit";
 import { motion } from "framer-motion";
-import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe, Award } from "lucide-react";
+import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe, Award, RefreshCw } from "lucide-react";
 import dataJsonStatic from "../data.json";
+import { extractTextFromFile, updateResumeCache, getResumeChunks, clearCache } from "../utils/resumeRAG";
 
 export const Admin = () => {
   const [token, setToken] = useState("");
@@ -11,6 +12,8 @@ export const Admin = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [activeTab, setActiveTab] = useState<"global" | "projects" | "skills" | "certificates">("global");
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const [isSyncingResume, setIsSyncingResume] = useState(false);
+  const [resumeSyncStatus, setResumeSyncStatus] = useState("");
 
   // Global Settings State
   const [globalSettings, setGlobalSettings] = useState(dataJsonStatic.global || {
@@ -212,6 +215,17 @@ export const Admin = () => {
             owner, repo, content: base64Content, encoding: "base64",
           });
           tree.push({ path: "public/resume.pdf", mode: "100644", type: "blob", sha: blobData.sha });
+
+          const now = Date.now();
+          updatedGlobal.resumeUpdatedAt = now;
+
+          try {
+            const extractedText = await extractTextFromFile(resumeFile);
+            updateResumeCache(extractedText, now);
+            setResumeSyncStatus(`✓ Chatbot synced with ${resumeFile.name}`);
+          } catch (e) {
+            console.warn("Could not immediately extract uploaded resume text:", e);
+          }
         }
 
         if (uploadFile && uploadRepoName.trim()) {
@@ -450,6 +464,50 @@ export const Admin = () => {
                       </button>
                     </div>
                     <p className="text-[10px] text-gray-400 mt-1">Get a free key at <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" className="text-cyan-500 underline">console.groq.com/keys</a>. Stored securely in your browser only.</p>
+                  </div>
+
+                  <div className="pt-3 border-t border-black/10 dark:border-white/10">
+                    <label className="block text-xs text-gray-500 mb-1">Chatbot Knowledge Base (Resume Sync)</label>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        disabled={isSyncingResume}
+                        onClick={async () => {
+                          setIsSyncingResume(true);
+                          setResumeSyncStatus("Syncing resume with chatbot...");
+                          try {
+                            if (resumeFile) {
+                              const text = await extractTextFromFile(resumeFile);
+                              updateResumeCache(text, Date.now());
+                              setResumeSyncStatus(`✓ Chatbot synced with selected file: ${resumeFile.name}`);
+                              setMessage({ type: "success", text: `Chatbot memory updated with ${resumeFile.name}!` });
+                            } else {
+                              clearCache();
+                              const chunks = await getResumeChunks(true);
+                              setResumeSyncStatus(`✓ Chatbot synced with live resume (${chunks.length} chunks indexed)`);
+                              setMessage({ type: "success", text: `Chatbot re-indexed with ${chunks.length} chunks from live resume!` });
+                            }
+                          } catch (err: any) {
+                            setResumeSyncStatus(`❌ Sync failed: ${err.message}`);
+                            setMessage({ type: "error", text: `Sync failed: ${err.message}` });
+                          } finally {
+                            setIsSyncingResume(false);
+                          }
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-50"
+                      >
+                        <RefreshCw className={`w-3.5 h-3.5 ${isSyncingResume ? 'animate-spin' : ''}`} />
+                        {isSyncingResume ? "Syncing..." : "Re-sync Chatbot with Resume Now"}
+                      </button>
+                      {resumeSyncStatus && (
+                        <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">
+                          {resumeSyncStatus}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-gray-400 mt-1.5">
+                      Whenever you upload a new resume and click "Save Changes", the chatbot automatically updates its knowledge base so it always answers questions using your latest resume.
+                    </p>
                   </div>
                 </div>
               </div>

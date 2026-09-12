@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Bot, User, Sparkles, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, User, Sparkles, Loader2, RefreshCw } from 'lucide-react';
 import { usePortfolioData } from '../../hooks/usePortfolioData';
 import { getResumeChunks, findRelevantChunks, generateResponse } from '../../utils/resumeRAG';
 
@@ -9,6 +9,92 @@ interface Message {
   role: 'user' | 'assistant' | 'system';
   content: string;
   isStreaming?: boolean;
+}
+
+function renderInline(text: string): React.ReactNode[] {
+  const parts = text.split(/(\*\*.*?\*\*|`.*?`)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <strong key={i} className="font-semibold text-black dark:text-white">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code key={i} className="px-1 py-0.5 rounded bg-black/10 dark:bg-white/10 font-mono text-[11px] text-purple-600 dark:text-purple-300">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
+}
+
+function FormattedMessage({ content, isUser }: { content: string; isUser: boolean }) {
+  if (isUser) {
+    return <div className="whitespace-pre-wrap">{content}</div>;
+  }
+
+  const lines = content.split('\n');
+
+  return (
+    <div className="space-y-1.5 leading-relaxed text-xs sm:text-sm">
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={idx} className="h-1" />;
+        }
+
+        if (trimmed === '---' || trimmed === '***') {
+          return <hr key={idx} className="border-black/10 dark:border-white/10 my-2" />;
+        }
+
+        // Heading: ###, ##, #
+        if (trimmed.startsWith('#')) {
+          const text = trimmed.replace(/^#+\s*/, '');
+          return (
+            <div key={idx} className="font-bold text-sm text-indigo-600 dark:text-indigo-400 mt-2 mb-0.5 flex items-center gap-1.5">
+              <span>{renderInline(text)}</span>
+            </div>
+          );
+        }
+
+        // Sub-bullet point (indented in original markdown)
+        if (/^\s{2,}[-*•]\s+/.test(line)) {
+          const text = trimmed.replace(/^[-*•]\s+/, '');
+          return (
+            <div key={idx} className="flex items-start gap-2 ml-4 my-0.5 text-xs text-gray-600 dark:text-gray-300">
+              <span className="text-gray-400 select-none shrink-0">•</span>
+              <span className="flex-1">{renderInline(text)}</span>
+            </div>
+          );
+        }
+
+        // Bullet list: -, *, •, or 1.
+        if (/^[-*•]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed)) {
+          const match = trimmed.match(/^([-\*•]|\d+\.)\s+(.*)$/);
+          const bullet = match ? match[1] : '•';
+          const text = match ? match[2] : trimmed;
+          return (
+            <div key={idx} className="flex items-start gap-2 ml-1 my-0.5">
+              <span className="text-indigo-500 font-bold select-none shrink-0">
+                {bullet === '-' || bullet === '*' ? '•' : bullet}
+              </span>
+              <span className="flex-1">{renderInline(text)}</span>
+            </div>
+          );
+        }
+
+        return (
+          <p key={idx} className="my-0.5">
+            {renderInline(line)}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
 
 export const ResumeChat = () => {
@@ -26,6 +112,7 @@ export const ResumeChat = () => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,6 +129,33 @@ export const ResumeChat = () => {
       inputRef.current.focus();
     }
   }, [isOpen]);
+
+  const handleRefreshResume = async () => {
+    if (isRefreshing || isLoading) return;
+    setIsRefreshing(true);
+    try {
+      const chunks = await getResumeChunks(true);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          role: 'system',
+          content: `🔄 Resume re-indexed! (${chunks.length} knowledge segments loaded). Ready for questions.`,
+        },
+      ]);
+    } catch (err: any) {
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          role: 'system',
+          content: `⚠️ Failed to re-index resume: ${err.message}`,
+        },
+      ]);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   const handleSend = async () => {
     const query = input.trim();
@@ -66,7 +180,7 @@ export const ResumeChat = () => {
     setIsLoading(true);
 
     try {
-      const chunks = await getResumeChunks();
+      const chunks = await getResumeChunks(false, (global as any)?.resumeUpdatedAt);
       const context = findRelevantChunks(query, chunks);
 
       await generateResponse(query, context, apiKey, (text) => {
@@ -131,7 +245,7 @@ export const ResumeChat = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[400px] h-[520px] flex flex-col bg-white dark:bg-[#0a0a0a] border border-black/10 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[420px] md:w-[440px] h-[540px] flex flex-col bg-white dark:bg-[#0a0a0a] border border-black/10 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white shrink-0">
@@ -146,13 +260,24 @@ export const ResumeChat = () => {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors"
-                aria-label="Close chat"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={handleRefreshResume}
+                  disabled={isRefreshing || isLoading}
+                  className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors disabled:opacity-50"
+                  title="Reload latest resume"
+                  aria-label="Reload latest resume"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors"
+                  aria-label="Close chat"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
@@ -181,15 +306,15 @@ export const ResumeChat = () => {
 
                   {/* Bubble */}
                   <div
-                    className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                    className={`max-w-[85%] sm:max-w-[88%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
                       msg.role === 'user'
                         ? 'bg-indigo-500 text-white rounded-br-md'
                         : msg.role === 'system'
                         ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800/40 rounded-bl-md'
-                        : 'bg-gray-100 dark:bg-white/5 text-gray-800 dark:text-gray-200 rounded-bl-md'
+                        : 'bg-gray-100 dark:bg-white/5 text-gray-800 dark:text-gray-200 rounded-bl-md shadow-sm'
                     }`}
                   >
-                    {msg.content}
+                    <FormattedMessage content={msg.content} isUser={msg.role === 'user'} />
                     {msg.isStreaming && (
                       <span className="inline-block w-1.5 h-4 bg-purple-500 ml-1 animate-pulse rounded-full align-text-bottom" />
                     )}
