@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MousePointer2, Bug } from "lucide-react";
+import { MousePointer2, Bug, Sparkles } from "lucide-react";
 import { usePortfolioData } from "../hooks/usePortfolioData";
 import { Projects } from "../components/ui/Projects";
 import { Certificates } from "../components/ui/Certificates";
 import { GitHubRepos } from "../components/ui/GitHubRepos";
 import { AboutMe } from "../components/ui/AboutMe";
+import { InteractiveAILab } from "../components/ui/InteractiveAILab";
 import antGif from "../assets/ant.gif";
 
 export const Home = () => {
@@ -176,6 +177,12 @@ export const Home = () => {
               </div>
             </a>
 
+            {/* AI Lab Interactive Demo Pill */}
+            <a href="#ai-lab" className="px-7 py-3 bg-indigo-500/10 dark:bg-indigo-500/20 border-2 border-indigo-500 hover:bg-indigo-500 hover:text-white text-indigo-600 dark:text-indigo-400 dark:hover:text-white rounded-full font-semibold transition-all cursor-pointer shadow-sm flex items-center gap-2 group">
+              <Sparkles className="w-4 h-4 text-indigo-500 group-hover:text-white transition-colors" />
+              <span>AI Lab</span>
+            </a>
+
             {/* About Me Pill */}
             <a href="#about" className="px-8 py-3 bg-white dark:bg-black border-2 border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-black dark:text-white rounded-full font-semibold transition-colors cursor-pointer shadow-sm">
               About Me
@@ -199,6 +206,9 @@ export const Home = () => {
 
       {/* Projects Grid Section */}
       <Projects />
+
+      {/* Interactive AI Systems Lab Section */}
+      <InteractiveAILab />
 
       {/* Certificates Section */}
       <Certificates />
