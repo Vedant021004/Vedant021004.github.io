@@ -86,50 +86,70 @@
     ],
     "certificates": [
       {
-        "file": "google.png",
-        "title": "Google Certification"
-      },
-      {
-        "file": "jp morgan.png",
-        "title": "J.P. Morgan Certification"
-      },
-      {
-        "file": "CS50P.png",
-        "title": "Harvard CS50P"
-      },
-      {
-        "file": "deloitte.png",
-        "title": "Deloitte Certification"
-      },
-      {
-        "file": "tata.png",
-        "title": "Tata Certification"
-      },
-      {
-        "file": "datascience.png",
-        "title": "Data Science Certification"
-      },
-      {
-        "file": "c programming.png",
-        "title": "C Programming"
+        "file": "openai.jpg",
+        "title": "OpenAI Agents & Autonomous Workflows",
+        "category": "Achievement",
+        "description": "Engineered autonomous AI agent systems utilizing multi-step reasoning, custom function calling, and structured output pipelines."
       },
       {
         "file": "LLM.png",
-        "title": "LLM Certification"
+        "title": "Large Language Models & RAG Architecture",
+        "category": "Achievement",
+        "description": "Mastery of LLM fine-tuning, prompt engineering frameworks, vector embeddings, and retrieval-augmented generation (RAG) pipelines."
       },
       {
-        "file": "openai.jpg",
-        "title": "OpenAI Agents and Workflows"
+        "file": "jp morgan.png",
+        "title": "J.P. Morgan Software Engineering Simulation",
+        "category": "Achievement",
+        "description": "Engineered financial data feed systems and high-throughput real-time stock price analysis tools during J.P. Morgan's technical program."
+      },
+      {
+        "file": "CS50P.png",
+        "title": "Harvard CS50P: Programming with Python",
+        "category": "Certification",
+        "description": "Harvard University's comprehensive computer science curriculum in advanced Python programming, algorithms, object-oriented design, and testing."
+      },
+      {
+        "file": "google.png",
+        "title": "Google Cloud & Engineering Foundations",
+        "category": "Certification",
+        "description": "Google professional certification validating scalable cloud infrastructure, containerized deployments, and distributed systems."
+      },
+      {
+        "file": "deloitte.png",
+        "title": "Deloitte Technology Simulation",
+        "category": "Certification",
+        "description": "Enterprise software engineering and data analytics consulting simulation."
+      },
+      {
+        "file": "tata.png",
+        "title": "Tata Data Visualization & Analytics",
+        "category": "Certification",
+        "description": "Executive dashboard design and predictive analytics for business intelligence."
+      },
+      {
+        "file": "datascience.png",
+        "title": "Data Science & Machine Learning",
+        "category": "Certification",
+        "description": "Statistical modeling, feature engineering, and predictive algorithmic pipelines."
+      },
+      {
+        "file": "c programming.png",
+        "title": "C Systems Programming & Memory Management",
+        "category": "Certification",
+        "description": "Low-level systems programming, pointer arithmetic, data structures, and memory safety."
       },
       {
         "file": "screenshot-2026-07-21-185006.png",
-        "title": "Coursera certifies their successful completion of Supervised Machine Learning: Regression and Classification"
+        "title": "DeepLearning.AI: Supervised Machine Learning",
+        "category": "Certification",
+        "description": "In-depth mathematical and practical foundations of gradient descent, linear/logistic regression, regularized models, and classification."
       },
       {
         "file": "screenshot-2026-09-03-235816.png",
-        "title": "CODEWAR 24 HOURS HACKTHON - 5TH RANK",
-        "description": "",
-        "category": "Achievement"
+        "title": "CODEWAR 24 HOURS HACKATHON - 5TH RANK",
+        "category": "Achievement",
+        "description": "Secured 5th Rank out of numerous engineering teams in an intense 24-hour hackathon sprint, building an end-to-end full-stack software application under tight deadlines."
       }
     ],
     "currentStatus": "Currently building AI applications with LangChain and Retrieval-Augmented Generation (RAG)."
