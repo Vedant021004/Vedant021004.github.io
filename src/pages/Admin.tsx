@@ -41,6 +41,9 @@ export const Admin = () => {
   const [certFeaturedInSlideshow, setCertFeaturedInSlideshow] = useState(true);
   const [certDescription, setCertDescription] = useState("");
   const [certFile, setCertFile] = useState<File | null>(null);
+  const [editingCertIdx, setEditingCertIdx] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   // Projects State
   const [caseStudies, setCaseStudies] = useState<any[]>((dataJsonStatic as any).caseStudies || []);
@@ -74,7 +77,15 @@ export const Admin = () => {
       });
       
       if ('content' in data) {
-        const decoded = JSON.parse(atob(data.content));
+        const cleanBase64 = data.content.replace(/\s/g, '');
+        const binaryStr = atob(cleanBase64);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) {
+          bytes[i] = binaryStr.charCodeAt(i);
+        }
+        const decodedString = new TextDecoder('utf-8').decode(bytes);
+        const decoded = JSON.parse(decodedString);
+
         setHiddenRepos(decoded.hiddenRepos || []);
         setProjectImages(decoded.projectImages || {});
         setProjectLinks(decoded.projectLinks || {});
@@ -83,6 +94,10 @@ export const Admin = () => {
         setRoles(decoded.global?.roles || []);
         setExpertise(decoded.global?.expertise || []);
         setCertificates(decoded.global?.certificates || []);
+
+        // Sync local storage so browser and other components reflect live data immediately
+        localStorage.setItem('portfolio_data', JSON.stringify(decoded));
+        window.dispatchEvent(new Event('portfolio_data_updated'));
       }
     } catch (e) {
       console.error("Failed to fetch live config, using bundled version.", e);
@@ -274,6 +289,10 @@ export const Admin = () => {
       setCaseStudies(caseStudies);
       setGlobalSettings(updatedGlobal);
       setCertificates(updatedCertificates);
+
+      const committedData = hasFileUpdates ? finalDataJson : newDataJson;
+      localStorage.setItem('portfolio_data', JSON.stringify(committedData));
+      window.dispatchEvent(new Event('portfolio_data_updated'));
       setUploadFile(null);
       setUploadRepoName("");
       setLinkRepoName("");
@@ -357,6 +376,23 @@ export const Admin = () => {
       category: newCat
     };
     setCertificates(updated);
+  };
+
+  const startEditingCert = (idx: number) => {
+    setEditingCertIdx(idx);
+    setEditTitle(certificates[idx]?.title || "");
+    setEditDescription((certificates[idx] as any)?.description || "");
+  };
+
+  const saveEditingCert = (idx: number) => {
+    const updated = [...certificates];
+    updated[idx] = {
+      ...updated[idx],
+      title: editTitle.trim() || updated[idx].title,
+      description: editDescription.trim()
+    };
+    setCertificates(updated);
+    setEditingCertIdx(null);
   };
 
   return (
@@ -982,14 +1018,55 @@ export const Admin = () => {
                             </button>
                           </div>
 
-                          <span className="text-gray-900 dark:text-white text-sm font-bold leading-snug line-clamp-2">
-                            {cert.title}
-                          </span>
+                          {editingCertIdx === idx ? (
+                            <div className="flex flex-col gap-2 mt-2">
+                              <input
+                                type="text"
+                                value={editTitle}
+                                onChange={(e) => setEditTitle(e.target.value)}
+                                placeholder="Edit title"
+                                className="w-full bg-white dark:bg-black/60 border border-cyan-400 rounded-lg px-2.5 py-1 text-xs text-black dark:text-white font-medium focus:outline-none"
+                              />
+                              <textarea
+                                value={editDescription}
+                                onChange={(e) => setEditDescription(e.target.value)}
+                                placeholder="Edit description..."
+                                rows={2}
+                                className="w-full bg-white dark:bg-black/60 border border-cyan-400 rounded-lg px-2.5 py-1 text-xs text-black dark:text-white focus:outline-none"
+                              />
+                              <div className="flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => saveEditingCert(idx)}
+                                  className="px-3 py-1 bg-cyan-500 text-white rounded-md text-[11px] font-bold hover:bg-cyan-600 transition-colors"
+                                >
+                                  ✓ Done
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setEditingCertIdx(null)}
+                                  className="px-2 py-1 text-gray-500 hover:text-black dark:hover:text-white text-[11px]"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <span className="text-gray-900 dark:text-white text-sm font-bold leading-snug line-clamp-2">
+                                {cert.title}
+                              </span>
 
-                          {cert.description && (
-                            <span className="text-gray-500 dark:text-gray-400 text-xs line-clamp-2 mt-1 leading-relaxed">
-                              {cert.description}
-                            </span>
+                              {cert.description ? (
+                                <span className="text-gray-500 dark:text-gray-400 text-xs line-clamp-2 mt-1 leading-relaxed">
+                                  {cert.description}
+                                </span>
+                              ) : (
+                                <span className="text-amber-500 text-[11px] italic mt-1">
+                                  No description yet — click "Edit" to add details
+                                </span>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
@@ -998,13 +1075,24 @@ export const Admin = () => {
                         <span className="text-[11px] text-gray-400">
                           {inSlideshow ? "⭐ Rotates in continuous slideshow" : "Appears in certificates catalog"}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))}
-                          className="text-red-500 hover:text-red-600 font-semibold text-xs hover:underline"
-                        >
-                          Remove
-                        </button>
+                        <div className="flex items-center gap-3">
+                          {editingCertIdx !== idx && (
+                            <button
+                              type="button"
+                              onClick={() => startEditingCert(idx)}
+                              className="text-cyan-600 dark:text-cyan-400 font-semibold text-xs hover:underline"
+                            >
+                              ✏️ Edit
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))}
+                            className="text-red-500 hover:text-red-600 font-semibold text-xs hover:underline"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
