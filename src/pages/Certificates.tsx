@@ -18,10 +18,10 @@ export const Certificates = () => {
         >
           <div className="inline-flex items-center gap-2 text-cyan-500 dark:text-cyan-400 mb-4 transition-colors">
             <Award className="h-5 w-5" />
-            <span className="text-sm font-medium uppercase tracking-widest">Achievements</span>
+            <span className="text-sm font-medium uppercase tracking-widest">Milestones</span>
           </div>
           <h1 className="font-display text-5xl md:text-6xl font-medium tracking-tight text-black dark:text-white mb-4 transition-colors">
-            Certifications
+            Achievements & Certifications
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-lg max-w-xl transition-colors">
             Continuous learning and professional validations across AI, Data Science, and Software Engineering.
@@ -47,6 +47,11 @@ export const Certificates = () => {
               </div>
               <div className="p-6 border-t border-black/10 dark:border-white/5 bg-gradient-to-b from-transparent to-black/5 dark:to-black/50 transition-colors">
                 <h3 className="font-medium text-black dark:text-white tracking-wide transition-colors">{cert.title}</h3>
+                {(cert as any).description && (
+                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 transition-colors leading-relaxed">
+                    {(cert as any).description}
+                  </p>
+                )}
               </div>
             </motion.div>
           ))}

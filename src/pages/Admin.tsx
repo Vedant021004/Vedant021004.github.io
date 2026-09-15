@@ -35,8 +35,9 @@ export const Admin = () => {
   const [roles, setRoles] = useState<string[]>(globalSettings.roles || []);
   const [newRole, setNewRole] = useState("");
   const [expertise, setExpertise] = useState<any[]>(globalSettings.expertise || []);
-  const [certificates, setCertificates] = useState<{file: string, title: string}[]>(globalSettings.certificates || []);
+  const [certificates, setCertificates] = useState<{file: string, title: string, description?: string}[]>(globalSettings.certificates || []);
   const [certTitle, setCertTitle] = useState("");
+  const [certDescription, setCertDescription] = useState("");
   const [certFile, setCertFile] = useState<File | null>(null);
 
   // Projects State
@@ -194,7 +195,7 @@ export const Admin = () => {
             owner, repo, content: base64Content, encoding: "base64",
           });
           tree.push({ path: `public/certificates/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
-          updatedCertificates.push({ file: fileName, title: certTitle.trim() });
+          updatedCertificates.push({ file: fileName, title: certTitle.trim(), description: certDescription.trim() });
         }
 
         updatedGlobal.certificates = updatedCertificates;
@@ -273,6 +274,7 @@ export const Admin = () => {
       setResumeFile(null);
       setCertFile(null);
       setCertTitle("");
+      setCertDescription("");
       
       setMessage({ type: "success", text: "Successfully saved to GitHub! Live site is updated." });
     } catch (err: any) {
@@ -767,19 +769,26 @@ export const Admin = () => {
           {activeTab === 'certificates' && (
             <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 transition-colors col-span-1 lg:col-span-2">
               <h2 className="text-xl font-medium text-black dark:text-white mb-2 flex items-center gap-2">
-                <Award className="h-5 w-5 text-gray-500" /> Certificates
+                <Award className="h-5 w-5 text-gray-500" /> Achievements & Certificates
               </h2>
               
-              <div className="flex flex-col md:flex-row gap-4 mb-6 mt-4">
-                <input
-                  type="text" value={certTitle} onChange={(e) => setCertTitle(e.target.value)}
-                  placeholder="Certificate Title (e.g. AWS Certified)"
-                  className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+              <div className="flex flex-col gap-4 mb-6 mt-4">
+                <div className="flex flex-col md:flex-row gap-4">
+                  <input
+                    type="text" value={certTitle} onChange={(e) => setCertTitle(e.target.value)}
+                    placeholder="Title (e.g. Hackathon Winner or AWS Certified)"
+                    className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+                  />
+                  <label className="flex-1 flex items-center justify-center border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all py-2">
+                    <span className="text-sm text-gray-500 px-4">{certFile ? certFile.name : "Select Image"}</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => setCertFile(e.target.files?.[0] || null)} />
+                  </label>
+                </div>
+                <textarea
+                  value={certDescription} onChange={(e) => setCertDescription(e.target.value)}
+                  placeholder="Description (Optional)" rows={2}
+                  className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
                 />
-                <label className="flex-1 flex items-center justify-center border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all py-2">
-                  <span className="text-sm text-gray-500 px-4">{certFile ? certFile.name : "Select Image"}</span>
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => setCertFile(e.target.files?.[0] || null)} />
-                </label>
               </div>
 
               <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300 mb-3 mt-8">Current Certificates</h3>
