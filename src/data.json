@@ -95,22 +95,22 @@
       {
         "file": "openai.jpg",
         "title": "OpenAI Agents & Autonomous Workflows",
-        "category": "Achievement",
-        "featuredInSlideshow": true,
+        "category": "Certification",
+        "featuredInSlideshow": false,
         "description": "Engineered autonomous AI agent systems utilizing multi-step reasoning, custom function calling, and structured output pipelines."
       },
       {
         "file": "LLM.png",
         "title": "Large Language Models & RAG Architecture",
-        "category": "Achievement",
-        "featuredInSlideshow": true,
+        "category": "Certification",
+        "featuredInSlideshow": false,
         "description": "Mastery of LLM fine-tuning, prompt engineering frameworks, vector embeddings, and retrieval-augmented generation (RAG) pipelines."
       },
       {
         "file": "jp morgan.png",
         "title": "J.P. Morgan Software Engineering Simulation",
-        "category": "Achievement",
-        "featuredInSlideshow": true,
+        "category": "Certification",
+        "featuredInSlideshow": false,
         "description": "Engineered financial data feed systems and high-throughput real-time stock price analysis tools during J.P. Morgan's technical program."
       },
       {
@@ -161,6 +161,13 @@
         "category": "Certification",
         "featuredInSlideshow": false,
         "description": "In-depth mathematical and practical foundations of gradient descent, linear/logistic regression, regularized models, and classification."
+      },
+      {
+        "file": "screenshot-2026-09-15-152350.png",
+        "title": "Participating in the Online Evaluation Round",
+        "description": "",
+        "category": "Achievement",
+        "featuredInSlideshow": true
       }
     ],
     "currentStatus": "Currently building AI applications with LangChain and Retrieval-Augmented Generation (RAG)."
