@@ -37,6 +37,7 @@ export const Admin = () => {
   const [expertise, setExpertise] = useState<any[]>(globalSettings.expertise || []);
   const [certificates, setCertificates] = useState<{file: string, title: string, description?: string}[]>(globalSettings.certificates || []);
   const [certTitle, setCertTitle] = useState("");
+  const [certCategory, setCertCategory] = useState<"Achievement" | "Certification">("Achievement");
   const [certDescription, setCertDescription] = useState("");
   const [certFile, setCertFile] = useState<File | null>(null);
 
@@ -195,7 +196,7 @@ export const Admin = () => {
             owner, repo, content: base64Content, encoding: "base64",
           });
           tree.push({ path: `public/certificates/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
-          updatedCertificates.push({ file: fileName, title: certTitle.trim(), description: certDescription.trim() });
+          updatedCertificates.push({ file: fileName, title: certTitle.trim(), description: certDescription.trim(), category: certCategory });
         }
 
         updatedGlobal.certificates = updatedCertificates;
@@ -275,6 +276,7 @@ export const Admin = () => {
       setCertFile(null);
       setCertTitle("");
       setCertDescription("");
+      setCertCategory("Achievement");
       
       setMessage({ type: "success", text: "Successfully saved to GitHub! Live site is updated." });
     } catch (err: any) {
@@ -359,7 +361,7 @@ export const Admin = () => {
             onClick={() => setActiveTab("certificates")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${activeTab === 'certificates' ? 'bg-black dark:bg-white text-white dark:text-black font-medium' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'}`}
           >
-            <Award className="h-4 w-4" /> Certificates
+            <Award className="h-4 w-4" /> Achievements & Certs
           </button>
         </div>
 
@@ -773,6 +775,35 @@ export const Admin = () => {
               </h2>
               
               <div className="flex flex-col gap-4 mb-6 mt-4">
+                {/* Category Selector */}
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-gray-500 font-semibold uppercase">Category:</span>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCertCategory("Achievement")}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                        certCategory === "Achievement"
+                          ? "bg-amber-500 text-white shadow-sm"
+                          : "bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300 hover:bg-black/10"
+                      }`}
+                    >
+                      🏆 Hackathon / Achievement
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCertCategory("Certification")}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                        certCategory === "Certification"
+                          ? "bg-blue-600 text-white shadow-sm"
+                          : "bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300 hover:bg-black/10"
+                      }`}
+                    >
+                      📜 Certification
+                    </button>
+                  </div>
+                </div>
+
                 <div className="flex flex-col md:flex-row gap-4">
                   <input
                     type="text" value={certTitle} onChange={(e) => setCertTitle(e.target.value)}
@@ -780,36 +811,44 @@ export const Admin = () => {
                     className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
                   />
                   <label className="flex-1 flex items-center justify-center border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all py-2">
-                    <span className="text-sm text-gray-500 px-4">{certFile ? certFile.name : "Select Image"}</span>
+                    <span className="text-sm text-gray-500 px-4">{certFile ? certFile.name : "Select Photo / Certificate"}</span>
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => setCertFile(e.target.files?.[0] || null)} />
                   </label>
                 </div>
                 <textarea
                   value={certDescription} onChange={(e) => setCertDescription(e.target.value)}
-                  placeholder="Description (Optional)" rows={2}
+                  placeholder="Description of the hackathon, project, or certification (Optional)" rows={2}
                   className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
                 />
               </div>
 
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300 mb-3 mt-8">Current Certificates</h3>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300 mb-3 mt-8">Current Achievements & Certificates</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {certificates.map((cert, idx) => (
                   <div key={idx} className="flex items-center justify-between bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 p-4 rounded-xl">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white dark:bg-black rounded-lg p-2 flex items-center justify-center overflow-hidden">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-12 h-12 bg-white dark:bg-black rounded-lg p-2 flex items-center justify-center overflow-hidden shrink-0 border border-black/5 dark:border-white/5">
                         <img src={`/certificates/${cert.file}`} alt={cert.title} className="max-w-full max-h-full object-contain" />
                       </div>
-                      <span className="text-gray-700 dark:text-gray-300 text-sm font-medium truncate max-w-[150px]">{cert.title}</span>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500">
+                          {(cert as any).category || (cert.title.toLowerCase().includes("hackathon") ? "Achievement" : "Certification")}
+                        </span>
+                        <span className="text-gray-700 dark:text-gray-300 text-sm font-medium truncate">{cert.title}</span>
+                        {(cert as any).description && (
+                          <span className="text-gray-400 text-xs truncate">{(cert as any).description}</span>
+                        )}
+                      </div>
                     </div>
                     <button 
                       onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))} 
-                      className="text-red-500 dark:text-red-400 text-xs ml-4"
+                      className="text-red-500 dark:text-red-400 text-xs ml-4 shrink-0 hover:underline"
                     >
                       Remove
                     </button>
                   </div>
                 ))}
-                {certificates.length === 0 && <div className="text-gray-500 text-sm italic py-4 col-span-3">No certificates configured.</div>}
+                {certificates.length === 0 && <div className="text-gray-500 text-sm italic py-4 col-span-3">No certificates or achievements configured.</div>}
               </div>
             </div>
           )}

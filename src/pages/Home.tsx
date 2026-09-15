@@ -183,7 +183,7 @@ export const Home = () => {
 
             {/* Certificates Pill */}
             <a href="#certificates" className="px-8 py-3 bg-white dark:bg-black border-2 border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-black dark:text-white rounded-full font-semibold transition-colors cursor-pointer shadow-sm">
-              Certifications
+              Achievements & Certs
             </a>
 
             {/* GitHub Pill */}
