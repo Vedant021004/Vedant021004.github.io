@@ -41,8 +41,13 @@ export const Certificates = () => {
     return "Certifications";
   };
 
-  // Slideshow items: items marked as achievements, or top featured items if none specifically marked
-  const slideshowItems = certificates.filter((c) => getItemCategory(c) === "Achievements");
+  // Slideshow items: items explicitly marked featuredInSlideshow === true, or fallback to Achievements
+  const slideshowItems = certificates.filter((c) => {
+    if (typeof c.featuredInSlideshow === "boolean") {
+      return c.featuredInSlideshow;
+    }
+    return getItemCategory(c) === "Achievements";
+  });
   const displaySlides = slideshowItems.length > 0 ? slideshowItems : certificates.slice(0, 5);
 
   // Auto-play slideshow timer (switches every 4.5 seconds unless paused)

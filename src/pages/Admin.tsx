@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Octokit } from "octokit";
 import { motion } from "framer-motion";
-import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe, Award, RefreshCw } from "lucide-react";
+import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe, Award, RefreshCw, Trophy, Scroll, Sparkles } from "lucide-react";
 import dataJsonStatic from "../data.json";
 import { extractTextFromFile, updateResumeCache, getResumeChunks, clearCache } from "../utils/resumeRAG";
 
@@ -38,6 +38,7 @@ export const Admin = () => {
   const [certificates, setCertificates] = useState<{file: string, title: string, description?: string}[]>(globalSettings.certificates || []);
   const [certTitle, setCertTitle] = useState("");
   const [certCategory, setCertCategory] = useState<"Achievement" | "Certification">("Achievement");
+  const [certFeaturedInSlideshow, setCertFeaturedInSlideshow] = useState(true);
   const [certDescription, setCertDescription] = useState("");
   const [certFile, setCertFile] = useState<File | null>(null);
 
@@ -196,7 +197,13 @@ export const Admin = () => {
             owner, repo, content: base64Content, encoding: "base64",
           });
           tree.push({ path: `public/certificates/${fileName}`, mode: "100644", type: "blob", sha: blobData.sha });
-          updatedCertificates.push({ file: fileName, title: certTitle.trim(), description: certDescription.trim(), category: certCategory });
+          updatedCertificates.push({
+            file: fileName,
+            title: certTitle.trim(),
+            description: certDescription.trim(),
+            category: certCategory,
+            featuredInSlideshow: certFeaturedInSlideshow
+          });
         }
 
         updatedGlobal.certificates = updatedCertificates;
@@ -277,6 +284,7 @@ export const Admin = () => {
       setCertTitle("");
       setCertDescription("");
       setCertCategory("Achievement");
+      setCertFeaturedInSlideshow(true);
       
       setMessage({ type: "success", text: "Successfully saved to GitHub! Live site is updated." });
     } catch (err: any) {
@@ -323,6 +331,33 @@ export const Admin = () => {
       </div>
     );
   }
+
+  const toggleItemSlideshow = (idx: number) => {
+    const updated = [...certificates];
+    const item = updated[idx] as any;
+    const isCurrentlyIn = item.featuredInSlideshow ?? (
+      item.category === "Achievement" || 
+      item.title?.toLowerCase().includes("hackathon") || 
+      item.title?.toLowerCase().includes("agents") ||
+      item.title?.toLowerCase().includes("llm")
+    );
+    updated[idx] = {
+      ...updated[idx],
+      featuredInSlideshow: !isCurrentlyIn
+    };
+    setCertificates(updated);
+  };
+
+  const toggleItemCategory = (idx: number) => {
+    const updated = [...certificates];
+    const currentCat = (updated[idx] as any).category || ((updated[idx].title?.toLowerCase().includes("hackathon")) ? "Achievement" : "Certification");
+    const newCat = currentCat === "Achievement" ? "Certification" : "Achievement";
+    updated[idx] = {
+      ...updated[idx],
+      category: newCat
+    };
+    setCertificates(updated);
+  };
 
   return (
     <div className="min-h-screen pt-32 pb-24 px-6 transition-colors duration-500">
@@ -769,86 +804,217 @@ export const Admin = () => {
           )}
 
           {activeTab === 'certificates' && (
-            <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 transition-colors col-span-1 lg:col-span-2">
-              <h2 className="text-xl font-medium text-black dark:text-white mb-2 flex items-center gap-2">
-                <Award className="h-5 w-5 text-gray-500" /> Achievements & Certificates
-              </h2>
-              
-              <div className="flex flex-col gap-4 mb-6 mt-4">
-                {/* Category Selector */}
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-gray-500 font-semibold uppercase">Category:</span>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setCertCategory("Achievement")}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                        certCategory === "Achievement"
-                          ? "bg-amber-500 text-white shadow-sm"
-                          : "bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300 hover:bg-black/10"
-                      }`}
-                    >
-                      🏆 Hackathon / Achievement
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setCertCategory("Certification")}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                        certCategory === "Certification"
-                          ? "bg-blue-600 text-white shadow-sm"
-                          : "bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300 hover:bg-black/10"
-                      }`}
-                    >
-                      📜 Certification
-                    </button>
-                  </div>
+            <div className="border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 rounded-3xl p-6 md:p-8 transition-colors col-span-1 lg:col-span-2">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-black/10 dark:border-white/10">
+                <div>
+                  <h2 className="text-xl md:text-2xl font-medium text-black dark:text-white flex items-center gap-2">
+                    <Award className="h-6 w-6 text-[#ea6b24]" /> Achievements, Hackathons & Certificates
+                  </h2>
+                  <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Control what appears on your portfolio. Choose which items rotate in the top continuous slideshow!
+                  </p>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-4">
-                  <input
-                    type="text" value={certTitle} onChange={(e) => setCertTitle(e.target.value)}
-                    placeholder="Title (e.g. Hackathon Winner or AWS Certified)"
-                    className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
-                  />
-                  <label className="flex-1 flex items-center justify-center border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all py-2">
-                    <span className="text-sm text-gray-500 px-4">{certFile ? certFile.name : "Select Photo / Certificate"}</span>
-                    <input type="file" accept="image/*" className="hidden" onChange={(e) => setCertFile(e.target.files?.[0] || null)} />
-                  </label>
+                {/* Live Stats */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="px-3 py-1 rounded-xl bg-black/5 dark:bg-white/10 text-xs font-semibold text-gray-700 dark:text-gray-300">
+                    Total: {certificates.length}
+                  </span>
+                  <span className="px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                    <Star className="w-3.5 h-3.5 fill-amber-500" />
+                    Slideshow: {certificates.filter(c => (c as any).featuredInSlideshow ?? ((c as any).category === "Achievement" || c.title.toLowerCase().includes("hackathon") || c.title.toLowerCase().includes("agents"))).length}
+                  </span>
                 </div>
-                <textarea
-                  value={certDescription} onChange={(e) => setCertDescription(e.target.value)}
-                  placeholder="Description of the hackathon, project, or certification (Optional)" rows={2}
-                  className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
-                />
               </div>
 
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-300 mb-3 mt-8">Current Achievements & Certificates</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {certificates.map((cert, idx) => (
-                  <div key={idx} className="flex items-center justify-between bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 p-4 rounded-xl">
-                    <div className="flex items-center gap-4 min-w-0">
-                      <div className="w-12 h-12 bg-white dark:bg-black rounded-lg p-2 flex items-center justify-center overflow-hidden shrink-0 border border-black/5 dark:border-white/5">
-                        <img src={`/certificates/${cert.file}`} alt={cert.title} className="max-w-full max-h-full object-contain" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500">
-                          {(cert as any).category || (cert.title.toLowerCase().includes("hackathon") ? "Achievement" : "Certification")}
-                        </span>
-                        <span className="text-gray-700 dark:text-gray-300 text-sm font-medium truncate">{cert.title}</span>
-                        {(cert as any).description && (
-                          <span className="text-gray-400 text-xs truncate">{(cert as any).description}</span>
-                        )}
+              {/* Upload Card */}
+              <div className="bg-white dark:bg-black/40 border border-black/10 dark:border-white/10 rounded-2xl p-6 mb-8 shadow-sm">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-black dark:text-white mb-4 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-cyan-500" />
+                  Upload New Photo / Certificate
+                </h3>
+
+                <div className="flex flex-col gap-4">
+                  {/* Step 1: Category Selector */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-2">1. What kind of item is this?</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCertCategory("Achievement");
+                          setCertFeaturedInSlideshow(true);
+                        }}
+                        className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all ${
+                          certCategory === "Achievement"
+                            ? "border-amber-500 bg-amber-500/10 text-amber-900 dark:text-amber-200 ring-2 ring-amber-500/30"
+                            : "border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300"
+                        }`}
+                      >
+                        <Trophy className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
+                        <div>
+                          <div className="text-sm font-bold">🏆 Hackathon / Glimpse / Milestone</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">Live event photos, team moments, project awards</div>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setCertCategory("Certification")}
+                        className={`p-3 rounded-xl border text-left flex items-start gap-3 transition-all ${
+                          certCategory === "Certification"
+                            ? "border-blue-500 bg-blue-500/10 text-blue-900 dark:text-blue-200 ring-2 ring-blue-500/30"
+                            : "border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 text-gray-700 dark:text-gray-300"
+                        }`}
+                      >
+                        <Scroll className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
+                        <div>
+                          <div className="text-sm font-bold">📜 Professional Certification</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">Google, Harvard, cloud & developer certificates</div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Step 2: Slideshow Inclusion Toggle */}
+                  <div className="p-3.5 rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02] flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2.5">
+                      <Star className={`w-5 h-5 ${certFeaturedInSlideshow ? "text-amber-500 fill-amber-500" : "text-gray-400"}`} />
+                      <div>
+                        <div className="text-xs sm:text-sm font-bold text-black dark:text-white">
+                          Feature in Top Continuous Slideshow?
+                        </div>
+                        <div className="text-[11px] text-gray-500">
+                          When enabled, this photo & description will rotate in the continuous auto-playing slideshow on your homepage.
+                        </div>
                       </div>
                     </div>
-                    <button 
-                      onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))} 
-                      className="text-red-500 dark:text-red-400 text-xs ml-4 shrink-0 hover:underline"
+                    <button
+                      type="button"
+                      onClick={() => setCertFeaturedInSlideshow(!certFeaturedInSlideshow)}
+                      className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                        certFeaturedInSlideshow
+                          ? "bg-amber-500 text-white shadow-sm"
+                          : "bg-gray-200 dark:bg-white/10 text-gray-600 dark:text-gray-400"
+                      }`}
                     >
-                      Remove
+                      {certFeaturedInSlideshow ? "⭐ YES (In Slideshow)" : "NO (Grid Only)"}
                     </button>
                   </div>
-                ))}
-                {certificates.length === 0 && <div className="text-gray-500 text-sm italic py-4 col-span-3">No certificates or achievements configured.</div>}
+
+                  {/* Step 3: Title & File Input */}
+                  <div className="flex flex-col md:flex-row gap-4">
+                    <input
+                      type="text"
+                      value={certTitle}
+                      onChange={(e) => setCertTitle(e.target.value)}
+                      placeholder="Title (e.g. CODEWAR 24h Hackathon Winner or AWS Certified)"
+                      className="flex-1 bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2.5 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+                    />
+                    <label className="flex-1 flex items-center justify-center border-2 border-black/10 dark:border-white/10 border-dashed rounded-xl cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all py-2.5">
+                      <span className="text-sm text-gray-500 px-4 truncate">{certFile ? certFile.name : "📷 Select Photo or Certificate"}</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={(e) => setCertFile(e.target.files?.[0] || null)} />
+                    </label>
+                  </div>
+
+                  {/* Step 4: Description */}
+                  <textarea
+                    value={certDescription}
+                    onChange={(e) => setCertDescription(e.target.value)}
+                    placeholder="Description & Impact (Explain what you built, rank, team, tech stack, or skills certified - displayed on the slide & modal)"
+                    rows={2}
+                    className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-2.5 text-black dark:text-white text-sm focus:outline-none focus:border-cyan-400"
+                  />
+                </div>
+              </div>
+
+              {/* Current Items Manager with Slideshow Controls */}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-black dark:text-white">
+                  Current Items ({certificates.length}) — Click buttons below to toggle Slideshow or Category
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {certificates.map((cert, idx) => {
+                  const item = cert as any;
+                  const isAchievement = item.category === "Achievement" || (item.title?.toLowerCase().includes("hackathon"));
+                  const inSlideshow = item.featuredInSlideshow ?? (isAchievement || item.title?.toLowerCase().includes("agents") || item.title?.toLowerCase().includes("llm"));
+
+                  return (
+                    <div
+                      key={idx}
+                      className="flex flex-col justify-between bg-white dark:bg-black/30 border border-black/10 dark:border-white/5 p-4 rounded-2xl shadow-sm gap-3"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="w-16 h-16 bg-gray-50 dark:bg-black rounded-xl p-2 flex items-center justify-center overflow-hidden shrink-0 border border-black/5 dark:border-white/5">
+                          <img src={`/certificates/${cert.file}`} alt={cert.title} className="max-w-full max-h-full object-contain" />
+                        </div>
+                        <div className="flex flex-col min-w-0 flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            {/* Category Switch Button */}
+                            <button
+                              type="button"
+                              onClick={() => toggleItemCategory(idx)}
+                              title="Click to toggle Category"
+                              className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border transition-all ${
+                                isAchievement
+                                  ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:bg-amber-500/20"
+                                  : "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20 hover:bg-blue-500/20"
+                              }`}
+                            >
+                              {isAchievement ? "🏆 Hackathon" : "📜 Cert"}
+                            </button>
+
+                            {/* Slideshow Switch Button */}
+                            <button
+                              type="button"
+                              onClick={() => toggleItemSlideshow(idx)}
+                              title="Click to toggle Slideshow status"
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-md border transition-all flex items-center gap-1 ${
+                                inSlideshow
+                                  ? "bg-amber-500 text-white border-amber-600 shadow-sm"
+                                  : "bg-black/5 dark:bg-white/5 text-gray-500 border-transparent hover:bg-black/10 dark:hover:bg-white/10"
+                              }`}
+                            >
+                              <Star className={`w-3 h-3 ${inSlideshow ? "fill-white" : ""}`} />
+                              {inSlideshow ? "In Slideshow" : "Add to Slideshow"}
+                            </button>
+                          </div>
+
+                          <span className="text-gray-900 dark:text-white text-sm font-bold leading-snug line-clamp-2">
+                            {cert.title}
+                          </span>
+
+                          {cert.description && (
+                            <span className="text-gray-500 dark:text-gray-400 text-xs line-clamp-2 mt-1 leading-relaxed">
+                              {cert.description}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2 border-t border-black/5 dark:border-white/5 text-xs">
+                        <span className="text-[11px] text-gray-400">
+                          {inSlideshow ? "⭐ Rotates in continuous slideshow" : "Appears in certificates catalog"}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))}
+                          className="text-red-500 hover:text-red-600 font-semibold text-xs hover:underline"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {certificates.length === 0 && (
+                  <div className="text-gray-500 text-sm italic py-8 text-center col-span-2">
+                    No certificates or achievements configured. Upload your first one above!
+                  </div>
+                )}
               </div>
             </div>
           )}
