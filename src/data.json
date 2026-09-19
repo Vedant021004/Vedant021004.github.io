@@ -168,6 +168,13 @@
         "description": "Participated in the competitive online evaluation round, showcasing rapid problem-solving, architectural design, and algorithm optimization under timed conditions.",
         "category": "Achievement",
         "featuredInSlideshow": true
+      },
+      {
+        "file": "4-(1).png",
+        "title": "Build With Bharat 2.0 (NIT DELHI)",
+        "description": "",
+        "category": "Achievement",
+        "featuredInSlideshow": false
       }
     ],
     "currentStatus": "Currently building AI applications with LangChain and Retrieval-Augmented Generation (RAG)."
