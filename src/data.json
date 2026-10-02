@@ -175,6 +175,13 @@
         "description": "",
         "category": "Achievement",
         "featuredInSlideshow": true
+      },
+      {
+        "file": "screenshot-2026-10-02-103839.png",
+        "title": "Hack With Hyderabad 3.0",
+        "description": "",
+        "category": "Achievement",
+        "featuredInSlideshow": true
       }
     ],
     "currentStatus": "Currently building AI applications with LangChain and Retrieval-Augmented Generation (RAG)."
