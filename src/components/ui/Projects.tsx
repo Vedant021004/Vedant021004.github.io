@@ -20,11 +20,20 @@ export const Projects = () => {
     <section id="projects" className="py-16 md:py-24 px-6 md:px-10 max-w-[1600px] mx-auto bg-white dark:bg-[#050505] transition-colors duration-500">
       
       {/* Section Header */}
-      <div className="mb-16 flex items-center gap-4">
-        <FolderGit2 className="w-10 h-10 text-black dark:text-white transition-colors" />
-        <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black dark:text-white transition-colors">
-          Projects
-        </h2>
+      <div className="mb-16 flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-4">
+          <FolderGit2 className="w-10 h-10 text-black dark:text-white transition-colors" />
+          <h2 className="text-4xl md:text-5xl font-display font-black tracking-tight text-black dark:text-white transition-colors">
+            Projects
+          </h2>
+        </div>
+        <a
+          href="/projects.html"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-[#ea6b24] hover:bg-[#d55b18] text-white rounded-full font-semibold transition-all shadow-md hover:scale-105"
+        >
+          <span>See Projects</span>
+          <span className="text-sm">↗</span>
+        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
@@ -41,14 +50,18 @@ export const Projects = () => {
               className="group flex flex-col"
             >
               {/* Massive Solid Color Image Cover */}
-              <div className={`w-full aspect-[4/3] rounded-2xl md:rounded-3xl flex items-center justify-center mb-6 md:mb-8 ${visual.bg} transition-transform duration-500 group-hover:-translate-y-2`}>
+              <a 
+                href="/projects.html"
+                title="Click to view interactive project showcase"
+                className={`w-full aspect-[4/3] rounded-2xl md:rounded-3xl flex items-center justify-center mb-6 md:mb-8 ${visual.bg} transition-transform duration-500 group-hover:-translate-y-2 cursor-pointer`}
+              >
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: index % 2 === 0 ? 5 : -5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   {visual.icon}
                 </motion.div>
-              </div>
+              </a>
 
               {/* Title */}
               <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight text-black dark:text-white mb-4 transition-colors">
@@ -67,12 +80,19 @@ export const Projects = () => {
               </p>
 
               {/* View Project Button */}
-              <div className="mt-auto flex flex-col md:flex-row gap-3 md:gap-4">
+              <div className="mt-auto flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
+                <a 
+                  href="/projects.html"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-[#ea6b24] hover:bg-[#d55b18] text-white rounded-full font-semibold transition-colors gap-1.5"
+                >
+                  <span>See Projects</span>
+                  <span className="text-xs">↗</span>
+                </a>
                 <a 
                   href={project.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-[#333333] hover:bg-black text-white rounded-full font-semibold transition-colors"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-[#333333] hover:bg-black text-white rounded-full font-semibold transition-colors"
                 >
                   View Project
                 </a>
@@ -80,7 +100,7 @@ export const Projects = () => {
                   href={project.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-white border-2 border-black hover:bg-black hover:text-white text-black rounded-full font-semibold transition-colors"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-black hover:bg-black hover:text-white text-black rounded-full font-semibold transition-colors"
                 >
                   GitHub
                 </a>

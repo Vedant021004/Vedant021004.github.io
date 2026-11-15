@@ -165,6 +165,15 @@ export const Home = () => {
 
           {/* Pill Buttons */}
           <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
+            {/* See Projects Pill */}
+            <a 
+              href="/projects.html" 
+              className="px-8 py-3 bg-[#ea6b24] hover:bg-[#d55b18] text-white rounded-full font-semibold transition-all cursor-pointer shadow-md flex items-center gap-2 hover:scale-105"
+            >
+              <span>See Projects</span>
+              <span className="text-sm">↗</span>
+            </a>
+
             {/* My Work Pill */}
             <a href="#projects" className="relative group cursor-pointer block">
               <div className="pl-14 pr-6 py-3 border-2 border-black dark:border-white rounded-full flex items-center gap-2 hover:bg-black/5 dark:hover:bg-white/5 transition-colors bg-white dark:bg-black">

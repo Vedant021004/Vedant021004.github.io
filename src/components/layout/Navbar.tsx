@@ -58,6 +58,13 @@ export const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-4 text-black dark:text-white transition-colors">
+          <a
+            href="/projects.html"
+            className="px-4 py-2 border border-black/20 dark:border-white/20 hover:border-[#ea6b24] dark:hover:border-[#ea6b24] hover:text-[#ea6b24] rounded-full text-xs md:text-sm font-semibold transition-colors flex items-center gap-1.5"
+          >
+            <span>See Projects</span>
+            <span className="text-xs">↗</span>
+          </a>
           <button 
             onClick={toggleTheme}
             className="w-10 h-10 rounded-full border border-black/20 dark:border-white/20 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 hover:border-black dark:hover:border-white transition-colors"
