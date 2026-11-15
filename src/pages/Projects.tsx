@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Search, X, GitBranch, Globe, Terminal, Database, Code2, Layout, Binary, ExternalLink, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowRight, Search, X, GitBranch, Globe, Terminal, Database, Code2, Layout, Binary, ExternalLink, ChevronRight } from "lucide-react";
 import { useGithubRepos, Repo } from "../hooks/useGithubRepos";
 import { usePortfolioData } from "../hooks/usePortfolioData";
 import { Button } from "../components/ui/Button";
@@ -63,7 +63,7 @@ export const Projects = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-12 max-w-3xl"
+          className="mb-20 max-w-3xl"
         >
           <h1 className="font-display text-5xl md:text-7xl font-medium tracking-tight text-black dark:text-white mb-6">
             Featured Work
@@ -72,30 +72,6 @@ export const Projects = () => {
             A deep dive into the engineering behind production AI systems. Here is a look at the challenges, architectures, and results.
           </p>
         </motion.div>
-
-        {/* Interactive 3D/Flip Project Showcase Banner */}
-        <div className="mb-20 p-6 md:p-8 rounded-3xl bg-gradient-to-r from-[#101216] via-[#151722] to-[#101216] border border-[#7C5CFF]/30 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
-          <div className="space-y-2 text-center md:text-left">
-            <div className="text-xs font-mono-tech text-[#C8F542] font-bold tracking-wider flex items-center justify-center md:justify-start gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#C8F542] animate-ping" />
-              <span>INTERACTIVE FLIP-CARD SHOWCASE AVAILABLE</span>
-            </div>
-            <h3 className="text-xl md:text-2xl font-bold text-white font-sans">
-              Open Interactive 3D Systems Gallery
-            </h3>
-            <p className="text-sm text-[#9CA3AF] font-mono-tech max-w-xl">
-              Experience the standalone 3D card flips, wave particle canvas, command palette, and interactive project guide.
-            </p>
-          </div>
-          <a
-            href="/projects.html"
-            className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#7C5CFF] to-[#3B2BFF] hover:from-[#9074FF] hover:to-[#5B4CFF] text-white font-mono-tech font-bold text-xs flex items-center gap-2 shrink-0 transition-all shadow-[0_0_20px_rgba(124,92,255,0.4)] group border border-[#C8F542]/30"
-          >
-            <Sparkles className="w-4 h-4 text-[#C8F542] animate-pulse" />
-            <span>LAUNCH SHOWCASE</span>
-            <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </a>
-        </div>
 
         {/* Featured Case Studies */}
         {caseStudies.length > 0 && (
