@@ -226,13 +226,15 @@ export const ResumeChat = () => {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-full shadow-lg shadow-indigo-500/30 flex items-center justify-center hover:shadow-xl hover:shadow-indigo-500/40 transition-shadow"
-            aria-label="Open chat"
+            className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-[#101216] border border-[#7C5CFF]/40 text-white rounded-full shadow-[0_0_30px_rgba(124,92,255,0.3)] flex items-center gap-2.5 hover:border-[#7C5CFF] transition-all font-mono-tech text-xs"
+            aria-label="Open AI resume assistant"
           >
-            <MessageCircle className="w-6 h-6" />
+            <span className="w-2 h-2 rounded-full bg-[#7C5CFF] animate-ping" />
+            <MessageCircle className="w-4 h-4 text-[#7C5CFF]" />
+            <span className="font-semibold">ASK RESUME RAG</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -245,18 +247,18 @@ export const ResumeChat = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[420px] md:w-[440px] h-[540px] flex flex-col bg-white dark:bg-[#0a0a0a] border border-black/10 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-[360px] sm:w-[420px] md:w-[440px] h-[540px] flex flex-col bg-[#101216] border border-[#7C5CFF]/30 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden font-mono-tech"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white shrink-0">
+            <div className="flex items-center justify-between px-5 py-4 bg-[#15171D] border-b border-white/[0.08] text-white shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5" />
+                <div className="w-8 h-8 bg-[#7C5CFF]/20 border border-[#7C5CFF]/40 rounded-xl flex items-center justify-center text-[#7C5CFF]">
+                  <Bot className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm leading-tight">Ask about Vedant</h3>
-                  <p className="text-[11px] text-white/70 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" /> RAG-powered by resume
+                  <h3 className="font-bold text-xs leading-tight tracking-wider text-white">RESUME RAG ASSISTANT</h3>
+                  <p className="text-[10px] text-[#7C5CFF] flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> TF-IDF + Embeddings Retrieval
                   </p>
                 </div>
               </div>
@@ -264,7 +266,7 @@ export const ResumeChat = () => {
                 <button
                   onClick={handleRefreshResume}
                   disabled={isRefreshing || isLoading}
-                  className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors disabled:opacity-50"
+                  className="w-7 h-7 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors disabled:opacity-50 text-white/60 hover:text-white"
                   title="Reload latest resume"
                   aria-label="Reload latest resume"
                 >
@@ -272,7 +274,7 @@ export const ResumeChat = () => {
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors"
+                  className="w-7 h-7 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors text-white/60 hover:text-white"
                   aria-label="Close chat"
                 >
                   <X className="w-4 h-4" />

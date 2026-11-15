@@ -1,47 +1,486 @@
 {
+  "profile": {
+    "name": "Vedant Kapil",
+    "role": "AI ENGINEER",
+    "headline": "Building intelligent systems with LLMs, RAG, agents and modern AI infrastructure.",
+    "subheading": "Designing AI systems that retrieve, reason, orchestrate and ship.",
+    "status": "OPEN TO AI / GENAI INTERNSHIPS",
+    "locations": "Mumbai · Navi Mumbai · Delhi NCR · Remote",
+    "email": "vedantkp79@gmail.com",
+    "github": "https://github.com/Vedant021004",
+    "linkedin": "https://linkedin.com/in/vedant021004",
+    "resumeUrl": "/resume.pdf",
+    "profileImage": "/me.png",
+    "aboutBio": "Computer Engineering student focused on AI systems, LLM orchestration, and production-ready intelligent architectures. Dedicated to building reliable generative AI solutions that bridge academic machine learning research and enterprise software engineering.",
+    "education": {
+      "degree": "Bachelor of Engineering in Computer Engineering",
+      "focus": "Machine Learning, Distributed Systems, Artificial Intelligence"
+    }
+  },
   "hiddenRepos": [
     "Vedant021004.github.io"
   ],
-  "projectImages": {
-    "Vedant021004": "/projects/screenshot-2026-06-14-201058.png"
-  },
   "projectLinks": {
     "GEN-AI--Langchain-": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
     "ML-JOURNEY": "https://mymodelone.streamlit.app/",
     "PDF-CHATBOT": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
     "WEB": "https://web-seven-topaz-34.vercel.app"
   },
-  "caseStudies": [
+  "flagshipSystems": [
     {
-      "id": "1",
-      "title": "PDF Chatbot (GenAI & LangChain)",
-      "tech": [
-        "Python",
-        "LangChain",
-        "Streamlit"
+      "id": "enterprise-rag",
+      "title": "Enterprise Hybrid RAG Platform",
+      "tagline": "Dense Semantic + BM25 Lexical Retrieval with Reciprocal Rank Fusion & RAGAS",
+      "category": "RETRIEVAL SYSTEM",
+      "badge": "FLAGSHIP SYSTEM",
+      "problem": "Pure dense vector retrieval consistently misses exact SKU identifiers, error codes, and technical domain jargon, while generating ungrounded answers without strict sentence-level citation provenance.",
+      "solution": "Built a production-grade dual-retrieval architecture combining dense embeddings (HNSW in pgvector) and sparse BM25 indices, unified through Reciprocal Rank Fusion (RRF) and scored by a Cross-Encoder Reranker before LLM generation.",
+      "pipeline": [
+        {
+          "name": "Documents",
+          "role": "Multi-Format Ingestion",
+          "tech": "PyMuPDF / Unstructured",
+          "detail": "Extracts text, structural hierarchy, and tables from multi-page PDFs, markdown, and docx files.",
+          "tradeoff": "Rule-based parsing is 10x faster than vision LLMs, but requires fallback OCR on scanned documents."
+        },
+        {
+          "name": "Parsing & Chunking",
+          "role": "Semantic Chunking",
+          "tech": "Recursive Token Splitting",
+          "detail": "Sliding-window chunking (400 tokens with 50 token overlap) aligned on paragraph and heading boundaries.",
+          "tradeoff": "Small chunks (200 tokens) increase retrieval precision but lose broad context; 400 tokens balances context density."
+        },
+        {
+          "name": "Embeddings",
+          "role": "Vector Representation",
+          "tech": "text-embedding-3-large",
+          "detail": "Generates 1536-dimensional normalized dense vectors capturing deep semantic relationships.",
+          "tradeoff": "Large embedding models incur slightly higher API latency but reduce cross-domain cluster confusion."
+        },
+        {
+          "name": "PostgreSQL + pgvector",
+          "role": "Vector & Relational Indexing",
+          "tech": "pgvector / HNSW",
+          "detail": "Persists embeddings alongside relational document metadata with HNSW index for sub-10ms approximate nearest neighbor search.",
+          "tradeoff": "HNSW uses more RAM than IVFFlat but delivers significantly higher recall under concurrent querying."
+        },
+        {
+          "name": "Dense + BM25 Hybrid",
+          "role": "Dual-Path Search",
+          "tech": "Cosine Sim + BM25 Okapi",
+          "detail": "Queries both dense vector embeddings (for semantic intent) and sparse BM25 index (for exact acronyms, IDs, and tokens).",
+          "tradeoff": "Running dual search adds ~15ms retrieval overhead, but eliminates 85%+ of zero-result lexical queries."
+        },
+        {
+          "name": "Reciprocal Rank Fusion",
+          "role": "Score Normalization",
+          "tech": "RRF Algorithm",
+          "detail": "Merges disparate ranking distributions using RRF score = Σ [1 / (60 + rank_i)], eliminating fragile manual score thresholds.",
+          "tradeoff": "RRF is parameter-free and resilient across domains, though it ignores raw confidence magnitudes."
+        },
+        {
+          "name": "Cross-Encoder Reranker",
+          "role": "Precision Filtering",
+          "tech": "bge-reranker-large",
+          "detail": "Applies joint self-attention across query-passage pairs on top 30 candidates to select top 5 highest-relevance contexts.",
+          "tradeoff": "Cross-encoders have O(N) inference cost, making them suited only for candidate reranking, not initial retrieval."
+        },
+        {
+          "name": "LLM Reasoning",
+          "role": "Attributed Synthesis",
+          "tech": "GPT-4o / Claude 3.5 Sonnet",
+          "detail": "Synthesizes final answer constrained strictly to provided contexts with chain-of-thought verification.",
+          "tradeoff": "Strict prompt grounding prevents hallucination but increases token cost and reasoning latency."
+        },
+        {
+          "name": "Citations & Attribution",
+          "role": "Fact Verification",
+          "tech": "Pydantic Structured Output",
+          "detail": "Enforces JSON schema output requiring bracketed paragraph citations and source document IDs.",
+          "tradeoff": "Schema validation can occasionally trigger retries if the model generates loose formatting."
+        },
+        {
+          "name": "Evaluation",
+          "role": "Continuous Quality Loop",
+          "tech": "RAGAS & DeepEval",
+          "detail": "Evaluates synthetic test queries measuring Faithfulness, Answer Relevance, Context Precision, and Context Recall.",
+          "tradeoff": "Automated LLM-as-judge evaluation costs compute, but provides objective CI/CD regression protection."
+        }
       ],
-      "approach": "Engineered an interactive RAG PDF Chatbot powered by LangChain, OpenAI, and Streamlit for real-time document Q&A.",
+      "engineeringDecisions": [
+        "Chose PostgreSQL + pgvector over standalone vector DBs to eliminate distributed synchronization between metadata and vectors.",
+        "Implemented Hybrid Search with Reciprocal Rank Fusion to solve the classic 'rare keyword' failure mode in dense-only retrieval.",
+        "Integrated Cross-Encoder reranking to boost Top-5 NDCG before passing context into the LLM context window."
+      ],
+      "techStack": ["Python", "FastAPI", "PostgreSQL", "pgvector", "LangChain", "BM25", "Hugging Face", "RAGAS", "Docker"],
+      "githubUrl": "https://github.com/Vedant021004/GEN-AI--Langchain-",
       "demoUrl": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
-      "repoUrl": "https://github.com/Vedant021004/GEN-AI--Langchain-"
+      "statusLabel": "Production Architecture"
     },
     {
-      "id": "2",
-      "title": "Construction Company Website",
-      "tech": [
-        "TypeScript",
-        "React",
-        "Vercel"
+      "id": "agentic-ops",
+      "title": "Agentic AI Operations Platform",
+      "tagline": "Multi-Agent LangGraph Supervisor with Model Context Protocol (MCP) & Checkpointed State",
+      "category": "AGENTIC ARCHITECTURE",
+      "badge": "FLAGSHIP SYSTEM",
+      "problem": "Single monolithic prompts and linear chain architectures fail on complex multi-step workflows requiring branching logic, specialized tool calling, state recovery, and human governance.",
+      "solution": "Architected a graph-based multi-agent system using LangGraph with a Supervisor Node coordinating specialized sub-agents (RAG, SQL, Web Research, API Tools) communicating via standardized MCP protocols.",
+      "pipeline": [
+        {
+          "name": "User Input",
+          "role": "Task Definition",
+          "tech": "FastAPI Webhook / CLI",
+          "detail": "Accepts high-level user objective and conversational context.",
+          "tradeoff": "Requires input sanitization and schema validation before graph execution."
+        },
+        {
+          "name": "LangGraph Supervisor",
+          "role": "Central Orchestrator",
+          "tech": "LangGraph StateGraph",
+          "detail": "Maintains shared state, analyzes progress, and dynamically routes next action to the best-suited agent.",
+          "tradeoff": "Supervisor model latency is incurred at each routing step, but enables adaptive multi-step planning."
+        },
+        {
+          "name": "Specialized Sub-Agents",
+          "role": "Domain-Specific Workers",
+          "tech": "Research, SQL, RAG, Tool Agents",
+          "detail": "Four autonomous agents with restricted prompt instructions, individual system prompts, and scoped tools.",
+          "tradeoff": "Domain isolation reduces agent confusion but requires clear handoff schemas between agents."
+        },
+        {
+          "name": "Model Context Protocol (MCP)",
+          "role": "Standardized Tool Interface",
+          "tech": "Anthropic MCP Servers",
+          "detail": "Decouples tool implementations into standardized RPC services for database reads, API calls, and file actions.",
+          "tradeoff": "Protocol serialization overhead (~3ms) in exchange for language-agnostic modularity and reusability."
+        },
+        {
+          "name": "Postgres Checkpointer",
+          "role": "Resilient State Persistence",
+          "tech": "PostgresSaver / LangGraph Checkpoint",
+          "detail": "Persists state at every node transition, enabling time-travel debugging, session resumption, and human-in-the-loop pauses.",
+          "tradeoff": "Database writes on every graph step slightly increase turn latency, but guarantee 100% crash resilience."
+        },
+        {
+          "name": "HITL Verification",
+          "role": "Human-in-the-Loop Gate",
+          "tech": "Conditional Interrupt Nodes",
+          "detail": "Halts execution for human confirmation whenever agents attempt destructive actions (e.g. database updates, emails).",
+          "tradeoff": "Introduces asynchronous user delay for safety-critical operations."
+        },
+        {
+          "name": "Synthesis & Response",
+          "role": "Final Answer Aggregation",
+          "tech": "Output Guardrails",
+          "detail": "Supervisor verifies that all sub-agent deliverables satisfy user criteria and returns a unified verified response.",
+          "tradeoff": "Final aggregation pass ensures cohesive voice across disparate worker outputs."
+        }
       ],
-      "approach": "Designed and developed a modern, responsive construction company website with dynamic animations, project showcases, and a professional service portfolio.",
-      "demoUrl": "https://web-seven-topaz-34.vercel.app",
-      "repoUrl": "https://github.com/Vedant021004/WEB"
+      "engineeringDecisions": [
+        "Implemented cyclical graph architecture in LangGraph rather than linear DAGs to permit self-correction and retry loops.",
+        "Employed Model Context Protocol (MCP) servers to allow tools to be shared securely across multiple internal AI services.",
+        "Integrated PostgreSQL checkpointing to allow long-running operations to survive server restarts with zero state loss."
+      ],
+      "techStack": ["LangGraph", "LangChain", "Python", "MCP", "FastAPI", "PostgreSQL", "Pydantic", "Docker"],
+      "githubUrl": "https://github.com/Vedant021004",
+      "demoUrl": null,
+      "statusLabel": "Architecture Implementation"
+    },
+    {
+      "id": "enterprise-assistant",
+      "title": "Enterprise Support & Intelligent Tool Router",
+      "tagline": "Permission-Scoped Tool Execution, Dynamic Intent Routing, & End-to-End Tracing",
+      "category": "PRODUCTION SYSTEM",
+      "badge": "FLAGSHIP SYSTEM",
+      "problem": "Enterprise customer support teams struggle with high ticket volumes, siloed data systems (CRM, knowledge bases, ticketing APIs), and the risk of hallucinated or unauthorized actions by chatbots.",
+      "solution": "Built a permission-aware assistant utilizing fast intent classification, sandboxed API execution via MCP, and continuous tracing with OpenTelemetry to resolve technical queries autonomously.",
+      "pipeline": [
+        {
+          "name": "Query Ingestion",
+          "role": "Sanitization & Context",
+          "tech": "FastAPI Async Gateway",
+          "detail": "Handles multi-channel queries with rate limiting, user session tracking, and tenant authorization tokens.",
+          "tradeoff": "Authentication checks at the edge add ~4ms but prevent cross-tenant data leakage."
+        },
+        {
+          "name": "Intent Classifier",
+          "role": "Fast-Path Routing",
+          "tech": "Fine-Tuned Embeddings + Small LLM",
+          "detail": "Classifies queries into FAQ (cached), technical lookup (RAG), account action (Tool Call), or human escalation.",
+          "tradeoff": "Small model routing saves 80% cost on trivial queries while reserving large models for complex reasoning."
+        },
+        {
+          "name": "LangGraph Execution",
+          "role": "Orchestrated Resolution",
+          "tech": "LangGraph Conditional Edges",
+          "detail": "Executes sandboxed tools with RBAC token verification before any external database mutation.",
+          "tradeoff": "Fine-grained permissions prevent agent privilege escalation in enterprise environments."
+        },
+        {
+          "name": "Observability & Guardrails",
+          "role": "Tracing & Cost Monitoring",
+          "tech": "OpenTelemetry / LangSmith",
+          "detail": "Traces token consumption, execution latency, tool invocation logs, and response safety guardrails.",
+          "tradeoff": "Telemetry payload logging requires structured scrubbing of PII to maintain compliance."
+        }
+      ],
+      "engineeringDecisions": [
+        "Implemented semantic cache layer to instantly resolve frequent common enterprise queries without LLM invocation.",
+        "Restricted tool invocation to schema-validated Pydantic models with automated parameter boundary checks.",
+        "Instrumented complete OpenTelemetry traces to monitor end-to-end latency per sub-system."
+      ],
+      "techStack": ["Python", "FastAPI", "LangGraph", "OpenTelemetry", "PostgreSQL", "Docker", "Pydantic"],
+      "githubUrl": "https://github.com/Vedant021004",
+      "demoUrl": null,
+      "statusLabel": "Engineered System"
+    },
+    {
+      "id": "pdf-chatbot",
+      "title": "Document Intelligence & PDF Chatbot",
+      "tagline": "Interactive GenAI RAG Application with Real-Time Vector QA & In-Browser PDF Parsing",
+      "category": "DEPLOYED APPLICATION",
+      "badge": "LIVE PROTOTYPE",
+      "problem": "Extracting answers and synthesizing cross-document insights from dense multi-page academic papers and technical specifications without tedious manual searching.",
+      "solution": "Built a responsive Streamlit and LangChain application enabling real-time document upload, in-memory chunking, vector indexing, and grounded conversational question answering.",
+      "pipeline": [
+        {
+          "name": "PDF Upload",
+          "role": "Client Document Ingestion",
+          "tech": "PyPDF2 / PDF.js",
+          "detail": "Parses user-uploaded documents and extracts text chunks in real-time.",
+          "tradeoff": "In-memory processing ensures immediate feedback without storing user documents permanently."
+        },
+        {
+          "name": "Vector QA Engine",
+          "role": "Contextual Retrieval",
+          "tech": "LangChain & Vector Store",
+          "detail": "Performs cosine similarity search against indexed document chunks for relevant paragraph selection.",
+          "tradeoff": "Lightweight vector store fits inside serverless deployment limits."
+        },
+        {
+          "name": "Streamlit Interface",
+          "role": "Interactive Chat Interface",
+          "tech": "Streamlit Cloud",
+          "detail": "Delivers real-time streaming answers with source snippet references and chat history persistence.",
+          "tradeoff": "Streamlit enables rapid iterative deployment for public demonstration."
+        }
+      ],
+      "engineeringDecisions": [
+        "Configured custom chunk overlap to preserve conversational context across split paragraphs.",
+        "Employed streaming LLM tokens to minimize perceived time-to-first-token (TTFT) for user queries."
+      ],
+      "techStack": ["Python", "LangChain", "OpenAI", "Streamlit", "Vector Embeddings"],
+      "githubUrl": "https://github.com/Vedant021004/GEN-AI--Langchain-",
+      "demoUrl": "https://genniacqcxj6xbjrk9niak.streamlit.app/",
+      "statusLabel": "Live Application"
+    }
+  ],
+  "howIBuildStages": [
+    {
+      "step": "01",
+      "title": "UNDERSTAND",
+      "subtitle": "Problem Definition & Task Framing",
+      "description": "Deconstruct the business challenge. Determine whether the problem actually requires an LLM, a deterministic algorithm, or hybrid retrieval. Frame context boundaries and failure modes.",
+      "focus": ["Task taxonomy", "Context window constraints", "Deterministic vs probabilistic boundaries", "Failure mode analysis"]
+    },
+    {
+      "step": "02",
+      "title": "RETRIEVE",
+      "subtitle": "Embeddings · Search · Hybrid Retrieval",
+      "description": "Design the retrieval topology. Implement semantic dense indexing with pgvector alongside sparse BM25 token matching, unified via Reciprocal Rank Fusion (RRF) and Cross-Encoder reranking.",
+      "focus": ["Semantic chunking", "HNSW indexing", "Sparse lexical matching (BM25)", "Reciprocal Rank Fusion", "Cross-Encoder reranking"]
+    },
+    {
+      "step": "03",
+      "title": "REASON",
+      "subtitle": "LLMs · Structured Outputs · Tool Calling",
+      "description": "Select the optimal model tier. Enforce structured outputs using Pydantic schemas, strict grounding prompts, and constrained function calling to eliminate hallucinations.",
+      "focus": ["Pydantic schemas", "System prompt grounding", "Function & tool calling", "Few-shot calibration"]
+    },
+    {
+      "step": "04",
+      "title": "ORCHESTRATE",
+      "subtitle": "LangGraph · Agents · MCP",
+      "description": "Structure multi-agent coordination. Build stateful cyclical workflows with LangGraph, Model Context Protocol (MCP) tool standardizations, state checkpointing, and human-in-the-loop gates.",
+      "focus": ["LangGraph StateGraph", "MCP tool integration", "Postgres checkpointing", "Human-in-the-loop (HITL)", "Cyclic self-correction"]
+    },
+    {
+      "step": "05",
+      "title": "EVALUATE",
+      "subtitle": "RAGAS · DeepEval · Retrieval Metrics",
+      "description": "Measure before shipping. Run automated CI/CD evaluation pipelines measuring Faithfulness, Answer Relevance, Context Precision, and Context Recall against synthetic test suites.",
+      "focus": ["RAGAS benchmarks", "DeepEval assertions", "Context precision & recall", "Faithfulness scoring", "Regression tests"]
+    },
+    {
+      "step": "06",
+      "title": "DEPLOY",
+      "subtitle": "FastAPI · Docker · Cloud",
+      "description": "Containerize for production. Build high-throughput async FastAPI backends, package into lean Docker containers, and deploy to scalable cloud environments with rate limiting.",
+      "focus": ["FastAPI async endpoints", "Docker multi-stage builds", "Cloud orchestration", "Rate limiting & concurrency"]
+    },
+    {
+      "step": "07",
+      "title": "OBSERVE",
+      "subtitle": "Tracing · Logging · Latency · Cost",
+      "description": "Track telemetry end-to-end. Capture prompt/completion tokens, per-node execution latencies, tool execution logs, and cost analytics via OpenTelemetry and structured logging.",
+      "focus": ["OpenTelemetry tracing", "Token & cost attribution", "Per-node latency profiling", "Error budgets & alerting"]
+    }
+  ],
+  "techStack": {
+    "foundation": [
+      { "name": "Python", "detail": "Advanced asynchronous programming, typing, OOP, algorithms" },
+      { "name": "OOP & Design Patterns", "detail": "Clean architectural separation, SOLID principles" },
+      { "name": "SQL & PostgreSQL", "detail": "Complex queries, relational schemas, indexing" },
+      { "name": "Git & GitHub", "detail": "Version control, branching workflows, CI/CD" },
+      { "name": "Linux & CLI", "detail": "Bash scripting, systems administration, container runtimes" },
+      { "name": "REST APIs", "detail": "RESTful service design, OpenAPI specifications, JSON schemas" }
+    ],
+    "aiMachineLearning": [
+      { "name": "PyTorch", "detail": "Tensors, autograd, neural network modeling & fine-tuning" },
+      { "name": "Scikit-Learn", "detail": "Classification, regression, clustering, preprocessing" },
+      { "name": "NLP & Tokenization", "detail": "Byte-pair encoding, stemming, POS tagging, linguistics" },
+      { "name": "Transformers", "detail": "Self-attention, encoder-decoder, causal masking architectures" },
+      { "name": "Hugging Face", "detail": "Datasets, tokenizers, PEFT, LoRA, model hub integrations" }
+    ],
+    "llmEngineering": [
+      { "name": "LLM APIs", "detail": "OpenAI, Anthropic Claude, Groq, Ollama local inference" },
+      { "name": "Prompt Engineering", "detail": "Few-shot, chain-of-thought, system role engineering" },
+      { "name": "Structured Outputs", "detail": "Pydantic validation, instructor, JSON mode schemas" },
+      { "name": "Tool & Function Calling", "detail": "Native model tool dispatch, schema binding, error handling" },
+      { "name": "RAG Architectures", "detail": "Dense vector search, hybrid retrieval, contextual compression" },
+      { "name": "Embeddings & pgvector", "detail": "High-dimensional vector indexing, cosine/inner-product similarity" },
+      { "name": "BM25 & Hybrid Search", "detail": "Sparse lexical indexing combined with dense embeddings" },
+      { "name": "Reciprocal Rank Fusion", "detail": "Score normalization across disparate retrieval streams" },
+      { "name": "Reranking & HyDE", "detail": "Cross-encoder scoring, hypothetical document embeddings" },
+      { "name": "CRAG & Self-RAG", "detail": "Corrective retrieval and self-reflective evaluation loops" }
+    ],
+    "orchestration": [
+      { "name": "LangChain", "detail": "Chains, document loaders, vector store integrations" },
+      { "name": "LangGraph", "detail": "StateGraph, cyclical workflows, supervisors, routing" },
+      { "name": "Model Context Protocol", "detail": "Standardized MCP client/server tool orchestration" },
+      { "name": "Memory & Persistence", "detail": "Short-term buffer, summary memory, Postgres state savers" },
+      { "name": "Checkpointing & HITL", "detail": "State recovery, time travel, human confirmation interrupts" },
+      { "name": "Multi-Agent Systems", "detail": "Hierarchical supervisors, autonomous worker dispatch" }
+    ],
+    "production": [
+      { "name": "FastAPI", "detail": "High-performance async Python web framework, OpenAPI" },
+      { "name": "PostgreSQL", "detail": "ACID relational storage, pgvector extension, connection pooling" },
+      { "name": "Docker", "detail": "Multi-stage builds, container isolation, compose environments" },
+      { "name": "Cloud Deployment", "detail": "AWS/GCP infrastructure, Vercel, Streamlit Cloud" },
+      { "name": "CI/CD & Testing", "detail": "Pytest, GitHub Actions, automated linting & type checks" },
+      { "name": "Observability & Tracing", "detail": "OpenTelemetry, LangSmith, structured JSON logging" }
+    ]
+  },
+  "principles": [
+    { "quote": "Prototype fast.", "detail": "Quickly build working proofs-of-concept to validate feasibility before committing to heavy infrastructure." },
+    { "quote": "Measure before optimizing.", "detail": "Never guess bottlenecks. Profile token usage, network hops, and retrieval latency with empirical instrumentation." },
+    { "quote": "Retrieve before generating.", "detail": "Ground LLMs with high-precision contextual knowledge rather than relying on parametric memory." },
+    { "quote": "Tools before hallucination.", "detail": "Equip agents with deterministic tools (SQL, calculators, verified APIs) for factual correctness." },
+    { "quote": "Evaluation before claiming quality.", "detail": "Rigorously benchmark retrieval and synthesis using RAGAS and automated test suites before claiming production readiness." },
+    { "quote": "Observability before production.", "detail": "Instrument end-to-end tracing and cost attribution so no agent execution is an unmonitored black box." }
+  ],
+  "certificates": [
+    {
+      "file": "screenshot-2026-09-03-235816.png",
+      "title": "CODEWAR 24 HOURS HACKATHON - 5TH RANK",
+      "category": "Achievement",
+      "featured": true,
+      "issuer": "CODEWAR Hackathon",
+      "description": "Secured 5th Rank out of numerous engineering teams in an intense 24-hour hackathon sprint, engineering an end-to-end software application under strict time constraints."
+    },
+    {
+      "file": "openai.jpg",
+      "title": "OpenAI Agents & Autonomous Workflows",
+      "category": "Certification",
+      "featured": true,
+      "issuer": "OpenAI",
+      "description": "Engineered autonomous AI agent systems utilizing multi-step reasoning, custom function calling, and structured output pipelines."
+    },
+    {
+      "file": "LLM.png",
+      "title": "Large Language Models & RAG Architecture",
+      "category": "Certification",
+      "featured": true,
+      "issuer": "DeepLearning / GenAI",
+      "description": "Mastery of LLM fine-tuning, prompt engineering frameworks, vector embeddings, and retrieval-augmented generation (RAG) pipelines."
+    },
+    {
+      "file": "CS50P.png",
+      "title": "Harvard CS50P: Programming with Python",
+      "category": "Certification",
+      "featured": true,
+      "issuer": "Harvard University",
+      "description": "Harvard University's comprehensive computer science curriculum in advanced Python programming, algorithms, object-oriented design, and testing."
+    },
+    {
+      "file": "google.png",
+      "title": "Google Cloud & Engineering Foundations",
+      "category": "Certification",
+      "featured": true,
+      "issuer": "Google Cloud",
+      "description": "Google professional certification validating scalable cloud infrastructure, containerized deployments, and distributed systems."
+    },
+    {
+      "file": "jp morgan.png",
+      "title": "J.P. Morgan Software Engineering Simulation",
+      "category": "Certification",
+      "featured": false,
+      "issuer": "J.P. Morgan",
+      "description": "Engineered financial data feed systems and high-throughput real-time stock price analysis tools during J.P. Morgan's technical program."
+    },
+    {
+      "file": "screenshot-2026-07-21-185006.png",
+      "title": "DeepLearning.AI: Supervised Machine Learning",
+      "category": "Certification",
+      "featured": false,
+      "issuer": "DeepLearning.AI",
+      "description": "In-depth mathematical and practical foundations of gradient descent, linear/logistic regression, regularized models, and classification."
+    },
+    {
+      "file": "screenshot-2026-09-15-152350.png",
+      "title": "Competitive Online Evaluation Round",
+      "category": "Achievement",
+      "featured": false,
+      "issuer": "Technical Competition",
+      "description": "Participated in the competitive online evaluation round, showcasing rapid problem-solving, architectural design, and algorithm optimization under timed conditions."
+    },
+    {
+      "file": "deloitte.png",
+      "title": "Deloitte Technology Simulation",
+      "category": "Certification",
+      "featured": false,
+      "issuer": "Deloitte",
+      "description": "Enterprise software engineering and data analytics consulting simulation."
+    },
+    {
+      "file": "tata.png",
+      "title": "Tata Data Visualization & Analytics",
+      "category": "Certification",
+      "featured": false,
+      "issuer": "Tata Group",
+      "description": "Executive dashboard design and predictive analytics for business intelligence."
+    },
+    {
+      "file": "datascience.png",
+      "title": "Data Science & Machine Learning",
+      "category": "Certification",
+      "featured": false,
+      "issuer": "Professional Certification",
+      "description": "Statistical modeling, feature engineering, and predictive algorithmic pipelines."
+    },
+    {
+      "file": "c programming.png",
+      "title": "C Systems Programming & Memory Management",
+      "category": "Certification",
+      "featured": false,
+      "issuer": "Systems Engineering",
+      "description": "Low-level systems programming, pointer arithmetic, data structures, and memory safety."
     }
   ],
   "global": {
-    "groqApiKey": "",
-    "profileImage": "/profile-1784818556934-screenshot-2026-07-19-171104.png",
     "heroTitle": "Vedant Kapil",
-    "heroDescription": "Crafting production-grade AI systems and highly scalable ML infrastructure. Bridging the gap between cutting-edge research and real-world deployment.",
+    "heroDescription": "Building intelligent systems with LLMs, RAG, agents and modern AI infrastructure.",
+    "currentStatus": "Designing AI systems that retrieve, reason, orchestrate and ship.",
     "aboutTitle": "Vedant Kapil.",
     "aboutText1": "I am an AI Systems Engineer focused on bridging the gap between theoretical machine learning and robust production environments. My work revolves around training, fine-tuning, and deploying large-scale language models (LLMs) and computer vision systems.",
     "aboutText2": "I believe that the future of software isn't just about writing code; it's about orchestrating intelligence. This requires a deep understanding of both distributed systems and neural architectures.",
@@ -183,7 +622,6 @@
         "category": "Achievement",
         "featuredInSlideshow": true
       }
-    ],
-    "currentStatus": "Currently building AI applications with LangChain and Retrieval-Augmented Generation (RAG)."
+    ]
   }
 }

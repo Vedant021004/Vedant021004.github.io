@@ -1,91 +1,216 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun } from "lucide-react";
+import { Menu, X, FileText, Zap, Search, Terminal, Sparkles, ArrowUpRight } from "lucide-react";
 
-export const Navbar = () => {
+interface NavbarProps {
+  onOpenRecruiter: () => void;
+  onOpenCommand: () => void;
+}
+
+export const Navbar = ({ onOpenRecruiter, onOpenCommand }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Check initial theme
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setIsDark(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDark(false);
-      document.documentElement.classList.remove('dark');
-    }
-
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 40);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove('dark');
-      localStorage.theme = 'light';
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.theme = 'dark';
-      setIsDark(true);
+  const navLinks = [
+    { label: "SYSTEMS", href: "#systems" },
+    { label: "HOW I BUILD", href: "#how-i-build" },
+    { label: "STACK", href: "#stack" },
+    { label: "OPEN SOURCE", href: "#open-source" },
+    { label: "ACHIEVEMENTS", href: "#achievements" },
+    { label: "ABOUT", href: "#about" },
+    { label: "CONTACT", href: "#contact" },
+  ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
     }
-    window.dispatchEvent(new Event('theme_changed'));
   };
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? "bg-white/80 dark:bg-black/80 backdrop-blur-xl border-b border-black/10 dark:border-white/10 py-4 shadow-sm" : "bg-transparent py-6"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-[#ea6b24] flex items-center justify-center text-white font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
-            v
-          </div>
-          <h1 className="font-mono text-sm md:text-base tracking-widest text-black dark:text-white font-semibold transition-colors">
-            Vedant.Kapil
-          </h1>
-        </Link>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-[#08090B]/85 backdrop-blur-xl border-b border-white/[0.08] py-3.5 shadow-2xl"
+            : "bg-transparent py-5"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
+          
+          {/* Logo / Identity */}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            className="flex items-center gap-3 group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-[#101216] border border-white/[0.1] flex items-center justify-center text-[#7C5CFF] font-mono-tech font-bold text-sm group-hover:border-[#7C5CFF]/60 transition-colors shadow-sm">
+              VK
+            </div>
+            <div className="flex flex-col">
+              <span className="font-mono-tech text-xs tracking-wider font-bold text-white group-hover:text-[#7C5CFF] transition-colors">
+                VEDANT KAPIL
+              </span>
+              <span className="text-[10px] font-mono-tech text-white/40 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>AI ENGINEER</span>
+              </span>
+            </div>
+          </a>
 
-        <div className="flex items-center gap-4 text-black dark:text-white transition-colors">
-          <button 
-            onClick={toggleTheme}
-            className="w-10 h-10 rounded-full border border-black/20 dark:border-white/20 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 hover:border-black dark:hover:border-white transition-colors"
-            title="Toggle Theme"
-          >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-          <a 
-            href="https://github.com/Vedant021004" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hidden md:flex w-10 h-10 rounded-full border border-black/20 dark:border-white/20 items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 hover:border-black dark:hover:border-white transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-          </a>
-          <a 
-            href="https://linkedin.com/in/vedant021004" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hidden md:flex w-10 h-10 rounded-full border border-black/20 dark:border-white/20 items-center justify-center hover:bg-black/5 dark:hover:bg-white/5 hover:border-black dark:hover:border-white transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-          <a href="mailto:vedantkp79@gmail.com" className="px-5 py-2 md:px-6 md:py-2 bg-[#2c2c2c] dark:bg-white text-white dark:text-black rounded-full text-xs md:text-sm font-semibold hover:bg-black dark:hover:bg-gray-200 transition-colors ml-1 md:ml-2">
-            Let's talk
-          </a>
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-mono-tech">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-[#9CA3AF] hover:text-white transition-colors tracking-wider"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right Action Cluster */}
+          <div className="flex items-center gap-3">
+            
+            {/* Interactive Projects Showcase Link */}
+            <a
+              href="/projects.html"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#7C5CFF]/20 hover:bg-[#7C5CFF]/35 border border-[#7C5CFF]/40 text-[#C8F542] text-xs font-mono-tech font-bold transition-all shadow-[0_0_15px_rgba(124,92,255,0.2)] group"
+              title="Open Interactive Projects Showcase"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#C8F542] animate-pulse" />
+              <span>PROJECTS</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-[#C8F542] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+
+            {/* Quick Command Palette Button */}
+            <button
+              onClick={onOpenCommand}
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#101216] border border-white/[0.08] hover:border-white/20 text-[#9CA3AF] hover:text-white text-xs font-mono-tech transition-colors"
+              title="Open command palette (⌘K)"
+            >
+              <Search className="w-3.5 h-3.5 text-[#7C5CFF]" />
+              <span className="text-[11px]">⌘K</span>
+            </button>
+
+            {/* Recruiter View Pill */}
+            <button
+              onClick={onOpenRecruiter}
+              className="hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#7C5CFF]/15 hover:bg-[#7C5CFF]/25 border border-[#7C5CFF]/30 hover:border-[#7C5CFF]/50 text-[#7C5CFF] text-xs font-mono-tech font-semibold transition-all shadow-[0_0_15px_rgba(124,92,255,0.15)]"
+            >
+              <Zap className="w-3.5 h-3.5 fill-[#7C5CFF]" />
+              <span>RECRUITER VIEW</span>
+            </button>
+
+            {/* Resume Button */}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white text-black hover:bg-gray-200 text-xs font-mono-tech font-bold transition-all shadow-sm"
+            >
+              <span>RESUME</span>
+            </a>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-xl bg-[#101216] border border-white/[0.08] text-white/80 hover:text-white transition-colors"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+          </div>
+
         </div>
-      </div>
-    </motion.header>
+      </header>
+
+      {/* Mobile Drawer Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-[#08090B] pt-24 pb-8 px-6 flex flex-col justify-between font-mono-tech lg:hidden"
+          >
+            <div className="space-y-4">
+              <div className="text-[11px] text-[#7C5CFF] font-bold tracking-widest uppercase mb-2">
+                NAVIGATION
+              </div>
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className="block py-2 text-lg text-white hover:text-[#7C5CFF] font-bold border-b border-white/[0.06] transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            <div className="space-y-3 pt-6 border-t border-white/[0.08]">
+              <a
+                href="/projects.html"
+                className="w-full py-3 rounded-full bg-gradient-to-r from-[#7C5CFF] to-[#3B2BFF] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg"
+              >
+                <Sparkles className="w-4 h-4 text-[#C8F542] animate-pulse" />
+                <span>INTERACTIVE PROJECTS SHOWCASE ↗</span>
+              </a>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenRecruiter();
+                }}
+                className="w-full py-3 rounded-full bg-[#7C5CFF] text-white font-bold text-xs flex items-center justify-center gap-2"
+              >
+                <Zap className="w-4 h-4 fill-white" />
+                <span>20-SECOND RECRUITER VIEW</span>
+              </button>
+
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 rounded-full bg-[#101216] text-white border border-white/[0.1] font-bold text-xs flex items-center justify-center gap-2"
+              >
+                <FileText className="w-4 h-4 text-[#7C5CFF]" />
+                <span>DOWNLOAD RESUME (PDF)</span>
+              </a>
+
+              <a
+                href="https://github.com/Vedant021004"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 rounded-full text-center text-xs text-[#9CA3AF]"
+              >
+                GitHub: @Vedant021004
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

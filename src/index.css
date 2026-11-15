@@ -1,125 +1,154 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap");
 @import "tailwindcss";
+
 @theme {
-  --color-white: #F5F2E9;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --color-canvas: #08090B;
+  --color-surface: #101216;
+  --color-surface-elevated: #15171D;
+  --color-text-primary: #F5F5F5;
+  --color-text-secondary: #9CA3AF;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(124, 92, 255, 0.4);
+  --color-accent: #7C5CFF;
+  --color-accent-hover: #9074FF;
+  --color-accent-subtle: rgba(124, 92, 255, 0.12);
 }
-@custom-variant dark (&:is(.dark *));
 
 :root {
-  color-scheme: light;
-  --bg-color: #F5F2E9;
-  --text-color: #000000;
+  --bg-primary: #08090B;
+  --bg-secondary: #101216;
+  --bg-elevated: #15171D;
+  --text-primary: #F5F5F5;
+  --text-secondary: #9CA3AF;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --accent-color: #7C5CFF;
+  color-scheme: dark;
 }
 
-/* Enable real dark mode */
-html.dark {
-  color-scheme: dark;
-  --bg-color: #050505;
-  --text-color: #ededed;
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: "Inter", system-ui, sans-serif;
+  background-color: #08090B;
+  color: #F5F5F5;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.5s ease, color 0.5s ease;
   overflow-x: hidden;
+  selection-background-color: rgba(124, 92, 255, 0.35);
+  selection-color: #ffffff;
 }
 
-/* Figma Bounding Box Styles */
-.figma-box {
+/* Custom Typography Utility */
+.font-mono-tech {
+  font-family: 'JetBrains Mono', monospace;
+  font-feature-settings: "zero" 1;
+}
+
+/* Subtle Technical Grid Background */
+.tech-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.tech-grid-dense {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Glowing Border Effect */
+.card-glow {
   position: relative;
-  display: inline-block;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.figma-box::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border: 3px solid #0d99ff;
-  pointer-events: none;
+.card-glow:hover {
+  border-color: rgba(124, 92, 255, 0.4);
+  box-shadow: 0 0 30px -10px rgba(124, 92, 255, 0.2);
 }
 
-.figma-handle {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: white;
-  border: 2px solid #0d99ff;
-  z-index: 10;
-}
-
-.figma-handle-tl { top: -9px; left: -9px; }
-.figma-handle-tr { top: -9px; right: -9px; }
-.figma-handle-bl { bottom: -9px; left: -9px; }
-.figma-handle-br { bottom: -9px; right: -9px; }
-
-
-/* Premium Typography Tokens */
-.font-display {
-  font-family: "Inter", system-ui, sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-}
-
-.font-body {
-  font-family: "Inter", system-ui, sans-serif;
-}
-
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom Scrollbar for a premium feel */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #08090B;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(150, 150, 150, 0.3);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(150, 150, 150, 0.5);
+  background: rgba(124, 92, 255, 0.5);
 }
 
-/* Utility for glassmorphism */
-.glass {
-  background: rgba(255, 255, 255, 0.05);
+/* Glass Panels */
+.glass-panel {
+  background: rgba(16, 18, 22, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-.dark .glass {
-  background: rgba(20, 20, 20, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Loading Screen */
-.loader-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background-color: #050505;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+.glass-panel-elevated {
+  background: rgba(21, 23, 29, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.loader-overlay.is-done {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-20px);
+
+/* Animated Flowing Line */
+@keyframes flowLight {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.flow-line {
+  stroke-dasharray: 6 12;
+  animation: flowLight 4s linear infinite;
+}
+
+/* Pulse Animation for System Nodes */
+@keyframes pulseSubtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+.system-node-active {
+  animation: pulseSubtle 3.5s ease-in-out infinite;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .flow-line, .system-node-active {
+    animation: none !important;
+  }
 }
