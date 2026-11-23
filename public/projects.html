@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="en" class="go"><head><meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -26,9 +26,14 @@
 })();
 </script>
 <style>
-.orb,[class*="orb"],.bubble,[class*="bubble"]{display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;width:0!important;height:0!important;transform:scale(0)!important}
-#aq{display:none!important}
+.orb,[class*="orb"],.bubble,[class*="bubble"],#aq,#ld,#cv,#fx{display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;width:0!important;height:0!important;transform:scale(0)!important}
 body::after{display:none!important}
+html.go .hero .ch,html.go .hero .lead .wi,html.go .hero>.mono,html.go .hero .cta{opacity:1!important;transform:none!important;animation:none!important}
+html:not(.go) .hero .ch,html:not(.go) .hero .lead .wi,html:not(.go) .hero>.mono,html:not(.go) .hero .cta{opacity:1!important;transform:none!important}
+.card{perspective:1100px;height:320px;background:none;border:0;text-align:left;padding:0;transform:none!important;transition:transform .3s ease-out!important}
+.card:hover{transform:translateY(-4px)!important}
+.in{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.card.f .in{transform:rotateY(180deg)!important}
 
 :root{--bg:#F3F4EE;--ink:#0E1325;--mute:#5E667A;--line:#0E132522;--card:#E6E9DF;--accent:#3B2BFF;--on-accent:#fff;
 --serif:'Fraunces',Georgia,serif;--mono:'Space Mono',ui-monospace,monospace;
@@ -661,21 +666,9 @@ document.querySelectorAll(".rv").forEach(function(e){so.observe(e)});
 document.querySelectorAll("nav a").forEach(function(a){a.addEventListener("mouseenter",function(){scr(a,450)})});
 /* ---- intro (loader -> hero) ---- */
 var GR=["Hello","नमस्ते","Hola","Ciao","こんにちは","VEDANT KAPIL"],N=0;
-function intro(){var L=$("ld");H.classList.remove("go");
-if(rm||!L){H.classList.add("go");if(L)L.style.display="none";return}
-if(N++){L.style.animation="none";scrollTo({top:0,behavior:"instant"})}
-L.style.display="";L.classList.remove("out");B.style.overflow="hidden";
-var w=$("lw"),bar=$("lbar"),num=$("ln"),i=0,t0=performance.now(),D=GR.length*330+900;
-function say(){w.textContent=GR[i];w.classList.toggle("nm",i===GR.length-1);w.style.animation="none";void w.offsetWidth;w.style.animation=""}
-say();var iv=setInterval(function(){if(++i<GR.length)say();else clearInterval(iv)},330);
-L.onclick=function(){t0-=D};
-(function p(){var k=Math.min(1,(performance.now()-t0)/D),e=1-Math.pow(1-k,2.2);bar.style.transform="scaleX("+e+")";num.textContent=String(Math.round(e*100)).padStart(3,"0");
-if(k<1)return requestAnimationFrame(p);
-L.classList.add("out");setTimeout(function(){H.classList.add("go");B.style.overflow="";
-setTimeout(function(){scr(document.querySelector(".hero>.mono"),900)},300);
-setTimeout(function(){L.style.display="none"},1100)},380)})()}
-setTimeout(function(){H.classList.add("go");B.style.overflow=""},8000);
-Promise.race([document.fonts?document.fonts.ready:0,new Promise(function(r){setTimeout(r,1200)})]).then(intro);
+function intro(){var L=$("ld");H.classList.add("go");B.style.overflow="";if(L)L.style.display="none";}
+intro();
+Promise.race([document.fonts?document.fonts.ready:0,new Promise(function(r){setTimeout(r,300)})]).then(intro);
 var _a=acts;acts=function(){var a=_a();a.push(["Replay intro",function(){intro()}]);return a};
 $("nm").onclick=function(){intro()};
 /* ---- closing bookend: same type as the opening ---- */
