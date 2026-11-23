@@ -152,12 +152,12 @@ nav a:hover::after{transform:scaleX(1);transform-origin:left}
 .cta::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#fff7 50%,transparent 70%);transform:translateX(-130%);transition:transform .8s var(--emph);pointer-events:none}
 .cta:hover::before{transform:translateX(130%)}
 .card{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .6s var(--emph)}
-.card.tt{transition:transform .1s linear}
-.card.jl{animation:jl .75s var(--emph)}
-@keyframes jl{0%{scale:1}20%{scale:.9 1.08}45%{scale:1.07 .94}70%{scale:.98 1.02}100%{scale:1}}
+.card.tt{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.card.jl{animation:none}
+@keyframes jl{0%{scale:1}100%{scale:1}}
 .face::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(260px circle at var(--gx,50%) var(--gy,0%),#fff4,transparent 60%);opacity:0;transition:opacity .3s}
 .card:hover .face::after{opacity:1}
-.mq{transform:skewX(var(--sk,0deg))}
+.mq{transform:none}
 dialog[open]::backdrop{animation:bd .4s}
 @keyframes dl{from{opacity:0;transform:translateY(28px) scale(.93)}}
 @keyframes bd{from{opacity:0}}
@@ -704,15 +704,15 @@ function wave(w){return false}
 function tick(){if(document.hidden){run=0;return}var live=false;if(PT.length||RG.length){fxd();live=true}if(H.classList.contains("go"))WV.forEach(function(w){if(wave(w))live=true});skT*=.9;sk+=(skT-sk)*.12;var sa=Math.abs(sk)>.01;if(sa||mq._on){mq.style.setProperty("--sk",sa?sk.toFixed(2)+"deg":"0deg");mq._on=sa;live=true}gx+=(tx-gx)*.14;gy+=(ty-gy)*.14;if(Math.abs(tx-gx)+Math.abs(ty-gy)>.4){gl.style.translate=gx+"px "+gy+"px";live=true}if(live)requestAnimationFrame(tick);else run=0}
 document.addEventListener("visibilitychange",function(){if(document.hidden)run=0});
 var cachedH=1;function updateH(){cachedH=Math.max(1,H.scrollHeight-innerHeight)}updateH();addEventListener("resize",updateH);
-addEventListener("scroll",function(){if(sc)return;sc=1;requestAnimationFrame(function(){sc=0;var y=scrollY,d=y-ly;ly=y;pg.style.transform="scaleX("+(y/cachedH)+")";if(!rm){skT=Math.max(-7,Math.min(7,d*.12));if(y<innerHeight*1.3)h1.style.translate="0 "+(-Math.min(1,y/innerHeight)*70)+"px";kick()}})},{passive:true});
+addEventListener("scroll",function(){if(sc)return;sc=1;requestAnimationFrame(function(){sc=0;var y=scrollY,d=y-ly;ly=y;pg.style.transform="scaleX("+(y/cachedH)+")";if(!rm){skT=0;if(y<innerHeight*1.3)h1.style.translate="0 "+(-Math.min(1,y/innerHeight)*70)+"px";kick()}})},{passive:true});
 if(!rm){
 addEventListener("pointerdown",function(e){if(e.button)return;burst(e.clientX,e.clientY,9,5,e.target.closest&&e.target.closest(".card")?150:44)},true);
-G.addEventListener("click",function(e){var c=e.target&&e.target.closest?e.target.closest(".card"):null;if(!c)return;var r=c.getBoundingClientRect();c.classList.remove("jl");void c.offsetWidth;c.classList.add("jl")});
+G.addEventListener("click",function(e){var c=e.target&&e.target.closest?e.target.closest(".card"):null;if(!c)return;});
 G.addEventListener("animationend",function(e){var c=e.target;if(!c||!c.classList||!c.classList.contains("card"))return;if(e.animationName==="pop")c.style.animation="";else c.classList.remove("jl")});
 var sv=$("s"),s0=sv.onclick;sv.onclick=function(e){var ok=$("a").value;s0.call(this,e);if(ok)burst(e.clientX||innerWidth/2,e.clientY||innerHeight/2,60,11,200)};
 function rt(){if(tc){tc.style.setProperty("--rx","0deg");tc.style.setProperty("--ry","0deg");tc.classList.remove("tt");tc=null}}
 var pmoveQ=0,lastEv=null;
-addEventListener("pointermove",function(e){lastEv=e;if(pmoveQ)return;pmoveQ=1;requestAnimationFrame(function(){pmoveQ=0;var ev=lastEv;if(!ev)return;mx=tx=ev.clientX;my=ty=ev.clientY;if(gx<-900){gx=tx;gy=ty}kick();var tgt=ev.target;if(!tgt||!tgt.closest)return;var c=tgt.closest(".card");if(tc&&tc!==c)rt();if(c&&fine){if(!c._r||tc!==c)c._r=c.getBoundingClientRect();var r=c._r,nx=(ev.clientX-r.left)/r.width-.5,ny=(ev.clientY-r.top)/r.height-.5;c.classList.add("tt");c.style.setProperty("--rx",-ny*9+"deg");c.style.setProperty("--ry",nx*11+"deg");c.style.setProperty("--gx",(nx+.5)*100+"%");c.style.setProperty("--gy",(ny+.5)*100+"%");tc=c}var m=tgt.closest(".cta,.tg,.add");if(mg&&mg!==m){mg.style.setProperty("--tx","0px");mg.style.setProperty("--ty","0px")}if(m&&fine){if(!m._r||mg!==m)m._r=m.getBoundingClientRect();var q=m._r;m.style.setProperty("--tx",(ev.clientX-q.left-q.width/2)*.22+"px");m.style.setProperty("--ty",(ev.clientY-q.top-q.height/2)*.3+"px")}mg=m;var s=tgt.closest(".now>div");if(s){if(!s._r||s._cur!==s)s._r=s.getBoundingClientRect();var z=s._r;s.style.setProperty("--mx",ev.clientX-z.left+"px");s.style.setProperty("--my",ev.clientY-z.top+"px")}})},{passive:true});
+addEventListener("pointermove",function(e){lastEv=e;if(pmoveQ)return;pmoveQ=1;requestAnimationFrame(function(){pmoveQ=0;var ev=lastEv;if(!ev)return;mx=tx=ev.clientX;my=ty=ev.clientY;if(gx<-900){gx=tx;gy=ty}kick();var tgt=ev.target;if(!tgt||!tgt.closest)return;var c=tgt.closest(".card");if(tc&&tc!==c)rt();if(c&&fine){if(!c._r||tc!==c)c._r=c.getBoundingClientRect();var r=c._r,nx=(ev.clientX-r.left)/r.width-.5,ny=(ev.clientY-r.top)/r.height-.5;c.classList.add("tt");c.style.setProperty("--rx",-ny*4+"deg");c.style.setProperty("--ry",nx*5+"deg");c.style.setProperty("--gx",(nx+.5)*100+"%");c.style.setProperty("--gy",(ny+.5)*100+"%");tc=c}var m=tgt.closest(".cta,.tg,.add");if(mg&&mg!==m){mg.style.setProperty("--tx","0px");mg.style.setProperty("--ty","0px")}if(m&&fine){if(!m._r||mg!==m)m._r=m.getBoundingClientRect();var q=m._r;m.style.setProperty("--tx",(ev.clientX-q.left-q.width/2)*.22+"px");m.style.setProperty("--ty",(ev.clientY-q.top-q.height/2)*.3+"px")}mg=m;var s=tgt.closest(".now>div");if(s){if(!s._r||s._cur!==s)s._r=s.getBoundingClientRect();var z=s._r;s.style.setProperty("--mx",ev.clientX-z.left+"px");s.style.setProperty("--my",ev.clientY-z.top+"px")}})},{passive:true});
 H.addEventListener("pointerleave",function(){rt();mx=my=-999;kick()});
 /* ---- theme: circular reveal ---- */
 var tb=$("t"),ot=tb.onclick;
@@ -861,8 +861,7 @@ function tagIdx(){document.querySelectorAll("#grid .back .tags").forEach(functio
 var _d=draw;draw=function(){_d();tagIdx()};tagIdx();
 new MutationObserver(function(){G.classList.toggle("sp",!!G.querySelector(".card.f"))}).observe(G,{subtree:true,attributes:true,attributeFilter:["class"]});
 G.addEventListener("click",function(e){var c=e.target.closest(".card");if(!c||!c.classList.contains("f"))return;
-var r=c.getBoundingClientRect();if(navigator.vibrate)navigator.vibrate(12);
-if(r.top<70||r.bottom>innerHeight-20)c.scrollIntoView({behavior:"smooth",block:"center"})});
+if(navigator.vibrate)navigator.vibrate(12);});
 })();
 </script>
 <script>

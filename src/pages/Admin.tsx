@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Octokit } from "octokit";
 import { motion } from "framer-motion";
 import { Save, LogOut, ShieldAlert, CheckCircle2, Loader2, Upload, EyeOff, Eye, Settings, Code2, Type, Star, Globe, Award, RefreshCw, Trophy, Scroll, Sparkles } from "lucide-react";
@@ -6,6 +7,9 @@ import dataJsonStatic from "../data.json";
 import { extractTextFromFile, updateResumeCache, getResumeChunks, clearCache } from "../utils/resumeRAG";
 
 export const Admin = () => {
+  const navigate = useNavigate();
+  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
+
   const [token, setToken] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -62,8 +66,12 @@ export const Admin = () => {
       setToken(savedToken);
       setIsAuthenticated(true);
       fetchLiveConfig(savedToken);
+      setIsCheckingAccess(false);
+    } else {
+      // Strictly unauthorized - immediately redirect to home page
+      navigate("/", { replace: true });
     }
-  }, []);
+  }, [navigate]);
 
   const fetchLiveConfig = async (authToken: string) => {
     setIsLoadingData(true);
@@ -119,6 +127,7 @@ export const Admin = () => {
     localStorage.removeItem("github_admin_token");
     setToken("");
     setIsAuthenticated(false);
+    navigate("/", { replace: true });
   };
 
   const toBase64 = (file: File): Promise<string> => {
@@ -320,35 +329,8 @@ export const Admin = () => {
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-6 transition-colors duration-500">
-        <motion.form 
-          initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} onSubmit={handleLogin} 
-          className="w-full max-w-md border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 p-8 rounded-3xl backdrop-blur-md"
-        >
-          <div className="flex items-center gap-3 mb-4 text-black dark:text-white">
-            <ShieldAlert className="h-6 w-6 text-cyan-500 dark:text-cyan-400" />
-            <h2 className="text-2xl font-medium">Admin Access</h2>
-          </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">
-            Enter your GitHub Personal Access Token with <span className="font-semibold text-black dark:text-white">repo</span> scope to manage your website content.
-          </p>
-          <input
-            type="password" value={token} onChange={(e) => setToken(e.target.value)}
-            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-            className="w-full bg-white dark:bg-black/50 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-black dark:text-white focus:outline-none focus:border-cyan-400 mb-2"
-            required
-          />
-          <div className="text-[11px] text-gray-400 dark:text-gray-500 mb-6">
-            Need a new token? <a href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio+CMS" target="_blank" rel="noopener noreferrer" className="text-cyan-500 hover:underline">Generate one here on GitHub</a> (select expiration and check "repo").
-          </div>
-          <button type="submit" className="w-full bg-black dark:bg-white text-white dark:text-black font-medium py-3 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors">
-            Authenticate
-          </button>
-        </motion.form>
-      </div>
-    );
+  if (isCheckingAccess || !isAuthenticated) {
+    return null;
   }
 
   const toggleItemSlideshow = (idx: number) => {

@@ -11,6 +11,23 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CustomCursor } from "./components/ui/CustomCursor";
 import { ResumeChat } from "./components/ui/ResumeChat";
+import { AdminAuthModal } from "./components/ui/AdminAuthModal";
+
+function AdminShortcutListener() {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl + Shift + A (or Cmd + Shift + A on Mac)
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "A" || e.key === "a")) {
+        e.preventDefault();
+        window.dispatchEvent(new Event("open_admin_auth"));
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  return null;
+}
 
 function Preloader({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
@@ -57,6 +74,8 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <AdminShortcutListener />
+      <AdminAuthModal />
       <CustomCursor />
       <AnimatePresence>
         {loading && <Preloader onComplete={() => setLoading(false)} key="preloader" />}
